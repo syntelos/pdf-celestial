@@ -1,0 +1,52 @@
+
+		       FITS Standards Documents
+
+		      Don Wells (Chair, IAU-FWG)
+			   February 11, 1995
+
+At the present time (February 1995) it is still true that the official
+defining documents for FITS are two papers published in 1981 plus two
+more papers published in 1988, all four in the journal Astronomy and
+Astrophysics Supplement Series (see file papers.bib in directory
+/fits/documents/bibliography/ for references). The FITS community has
+long wanted to have a definitive compilation of the content of these
+four papers. The NASA/Science Office of Standards and Technology
+[NOST] has sponsored the creation of such a document. The NOST FITS
+standard document has been through several review cycles and has been
+examined by an accreditation panel, and was accepted as the NASA
+standard in July 93 (see fits_standard.mail).  This document is widely
+expected to be adopted during 1994-5 by the IAU FITS Working Group
+(the official body which "owns" FITS) as the definitive FITS standard,
+superceding the published papers. 
+
+Copies of the relevant NOST documents are in this directory. They were
+copied from the FITS directory on anonFTP server nssdca.gsfc.nasa.gov,
+and were dated July 13, 1993 on that server.
+
+File fits_standard.ps is the document you want.  Files
+fits_standard.tex and nost.sty are the source for this document, and
+file fits_standard.readme is the NOST README for these files.
+
+File fp89.txt is the Floating Point Agreement, which was approved by
+the regional FITS committees in 1988-89 and by the IAU FITS WG in
+December 1989, and which became effective in January 1990. The
+contents of this agreement have been incorporated in section 6.3 and
+appendix F of the NOST standard.
+
+Files blocking94.txt and image.{ps,tex} are now FITS standards.  They
+were approved by a formal vote of the IAU FITS Working Group which
+closed on May 10, 1994, and they were made effective immediately. 
+
+File bintable_aa.{ps, ps.gz, tex} is now a FITS standard.  It was
+approved by a formal vote of the IAU FITS Working Group which closed
+on June 10, 1994, and it was made effective immediately. Version
+'bintable_aa' incorporates minor wording changes made in 1994 in the
+course of the IAU-FWG review, plus a minor correction made in the
+course of preparing the paper for publication. This paper will be
+submitted to the Astron. & Astrophys. Supplement Series in January 95.
+The version which was approved in June 1994 is in directory
+bintable_old/.
+
+File xtension.txt is the official listing of reserved extension names,
+as maintained by the Chair of the IAU FITS WG; it is appendix G of the
+NOST standard.

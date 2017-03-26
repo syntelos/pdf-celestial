@@ -1,0 +1,215 @@
+(File updated 9 June 1993 11:15 am EST ; 
+       Announcement of Proposed Standard replacing Draft Standard.) 
+
+Note: all information files are now in the form AAREADME.DOC.  The old 
+files have been eliminated.
+
+This main directory contains copies of version 1.0 of the NASA/OSSA
+Office of Standards and Technology (NOST) Proposed Standard NOST
+Definition of the Flexible Image Transport System (FITS). This
+Proposed Standard has been approved by consensus of the NOST Technical
+Panel following review of the comments received on version 0.3 of the
+Draft Standard. The most significant change is the clarification that
+only the specifically defined commentary keywords, COMMENT, HISTORY,
+and columns 1-8 blank, may have '= ' in columns 9-10 without a
+following value.  Otherwise, if '= ' is present in columns 9-10, the
+keyword must have a value.  The informational appendix on IEEE special
+values, which is not part of the standard, has been expanded. This
+Proposed Standard is being submitted to the Accreditation Panel
+for approval as a NOST Standard and to the IAU FITS Working Group for
+endorsement as the Standard for FITS.  Although the formal comment
+period has ended, general comments or questions can be sent to the
+address at the end of this file. 
+
+The new version is being made generally available before final action
+by the Accreditation Panel to allow those who may have been using the
+Draft Standard as a reference on FITS, in spite of its provisional
+status, to replace it with the Proposed Standard.  Use of superseded
+versions has caused problems in the past. This Proposed NOST Standard
+should not be considered to supersede the existing FITS documentation
+as the international standard for FITS. 
+
+This directory also contains a list of the extension type names that 
+have been registered with the IAU FITS Working Group.  The file 
+containing the list includes a brief summary of the extension type 
+corresponding to each name, the developer, and the status of the 
+extension.  Also described is the procedure for registration of 
+extension type names.  This file will be updated from time to time as 
+new extension type names are proposed and extensions corresponding 
+to reserved names progress through the process required for IAU FITS 
+Working Group approval as a standard extension.  As a result, it 
+should be used rather than the appendix in the Standard covering 
+reserved extension type names, because the XTENSION.LIS file will be 
+more up to date. 
+
+The text of one proposal for a new extension type, the IMAGE proposal
+of Ponz, Thompson, and Munoz appears in the directory.  Readers should
+be aware that this extension type is at present only in the *proposal*
+stage and is subject to revision as a result of community review,
+until a final form has been approved by the IAU FITS Working Group. In
+the meantime, anyone using the specific type name IMAGE must make sure
+that their files remain in conformance with the current rules.  Keep
+up to date on developments through the USEnet newsgroup sci.astro.fits
+or the fitsbits mailing list (to subscribe, send mail to
+fitsbits-request@nrao.edu). 
+
+There are two subdirectories
+
+The SOFTWARE subdirectory contains software and information about
+publicly available software.  It is described further in the
+AAAREADME.DOC file it contains. 
+
+The ERRTEST subdirectory contains a number of sample FITS primary
+HDUs with a variety of deliberately inserted header errors, for use in
+testing FITS readers. Further information is in the AAAREADME.DOC file
+of the ERRTEST subdirectory. 
+
+
+        The FITS directory contains the following eight files: 
+
+AAAREADME.DOC;1        Information on the Proposed Standard
+FITS_STANDARD.PS;1     PostScript version of the processed LaTeX file
+FITS_STANDARD.TEX;1    LaTeX source file for FITS Proposed Standard
+FITS_STANDARD.TXT;1    Flat text version of the FITS Proposed Standard
+FITS_STANDARD.IND;1    LaTeX index file. Needed to produce LaTeX index.
+IMAGE.TEX;1	       LaTeX version of the IMAGE extension proposal
+NOST.STY;1             Style file needed produce Standard from LaTeX source file
+XTENSION.LIS;1         Extension type names registered with IAU
+
+Procedures for access and retrieval are as follows:
+NB: simulated sessions
+===============================================================================
+==             default DECnet copy command example                           ==
+===============================================================================
+ndadsa $ dir nssdca::anon_dir:[000000]
+
+Directory NSSDCA::ANON_DIR:[000000]
+
+ACTIVE.DIR;1        ADC.DIR;1           ASTRO-1.DIR;1       CDF.DIR;1          
+FITS.DIR;1          FORMS.DIR;1         HST.DIR;1           IUE.DIR;1          
+NCDS.DIR;1          OPERATIONS.DIR;1    PUBLIC.DIR;1        TOOLKIT.BCK;32767  
+USING_EAST_GATEWAY.DAT;32766            
+
+Total of 13 files.
+
+
+ndadsa $ dir nssdca::anon_dir:[fits]
+
+Directory NSSDCA::ANON_DIR:[FITS]
+
+AAAREADME.DOC;1    FITS_STANDARD.IND;1   FITS_STANDARD.PS;1  
+FITS_STANDARD.TEX;1    FITS_STANDARD.TXT;1     NOST.STY;1 
+
+Total of 6 files.                                                          
+
+ndadsa $ copy/log nssdca::anon_dir:[fits]aaareadme.doc *
+%COPY-S-COPIED, NSSDCA::ANON_DIR:[FITS]AAAREADME.DOC;1 copied to 
+                                      DISKA":[MEV]AAAREADME.DOC;2 (16 blocks)
+
+ndadsa $ copy/log nssdca::anon_dir:[fits]nost.sty *
+%COPY-S-COPIED, NSSDCA::ANON_DIR:[FITS]NOST.STY;1 copied to 
+                                          DISKA":[MEV]NOST.STY;1 (17 blocks)
+
+ndadsa $ copy/log nssdca::anon_dir:[fits]fits_standard.* *
+%COPY-S-COPIED, NSSDCA::ANON_DIR:[FITS]FITS_STANDARD.IND;1 copied to 
+                                  DISKA":[MEV]FITS_STANDARD.IND;2 (11 blocks)
+%COPY-S-COPIED, NSSDCA::ANON_DIR:[FITS]FITS_STANDARD.PS;1 copied to 
+                                  DISKA":[MEV]FITS_STANDARD.PS;1 (710 blocks)
+%COPY-S-COPIED, NSSDCA::ANON_DIR:[FITS]FITS_STANDARD.TEX;1 copied to 
+                                  DISKA":[MEV]FITS_STANDARD.TEX;1 (234 blocks)
+%COPY-S-COPIED, NSSDCA::ANON_DIR:[FITS]FITS_STANDARD.TXT;1 copied to 
+                                  DISKA":[MEV]FITS_STANDARD.TXT;1 (230 blocks)
+%COPY-S-NEWFILES, 4 files created
+
+
+===============================================================================
+==             Anonymous FTP command example via Internet                   ==
+===============================================================================
+ndadsa $ ftp nssdca.gsfc.nasa.gov
+
+NDADSA.GSFC.NASA.GOV MultiNet FTP user process 2.2(100)
+Connection opened (Assuming 8-bit connections)
+<NSSDCA.GSFC.NASA.GOV MultiNet FTP Server Process 2.2(11) at Mon 24-Dec-90 9:17AM-EST
+
+NSSDCA.GSFC.NASA.GOV>user anonymous
+<anonymous user ok. Send real ident as password.
+
+Password: MEV@NDADSA.GSFC.NASA.GOV 
+<Guest User MEV@NDADSA.GSFC.NASA.GOV logged into ANON_DIR:[000000] at Mon 24-Dec-90 09:17, job 202003a1.
+<Directory and access restrictions apply
+
+NSSDCA.GSFC.NASA.GOV>ls
+<List started.
+active.dir
+adc.dir
+astro-1.dir
+cdf.dir
+fits.dir
+forms.dir
+hst.dir
+iue.dir
+ncds.dir
+operations.dir
+public.dir
+toolkit.bck
+using_east_gateway.dat
+<Transfer completed.
+
+NSSDCA.GSFC.NASA.GOV>cd fits
+<Connected to ANON_DIR:[FITS].
+
+NSSDCA.GSFC.NASA.GOV>ls
+<List started.
+aaareadme.doc
+fits_standard.ind
+fits_standard.ps
+fits_standard.tex
+fits_standard.txt
+nost.sty
+<Transfer completed.                            
+
+NSSDCA.GSFC.NASA.GOV>dir
+<List started.
+ANON_DIR:[FITS]
+AAAREADME.DOC;1          15   3-SEP-1991 16:24  FITS_ANON (RWED,RWED,RE,RE)
+FITS_STANDARD.IND;1      11  21-MAY-1991 23:57  FITS_ANON (RWED,RWED,RE,RE)
+FITS_STANDARD.PS;1      713   3-SEP-1991 16:01  FITS_ANON (RWED,RWED,RE,RE)
+FITS_STANDARD.TEX;1     235   3-SEP-1991 15:54  FITS_ANON (RWED,RWED,RE,RE)
+NOST.STY;1               17  26-MAR-1991 17:21  FITS_ANON (RWED,RWED,RE,RE)
+Total of 6 files, 1218 blocks.
+<Transfer completed.
+        
+NSSDCA.GSFC.NASA.GOV>get aaareadme.doc;1 readme.
+<VMS retrieve of ANON_DIR:[FITS]AAAREADME.DOC;1 started.
+<Transfer completed.  316 (8) bytes transferred.
+
+NSSDCA.GSFC.NASA.GOV>get nost.sty nost.sty
+<VMS retrieve of ANON_DIR:[FITS]NOST.STY;1 started.
+<Transfer completed.  8250 (8) bytes transferred.
+
+NSSDCA.GSFC.NASA.GOV>get fits_standard.tex fits_standard.tex
+<VMS retrieve of ANON_DIR:[FITS]FITS_STANDARD.TEX;1 started.
+<Transfer completed.  129024 (8) bytes transferred.
+
+NSSDCA.GSFC.NASA.GOV>mget fits_standard.*
+<List started.       
+<Transfer completed.
+<VMS retrieve of ANON_DIR:[FITS]FITS_STANDARD.IND;1 started.
+<Transfer completed.  5632 (8) bytes transferred.
+<VMS retrieve of ANON_DIR:[FITS]FITS_STANDARD.PS;1 started.
+<Transfer completed.  509440 (8) bytes transferred.
+<VMS retrieve of ANON_DIR:[FITS]FITS_STANDARD.TEX;1 started.
+<Transfer completed.  118272 (8) bytes transferred.
+
+NSSDCA.GSFC.NASA.GOV>quit
+<QUIT command received. Goodbye.
+                   
+======================================================================
+For further information send electronic mail to the FITS Support 
+office at 
+        (DECnet)        NCF::FITS
+        (Internet)      fits@nssdca.gsfc.nasa.gov       
+
+or telephone at (301)513-1634.  The telephone is equipped with a voice 
+mail system to take messages from touch tone phones if no one answers.
+

@@ -1,0 +1,857 @@
+%                                                               l-aa.dem
+% L-AA vers. 3.0, LaTeX style file for Astronomy & Astrophysics
+% Demo file
+%                                                 (c) Springer-Verlag HD
+%-----------------------------------------------------------------------
+%FITS keyword macros (added by WDC and DCW)
+%  Simple keyword
+\newcommand{\Fkw}[1]{{\sf #1}}
+%  Keywory with index number
+\newcommand{\Fkwn}[2]{{\sf #1}{\it #2\/}}
+%  Numeric values
+\newcommand{\Fit}[1]{{\it #1\/}}
+% Fortran formats:
+\newcommand{\Ffi}[2]{{\verb|#1|{\it #2\/}}}
+\newcommand{\Ffisi}[4]{{\verb|#1|{\it #2\/}\verb|#3|{\it #4\/}}}
+% Data type codes:
+\newcommand{\Frt}[2]{{{\it #1\/}\verb|#2|}}
+%-----------------------------------------------------------------------
+%
+\documentstyle{l-aa}
+\begin{document}
+%  \refereelayout           % a referee layout
+   \thesaurus{03         % A&A Section 3:
+              (03.20.4)} % Techniques: miscellaneous
+%
+  \title{ Binary Table Extension to FITS } 
+
+  \author{ W.~D.~Cotton\inst{1}
+	\and  D.~Tody\inst{2}
+	\and  W.~D.~Pence\inst{3}}
+
+  \institute{National Radio Astronomy 
+	Observatory\thanks{The National Radio Astronomy Observatory
+		(NRAO) is operated by Associated Universities Inc.,
+		under cooperative agreement with the National Science 
+                Foundation.}, 
+	Charlottesville, 520 Edgemont Road, VA 22903-2475, USA 
+   \and National Optical Astronomy 
+	Observatory\thanks{The National Optical Astronomy Observatories
+		are operated by the Association of Universities for
+                Research in Astronomy, Inc. (AURA)
+		under cooperative agreement with the National Science 
+                Foundation.}, 
+	P.O.~Box 26732, Tucson, AZ 85726-6732, USA  
+   \and Laboratory for High Energy Astrophysics, Code~668,
+        NASA/Goddard Space Flight Center, Greenbelt, MD 20771, USA }
+
+  \offprints{W. D. Cotton}
+%
+  \date{Received; accepted}           % must be given at the last moment
+%
+% Please don't overrule this command, it will format your titlepage.
+\maketitle
+%
+%\maintitlerunninghead{Binary Tables Extension to FITS}
+%\authorrunninghead{W. D. Cotton et al.}
+%
+\begin{abstract}
+This paper describes the FITS binary tables which are a flexible and
+efficient means of transmitting a wide variety of data structures.
+Table rows may be a mixture of a number of numerical, logical and
+character data entries.  In addition, each entry is allowed to be a
+single dimensioned array.  Numeric data are kept in IEEE formats.
+{\em NOTE: The definition of the binary tables contained in this paper
+has been approved by formal vote of the IAU FITS Working Group, and is
+a part of the IAU FITS standards.}
+%
+\keywords= {Techniques: data transport - tape format - data
+processing}        % must be given
+%
+\end{abstract}
+%
+%
+\section{Introduction}
+
+The Flexible Image Transport System (FITS), Wells {\em et
+al.}~(\cite{paper1}) and Greisen \& Harten (\cite{paper2}), has been
+used for a number of years both as a means of transporting data
+between computers and/or data processing systems and as an archival format
+for a variety of astronomical data.  The success of this system has
+resulted in the introduction of enhancements.  In particular,
+considerable use has been made of the records following the primary
+data ``file''.  Grosb\o l et al. (\cite{paper3}) introduced a generalized
+header format for extension ``files'' following the primary data
+``file'', but in the same physical file.  Harten {\em et
+al.}~(\cite{paper4}) defined an ASCII table structure which could
+convey information that could be conveniently printed as a table.
+This paper generalizes the ASCII tables and defines an efficient means
+for conveying a wide variety of data structures as extension
+``files''.  The definition of the binary tables contained in this paper
+(excluding the appendices) was adopted as an official FITS standard in
+June~1994 by a formal vote of the International Astronomical Union's
+FITS Working Group.
+
+\section {Binary tables}
+
+The binary tables are tables in the sense that they are organized into
+rows and columns.  An entry, or set
+of values associated with a given row and column, can be an array of
+arbitrary size.  These values are represented in a standardized binary
+form.  Each row in the table contains an entry for each column.  This
+entry may be one of a number of different data types, 8-bit unsigned
+integers, 16- or 32-bit signed integers, logical, character, bit, 32-
+or 64-bit floating point or complex values.  The datatype and
+dimensionality are independently defined for each column but each row
+must have the same structure.  Additional information associated with
+the table may be included in the table header as keyword/value pairs.
+
+The binary tables come after the primary data ``file'', if any, in a FITS
+file and follow the standards for generalized extension tables defined
+by Grosb\o l {\it et al.} 1988.  The use of the binary tables requires
+the use of a single additional keyword in the primary header:
+\begin{enumerate} % list nest 1
+\item \Fkw{EXTEND} (logical) if true (ASCII ``\verb|T|'') indicates
+that there {\it may\/} be extension files following the data records
+and, if there are, that they conform to the generalized extension file
+header standards.
+\end{enumerate} % - list nest 1
+
+\section {Table Header}
+
+The table header begins at the first byte in the first record
+following the last record of primary data (if any) or following the last
+record of the previous extension ``file''.  The format of the binary table
+header is such that a given FITS reader can decide if it wants (or
+understands) it and can skip the table if not.
+
+A table header consists of one or more 2880 8-bit byte logical records
+each containing 36 80-byte ``card images'' in the form:\\
+\centerline{{\em keyword\/}~\verb|=|~{\em value\/}~\verb|/|~{\em comment}}
+where the {\em keyword\/} begins in column 1 and contains up to eight
+characters and the {\em value\/} begins in column 10 or later.
+Keyword/value pairs in binary table headers conform to standard FITS
+usage.
+
+\newcommand{\TSKIP}{3pt}
+\newcommand{\TGLUE}{{\hskip\TSKIP plus\TSKIP minus\TSKIP}}
+
+The number of columns in the table is given by the value associated
+with keyword \Fkw{TFIELDS}.  The type, dimensionality, labels, units,
+blanking values, and display formats for entries in column \Fit{nnn} may be
+defined by the values associated with the keywords \Fkwn{TFORM}{nnn},\TGLUE
+\Fkwn{TTYPE}{nnn},\TGLUE \Fkwn{TUNIT}{nnn},\TGLUE \Fkwn{TNULL}{nnn},\TGLUE and
+\Fkwn{TDISP}{nnn}.  Of these only \Fkwn{TFORM}{nnn}
+is required but the use of \Fkwn{TTYPE}{nnn} is strongly recommended.
+An entry may be omitted from the table, but still 
+defined in the header, by using a zero element count in the
+\Fkwn{TFORM}{nnn} entry.
+
+The mandatory keywords \Fkw{XTENSION}, \Fkw{BITPIX}, \Fkw{NAXIS},
+\Fkw{NAXIS1}, \Fkw{NAXIS2}, \Fkw{PCOUNT}, 
+\Fkw{GCOUNT} and \Fkw{TFIELDS} must be in order; other keywords follow
+these in an arbitrary order.  The mandatory keywords in a binary table
+header record are: 
+
+\begin{enumerate} % list nest 1
+\item \Fkw{XTENSION} (character) indicates the type of extension file,
+this must be the first keyword in the header.  This is {\tt
+'BINTABLE'} for the binary tables.
+\item \Fkw{BITPIX} (integer) gives the number of bits per ``pixel'' value.
+For binary tables this value is 8.
+\item \Fkw{NAXIS} (integer) gives the number of ``axes''; this value is 2
+for binary tables.
+\item \Fkw{NAXIS1} (integer) gives the number of 8 bit bytes in each
+``row''. This must correspond to the sum of the values defined in
+the \Fkwn{TFORM}{nnn} keywords.
+\item \Fkw{NAXIS2} (integer) gives the number of rows in the table.
+
+\item \Fkw{PCOUNT} (integer) is used to tell the number of bytes {\it
+following\/}\footnote{This is a {\it serious} change from the
+recommended usage of \Fkw{PCOUNT} in Greisen \&\ Harten \cite{paper2}
+which defines \Fkw{PCOUNT} as the number of bytes {\it preceding} the
+regular portion of the entry.  The Grosb\o l {\it et al.} \cite{paper3}
+generalized extension header agreement adopted, but did not define,
+the \Fkw{PCOUNT} keyword.  We take this to allow specific extensions
+to redefine the location of the \Fkw{PCOUNT} parameters.  This change
+does not, and must not, affect conformance with the rules for
+determining the size of the table.} the regular portion of the table.
+These bytes are allowed but no meaning is attached to them
+here. \Fkw{PCOUNT} should normally be 0 for binary tables (see however
+Appendix~\ref{app_varlen}).
+
+\item \Fkw{GCOUNT} (integer) gives the number of groups of data
+defined as for the random group primary data records. This is 1 for
+binary tables. 
+\item \Fkw{TFIELDS} (integer) gives the number of fields (columns)
+present in the table. 
+
+\item \Fkwn{TFORM}{nnn}\footnote{The ``\Fit{nnn}'' in keyword names
+indicates an integer index in the range 1--999.  The integer is left
+justified with no leading zeroes, e.g. \Fkw{TFORM1}, \Fkw{TFORM19},
+etc.} (character) gives the size and data type of field \Fit{nnn}.
+Allowed values of \Fit{nnn} range from 1 to the value associated 
+with \Fkw{TFIELDS}.  Allowed values of \Fkwn{TFORM}{nnn} are of the
+form \Fit{r}\verb|L| (logical), \Fit{r}\verb|X| (bit), \Fit{r}\verb|I|
+(16-bit integers), \Fit{r}\verb|J| (32-bit integers), \Fit{r}\verb|A|
+(characters), \Fit{r}\verb|E| (single precision), \Fit{r}\verb|D|
+(double precision), \Fit{r}\verb|B| (unsigned bytes), \Fit{r}\verb|C|
+(complex \{pair of single precision values\}), \Fit{r}\verb|M| (double
+complex \{pair of double precision values\}) and \Fit{r}\verb|P|
+(variable length array descriptor \{64 bits\}), where \Fit{r}=number
+of elements.  If the element count is absent, it is assumed to be 1.
+A value of zero is allowed. Note: additional characters may follow the
+datatype code character but they are not defined here.
+% change*** 13 July 94
+%   The number of bytes determined from summing the TFORMnnn values
+%should equal NAXIS1 but NAXIS1 should be used as the definition of
+%the actual length of the row.
+The number of bytes determined from summing the \Fkwn{TFORM}{nnn}
+values must equal \Fkw{NAXIS1}.
+% end change 13 July 94
+
+\item \Fkw{END} is always the last keyword in a header.  The remainder
+of the FITS logical (2880-byte) record following the \Fkw{END}
+keyword is blank filled.
+\end{enumerate} % - list nest 1
+
+
+The optional reserved keywords are:
+
+\begin{enumerate} % list nest 1
+\item \Fkw{EXTNAME} (character) can be used to give a name to the
+extension file to distinguish it from other similar files.  The name
+may have a hierarchical structure giving its relation to other files
+(e.g., \verb|'map1.cleancomp'|)
+\item \Fkw{EXTVER} (integer) is a version number which can be used
+with \Fkw{EXTNAME}  to
+identify a file.
+% change*** 13 July 94
+The default value for \Fkw{EXTVER} should be 1.
+% end change 13 July 94
+
+\item \Fkw{EXTLEVEL} (integer) specifies the level of the extension
+file in a hierarchical structure.  The default value for
+\Fkw{EXTLEVEL} should be 1. 
+\item \Fkwn{TTYPE}{nnn} (character) gives the label for field \Fit{nnn}.  
+\item \Fkwn{TUNIT}{nnn} (character) gives the physical units of field \Fit{nnn}.
+\item \Fkwn{TSCAL}{nnn} (floating) gives the scale factor for field
+\Fit{nnn}, with the formula
+$$\Fit{True\_value} = \Fit{FITS\_value}\times\Fkw{TSCAL}+\Fkw{TZERO}.$$
+Default value is 1.0.\footnote{ 
+% change*** 13 July 94
+%Note: \Fkwn{TSCAL}{nnn} and \Fkwn{TZERO}{nnn} are not
+%defined for A, L, P, or X format fields. 
+\Fkwn{TSCAL}{nnn} and \Fkwn{TZERO}{nnn} are not defined for \verb|A|,
+\verb|L|, or \verb|X| format fields.  For complex data types (\verb|C|
+and \verb|M|), \Fkwn{TSCAL}{nnn} and \Fkwn{TZERO}{nnn} are the real part of the
+scaling and offset factors and the imaginary part is 0.  The
+anticipated meaning of \Fkwn{TSCAL}{nnn} and \Fkwn{TZERO}{nnn} for \verb|P|
+fields is described in Appendix~\ref{app_varlen}.
+% end change 13 July 94
+}
+\item \Fkwn{TZERO}{nnn} (floating) gives the offset for field
+\Fit{nnn}. (See \Fkwn{TSCAL}{nnn}.) Default value is 0.0.
+
+\item \Fkwn{TNULL}{nnn} (integer) gives the undefined value for
+integer (\verb|B|, \verb|I|, and \verb|J|) field \Fit{nnn}.
+Section~\ref{sect_datatypes} (``Table Data Records'') discusses the
+conventions for indicating invalid data of other types.
+
+\item \Fkwn{TDISP}{nnn} (character) gives the Fortran~90 format
+suggested for the display of field \Fit{nnn}.  Each byte of bit and
+byte arrays will be considered to be an unsigned integer for purposes of
+display.\footnote{
+The version of this document voted on by the regional and IAU FITS
+committees stated that the values should be considered signed.  As the
+values are defined to be unsigned, the present definition is the
+preferred one.}
+The allowed forms are \Ffi{A}{w}, \Ffi{L}{w}, \Ffi{I}{w.m},
+\Ffi{B}{w.m} (Binary, integers only), \Ffi{O}{w.m} (Octal, integers
+only), \Ffi{Z}{w.m} (Hexidecimal, integers only), \Ffi{F}{w.d},
+\Ffisi{E}{w.d}{E}{e}, \Ffi{EN}{w.d}, \Ffi{ES}{w.d},
+\Ffisi{G}{w.d}{E}{e}, and \Ffisi{D}{w.d}{E}{e} where \Fit{w} is the width of
+the displayed value in characters, \Fit{m} is the minimum number of
+digits possibly requiring leading zeroes, \Fit{d} is the number of
+digits to the right of the decimal, and \Fit{e} is the number of
+digits in the exponent.  All entries in a field are displayed with a
+single, repeated format.  If Fortran~90 formats are not available to a
+reader which prints a table then equivalent Fortran~77 formats may be
+substituted.  Any
+\Fkwn{TSCAL}{nnn} and \Fkwn{TZERO}{nnn} values should be applied
+before display of the value.  
+%Note that characters and logical values may be null (zero byte) terminated.
+
+\item \Fkw{THEAP} (integer). This keyword is reserved for use by the
+convention described in Appendix~\ref{app_varlen}.
+\item \Fkwn{TDIM}{nnn} (character). This keyword is reserved for use
+by the convention described in Appendix~\ref{app_dim}.
+\item \Fkw{AUTHOR} (character) gives the name of the author or creator 
+of the table. 
+% change*** 13 July 94
+This is the human or organization that collected the information given
+in this table.
+% end change 13 July 94
+
+\item \Fkw{REFERENC} (character) gives the reference for the table. 
+\end{enumerate} % - list nest 1
+
+Other optional keyword/value pairs adhering to the FITS keyword standards
+are allowed although a reader may choose to ignore them.
+
+\section{Conventions for Multidimensional Arrays}
+
+     There is commonly a need to use data structures more complex than
+the one dimensional definition of the table entries defined for this
+table format.  Multidimensional arrays, or more complex structures,
+may be implemented by passing dimensions or other structural
+information as either column entries or keywords in the header.
+Passing the dimensionality as column entries has the advantage that
+the array can have variable dimension (subject to a fixed maximum size
+and storage usage; however, see Appendix~\ref{app_varlen}).  A
+convention for arrays is suggested in Appendix~\ref{app_dim} and a
+convention for arrays of character strings in Appendix~\ref{app_char}.
+These and any other conventions will not require a generalized FITS
+reader to know or understand their details.
+
+\section{Table Data Records}\label{sect_datatypes}
+
+The binary table data records begin with the next logical record
+following the last header record. If the intersection of a row and
+column is an array then the elements of this array are contiguous and
+in order of increasing array index.  Within a row, columns are stored
+in order of increasing column number.  Rows are given in order of
+increasing row number.  All 2880--byte logical records are completely
+filled with no extra bytes between columns or rows.  Columns and rows
+do not necessarily begin in the first byte of a 2880--byte record.
+Note that this implies that a given word may not be aligned in the
+record along word boundaries of its type; words may even span
+2880--byte records.  The last 2880--byte record should be zero byte
+filled past the end of the valid data.
+
+   If word alignment is ever considered important for efficiency
+considerations then this may be accomplished by the proper design of
+the table.  The simplest way to accomplish this is to order the
+columns by data type (\verb|M|, \verb|D|, \verb|C|, \verb|P|,
+\verb|E|, \verb|J|, \verb|I|, \verb|B|, \verb|L|, \verb|A|, \verb|X|)
+and then add sufficient padding in the form of a dummy column of type
+B with the number of elements such that the size of a row is either an
+integral multiple of 2880 bytes or such that an integral number of rows is
+2880 bytes.
+
+The data types are defined in the following list (\Fit{r} is the
+number of elements in the entry):
+
+\begin{enumerate} % list nest 1
+\item  \Frt{r}{L}. A logical value consists of an ASCII ``\verb|T|''
+indicating true and ``\verb|F|'' indicating false.  A null character
+(zero byte) indicates an invalid value.
+% change*** 13 July 94
+Any other values are illegal.
+% end change 13 July 94
+
+\item \Frt{r}{X}. A bit array starts in the most significant bit of
+the first byte with the following bits in order of decreasing
+significance in the byte.  Bit significance is in the same order as
+for integers.  A bit array entry consists of an integral number of
+8--bit bytes with trailing bits zero.\footnote{No explicit null value is
+defined for bit arrays but if the 
+capability of blanking bit arrays is needed it is recommended that one
+of the following conventions be adopted: 1) designate a bit in the
+array as a validity bit, 2) add an \verb|L| type column to indicate
+validity of the array or 3) add a second bit array which contains a
+validity bit for each of the bits in the original array.  Such
+conventions are beyond the scope of this general format design and in
+general readers will not be expected to understand them.}
+
+\item \Frt{r}{B}.  Unsigned 8-bit integer with bits in decreasing order
+of significance.  Signed values may be passed with appropriate values
+of \Fkwn{TSCAL}{nnn} and \Fkwn{TZERO}{nnn}.
+\item \Frt{r}{I}. A 16-bit twos-complement integer with the bits
+in decreasing order of significance.  Unsigned values may be passed
+with appropriate values of \Fkwn{TSCAL}{nnn} and \Fkwn{TZERO}{nnn}.
+\item \Frt{r}{J}. A 32-bit twos-complement integer with the bits
+in decreasing order of significance.  Unsigned values may be passed
+with appropriate values of \Fkwn{TSCAL}{nnn} and \Fkwn{TZERO}{nnn}.
+
+\item \label{item_a_type} \Frt{r}{A}. Character strings are
+represented by ASCII characters in their natural order.  A character
+string may be terminated before its explicit length by an ASCII NUL
+character. An ASCII NUL as the first character will indicate an
+undefined string, i.e. a NULL string. Legal characters are printable
+ASCII characters in the range \verb*|' '| (decimal 32) to \verb|'~'|
+(decimal 126) inclusive and ASCII NUL after the last valid character.
+Strings the full length of the field are not NULL terminated.
+Characters after the first ASCII NUL are not defined.
+
+\item \Frt{r}{E}. Single precision floating point values are in IEEE
+32-bit precision format in the order: sign bit, exponent and mantissa
+in decreasing order of significance. The IEEE NaN (not a number)
+values are used to indicate an invalid number; a value with all bits
+set is recognized as a NaN. All IEEE special values are recognized.
+
+\item \Frt{r}{D}.  Double precision floating point values are in IEEE
+64-bit precision format in the order: sign bit, exponent and mantissa
+in decreasing order of significance.  The IEEE NaN values are used to
+indicate an invalid number; a value with all bits set is recognized as
+a NaN. All IEEE special values are recognized.
+
+\item \Frt{r}{C}.  A Complex value consists of a pair of IEEE 32-bit
+precision floating point values with the first being the real and the
+second the imaginary part.  If either word contains a NaN value the
+complex value is invalid.
+
+\item \Frt{r}{M}. Double precision complex values.  These consist of a
+pair of IEEE 64-bit precision floating point values with the first
+being the real and the second the imaginary part.  If either word
+contains a NaN value the complex value is invalid.
+
+\item \Frt{r}{P}. Variable length array descriptor.  An element is equal
+in size to a pair of 32-bit integers (i.e., 64 bits).  The anticipated
+use of this data type is described in Appendix~\ref{app_varlen}.
+Arrays of type \verb|P| are not defined; the \Fit{r} field is
+permitted, but values other than 0 or 1 are undefined.  For purposes
+of printing, an entry of type \verb|P| should be considered equivalent
+to \verb|2J|.
+
+\end{enumerate} % - list nest 1
+
+\section{Binary Table Header Example }
+
+\newcommand{\V}[1]{\verb*|#1|}
+\newcommand{\bthef}[4]{\V{#1}&\V{#2}&\V{#3}&\V{#4}}
+\newcommand{\bthes}[3]{\V{#1}&\V{= }&\V{#2}&\V{ / #3}}
+\newcommand{\bther}[3]{\V{#1}&\V{= }&\hfill\V{#2}&\V{ / #3}}
+\newcommand{\bthec}[1]{\V{COMMENT}&\multicolumn{3}{l|}{\V{ #1}}}
+\newcommand{\btheh}[1]{\V{HISTORY}&\multicolumn{3}{l|}{\V{ #1}}}
+\newcommand{\bthee}{\V{END}&&&}
+\begin{table*}
+\begin{center}
+\caption[]{Binary table header example}\label{tab_example}
+\begin{tabular}{|l@{}l@{}l@{}l|}
+\noalign{\smallskip}
+\hline
+\bthef{\ }{\ 1}{\ \ \ \ \ \ \ \ \ 2\ \ \ \ \ \ \ \ \ 3}
+{\ \ \ \ \ \ \ \ \ 4\ \ \ \ \ \ \ \ \ 5\ \ \ \ \ \ \ \ \ 6\ \ \ \ \ \ \ \ \ 7\ \
+\ \ \ \ \ \ \ 8}\\
+\bthef{12345678}{90}{12345678901234567890}
+{12345678901234567890123456789012345678901234567890}\\
+\hline\hline
+\bthes{XTENSION}{'BINTABLE'}{binary table extension}\\ 
+\bther{BITPIX}   {8}{8-bit bytes} \\
+\bther{NAXIS}    {2}{2-dimensional binary table} \\
+\bther{NAXIS1}{4028}{width of table in bytes} \\
+\bther{NAXIS2} {270}{number of rows in table} \\
+\bther{PCOUNT}   {0}{size of special data area} \\
+\bther{GCOUNT}   {1}{one data group (mandatory keyword)} \\
+\bther{TFIELDS}  {5}{number in each row} \\
+\bthes{TTYPE1}{'OBJECT\ \ '}{catalog name of the object} \\
+\bthes{TFORM1}{'16A\phantom{xxxxx}'}{data format of the field: ASCII Character} \\
+\bthes{TTYPE2}{'RA\phantom{xxxxxx}'}{R.A. of the object} \\
+\bthes{TFORM2}{'1E\phantom{xxxxxx}'}{data format of the field: 4-byte REAL} \\
+\bthes{TUNIT2}{'deg\phantom{xxxxx}'}{physical unit of field: decimal degrees} \\
+\bthes{TTYPE3}{'DEC\phantom{xxxxx}'}{declination of the object} \\
+\bthes{TFORM3}{'1E\phantom{xxxxxx}'}{data format of the field: 4-byte REAL} \\
+\bthes{TUNIT3}{'deg\phantom{xxxxx}'}{physical unit of field: decimal degrees} \\
+\bthes{TTYPE4}{'EXPOSURE'}{exposure time of the observation} \\
+\bthes{TFORM4}{'1J\phantom{xxxxxx}'}{data format of the field: 4-byte INTEGER} \\
+\bthes{TUNIT4}{'s\phantom{xxxxxxx}'}{physical unit of field: seconds} \\
+\bther{TSCAL4}{1.0E-3}{converts EXPOSURE from milliseconds to seconds} \\
+\bther{TZERO4}{0.0}{converts EXPOSURE from milliseconds to seconds} \\
+\bthes{TTYPE5}{'IMAGE\phantom{xxx}'}{2-dimensional image} \\
+\bthes{TFORM5}{'2000I\phantom{xxx}'}{data format of the field: 2-byte INTEGERS} \\
+\bthes{TUNIT5}{'count\phantom{xxx}'}{physical unit of field: CCD ADU counts} \\
+\bthes{TDIM5}{'(50,40)\phantom{x}'}{dimension of the IMAGE} \\
+\bthes{EXTNAME}{'DETECTED\_OBJECTS'}{user-supplied name of this table} \\
+\bther{EXTVER}{1}{version number of this table} \\
+\bther{EQUINOX}{2000.0}{equinox in years for the R.A. and dec.} \\
+\bthes{DATE}{'18/08/94'}{date that this FITS file was created} \\
+\bthec{}\\
+\bthec{This table contains the set of 50 x 40 pixel subimages that have been} \\
+\bthec{extracted from around each detected object in larger CCD images.} \\
+\bthec{Each row of this table contains a separate image, along with other} \\
+\bthec{descriptive information.  Column 1 contains the catalog name of the} \\
+\bthec{object, columns 2 and 3 contain the RA and DEC of the object in} \\
+\bthec{decimal degrees (equinox = 2000.0), column 4 contains the exposure} \\
+\bthec{time, and the image itself is contained in column 5 as a 2-dimensional} \\
+\bthec{vector (as specified by the TDIM5 keyword).  The original exposure} \\
+\bthec{times were given in units of milliseconds, so the TSCAL4 and TZERO4} \\
+\bthec{keywords are used to convert to units of seconds.} \\
+\bthec{}\\
+\btheh{This FITS file was created by the FCREATE task.} \\
+\bthee \\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
+An example of a binary table header, shown in Table~\ref{tab_example}
+contains 5 columns using a number of different data types and
+dimensions.  The fifth column is a two dimensional array using the
+convention given in Appendix~\ref{app_dim}. Note that this is an
+artificial example contrived to show various aspects of the binary
+tables and does not represent recommended practice with regards to
+celestial coordinates.
+
+\appendix
+
+\section{``Variable Length Array'' Facility}\label{app_varlen}
+
+    One of the most attractive features of binary tables is that any
+field of the table can be an array.  In the standard case this is a
+fixed size array, i.e., a fixed amount of storage is allocated in each
+record for the array data---whether it is used or not.  This is fine
+so long as the arrays are small or a fixed amount of array data will
+be stored in each record, but if the stored array length varies for
+different records, it is necessary to impose a fixed upper limit on
+the size of the array that can be stored.  If this upper limit is made
+too large excessive wasted space can result and the binary table
+mechanism becomes seriously inefficient.  If the limit is set too low
+then it may become impossible to store certain types of data in the
+table.
+
+The ``variable length array'' construct presented here was devised to
+deal with this problem.  Variable length arrays are implemented in
+such a way that, even if a table contains such arrays, a simple reader
+program which does not understand variable length arrays will still be
+able to read the main table (in other words a table containing
+variable length arrays conforms to the basic binary table standard).
+The implementation chosen is such that the records in the main table
+remain fixed in size even if the table contains a variable length
+array field, allowing efficient random access to the main table.
+
+Variable length arrays are logically equivalent to regular static
+arrays, the only differences being 1) the length of the stored array
+can differ for different records, and 2) the array data is not stored
+directly in the table records.  Since a field of any datatype can be a
+static array, a field of any datatype can also be a variable length
+array (excluding type \verb|P|, the variable length array descriptor
+itself, which is not a datatype so much as a storage class specifier).
+Conventions such as \Fkwn{TDIM}{nnn} (see Appendix~\ref{app_dim})
+apply equally to both to variable length and static arrays.
+
+A variable length array is declared in the table header with a special
+field datatype specifier of the form\\
+\centerline{\Fit{r}\verb|P|\Fit{t}\verb|(|\Fit{maxelem}\verb|)|}
+where the ``\verb|P|'' indicates the amount of space occupied by the
+array descriptor in the data record (64 bits), the element count
+``\Fit{r}'' should be 0, 1, or absent, \Fit{t} is a character denoting
+the datatype of the array data (\verb|L|, \verb|X|, \verb|B|,
+\verb|I|, \verb|J|, etc., but not\verb| P|), and \Fit{maxelem} is a
+quantity guaranteed to be equal to or greater than the maximum number
+of elements of type \Fit{t} actually stored in a table record. There
+is no built-in upper limit on the size of a stored array;
+\Fit{maxelem} merely reflects the size of the largest array actually
+stored in the table, and is provided to avoid the need to preview the
+table when, for example, reading a table containing variable length
+elements into a database that supports only fixed size arrays.  There
+may be additional characters in the \Fkwn{TFORM}{nnn} keyword
+following the ``\verb|(|\Fit{maxelem}\verb|)|''.
+
+For example,\\
+\centerline{\verb|TFORM8  = 'PB(1800)'   / Variable byte array|}
+indicates that field 8 of the table is a variable length array of type
+byte, with a maximum stored array length not to exceed 1800 array
+elements (bytes in this case).
+
+The data for the variable length arrays in a table is not stored in
+the actual data records; it is stored in a special data area, the
+heap, following the last fixed size data record.  What is stored in
+the data record is an {\it array descriptor}.  This consists of two
+32-bit integer values: the number of elements (array length) of the
+stored array, followed by the zero-indexed byte offset of the first
+element of the array, measured from the start of the heap area.
+Storage for the array is contiguous.  The array descriptor for field
+\Fit{N} as it would appear embedded in a data record is illustrated
+symbolically below:\\
+\centerline{{\em ... }[{\em field N-1}] [{\em (nelem,offset)}] 
+    [{\em field N+1}]{\em ...}}
+If the stored array length is zero there is no array data, and the
+offset value is undefined (it should be set to zero).  The storage
+referenced by an array descriptor must lie entirely within the heap
+area; negative offsets are not permitted.
+
+A binary table containing variable length arrays consists of three
+principal segments, as follows:\\
+\centerline{[{\em table header}] [{\em record storage area}] 
+     [{\em heap area}]} 
+The table header consists of one or more 2880-byte FITS logical
+records with the last record indicated by the keyword \Fkw{END}
+somewhere in the record.  The record storage area begins with the next
+2880-byte logical record following the last header record and is
+$\Fkw{NAXIS1}\times\Fkw{NAXIS2}$ bytes in length.  The zero indexed
+byte offset of the heap measured from the start of the record storage
+area is given by the \Fkw{THEAP} keyword in the header.  If this
+keyword is missing the heap is assumed to begin with the byte
+immediately following the last data record, otherwise there may be a
+gap between the last stored record and the start of the heap.  If
+there is no gap the value of the heap offset is
+$\Fkw{NAXIS1}\times\Fkw{NAXIS2}$.  The total length in bytes of the
+heap area following the last stored record (gap plus heap) is given by
+the \Fkw{PCOUNT} keyword in the table header.
+
+For example, suppose we have a table containing 5 rows each 168 byte
+records, with a heap area 2880 bytes long, beginning at an offset of
+2880, thereby aligning the record storage and heap areas on FITS
+record boundaries (this alignment is not necessarily recommended but
+is useful for our example).  The data portion of the table consists of
+2 2880-byte FITS records, 840 bytes of which are used by the 5 table
+records, hence \Fkw{PCOUNT} is $2\times 2880-840$, or 4920 bytes; this
+is expressed in the table header as:
+\begin{verbatim}
+NAXIS1  =    168 / Width of table row in bytes
+NAXIS2  =      5 / Number of rows in table
+PCOUNT  =   4920 / Random parameter count
+  ...
+THEAP   =   2880 / Byte offset of heap area
+\end{verbatim}
+
+\vskip 1em
+The values of \Fkwn{TSCAL}{nnn} and \Fkwn{TZERO}{nnn} for variable
+length array column entries are to be applied to the values in the
+data array in the heap area, not the values of the array descriptor.
+These keywords can be used to scale data values in either
+static or variable length arrays.
+
+While the above description is sufficient to define the required
+features of the variable length array implementation, some hints
+regarding usage of the variable length array facility may also be
+useful.
+
+Programs which read binary tables should take care to not assume more
+about the physical layout of the table than is required by the
+specification.  For example, there are no requirements on the
+alignment of data within the heap.  If efficient runtime access is a
+concern one may want to design the table so that data arrays are
+aligned to the size of an array element.  In another case one might
+want to minimize storage and forgo any efforts at alignment (by
+careful design it is often possible to achieve both goals).  Variable
+array data may be stored in the heap in any order, i.e., the data for
+record N+1 is not necessarily stored at a larger offset than that for
+record N.  There may be gaps in the heap where no data is stored.
+Pointer aliasing is permitted, i.e., the array descriptors for two or
+more arrays may point to the same storage location (this could be used
+to save storage if two or more arrays are identical).
+
+Byte arrays are a special case because they can be used to store a
+``typeless'' data sequence.  Since FITS is a machine-independent
+storage format, some form of machine-specific data conversion (byte
+swapping, floating point format conversion) is implied when accessing
+stored data with types such as integer and floating, but byte arrays
+are copied to and from external storage without any form of
+conversion.
+
+An important feature of variable length arrays is that it is possible
+that the stored array length may be zero.  This makes it possible to
+have a column of the table for which, typically, no data is present in
+each stored record.  When data is present the stored array can be as
+large as necessary.  This can be useful when storing complex objects
+as records in a table.
+
+Accessing a binary table stored on a random access storage medium is
+straightforward.  Since the data records in the main table are fixed
+in size they may be randomly accessed given the record number, by
+computing the offset.  Once the record has been read in, any variable
+length array data may be directly accessed using the element count and
+offset given by the array descriptor stored in the data record.
+
+Reading a binary table stored on a sequential access storage medium
+requires that a table of array descriptors be built up as the main
+table records are read in.  Once all the table records have been read,
+the array descriptors are sorted by the offset of the array data in
+the heap.  As the heap data is read, arrays are extracted sequentially
+from the heap and stored in the affected records using the back
+pointers to the record and field from the table of array descriptors.
+Since array aliasing is permitted, it may be necessary to store a
+given array in more than one field or record.
+
+Variable length arrays are more complicated than regular static arrays
+and imply an extra data access per array to fetch all the data for a
+record.  For this reason, it is recommended that regular static arrays
+be used instead of variable length arrays unless efficiency or other
+considerations require the use of a variable array.
+
+\vskip 1em
+This facility is still undergoing trials and is not part of the
+basic binary table definition.
+%\vfil\eject
+
+%\appendix B
+\section{``Multidimensional Array'' Convention}\label{app_dim}
+
+   It is anticipated that binary tables will need to contain data
+structures more complex that those describable by the basic notation.
+Examples of these are multidimensional arrays and nonrectangular data
+structures.  Suitable conventions may be defined to pass these
+structures using some combination of keyword/value pairs and table
+entries to pass the parameters of these structures.
+
+   One case, multidimensional arrays, is so common that it is prudent
+to describe a simple convention.  The ``Multidimensional array''
+convention consists of the following: any column with a dimensionality
+of 2 or larger will have an associated character keyword
+\Fkwn{TDIM}{nnn}\verb|='(|\Fit{l}\verb|,|\Fit{m}\verb|,|\Fit{n}\verb|,|...\verb|)'|
+where \Fit{l}, \Fit{m}, \Fit{n},... are the dimensions of the array.
+The data is ordered such that the array index of the first dimension
+given (\Fit{l}) is the most rapidly varying and that of the last
+dimension given is the least rapidly varying.  The size implied by the
+\Fkwn{TDIM}{nnn} keyword will equal the element count specified in the
+\Fkwn{TFORM}{nnn} keyword.  The adherence to this convention will be
+indicated by the presence of a \Fkwn{TDIM}{nnn} keyword in the form
+described above. 
+
+    A character string is represented in a binary table by a
+one-dimensional character array, as described in
+item~\ref{item_a_type} (``\Frt{r}{A}'') in the list of datatypes in
+section~\ref{sect_datatypes} (``Table Data Records'').  For example, a
+Fortran~77 \verb|CHARACTER*20| variable could be represented in a
+binary table as a character array declared as
+\Fkwn{TFORM}{nnn}\verb|='20A'|.  Arrays of character strings, i.e.,
+multidimensional character arrays, may be represented using the
+\Fkwn{TDIM}{nnn} notation.  For example, if \Fkwn{TFORM}{nnn}\verb|='60A'|
+and \Fkwn{TDIM}{nnn}\verb|='(5,4,3)'|, then the entry consists of a
+$4\times 3$ array of strings of 5 characters each. (Variable length
+character strings are allowed by the convention described in
+Appendix~\ref{app_char}.  One dimensional arrays of strings should use
+the convention in Appendix~\ref{app_char} rather than the
+``Multidimensional Array'' convention.)
+
+\vskip 1em
+This convention is optional and will not preclude other conventions.
+This convention is not part of the binary table definition.
+
+%\vfil\eject
+%\appendix
+\section{``Substring Array'' Convention}\label{app_char}
+
+This appendix describes a layered convention for specifying that a
+character array field (\Fkwn{TFORM}{nnn}\verb|='|\Frt{r}{A}\verb|'|) consists
+of an array of either fixed-length or variable-length substrings
+within the field.  This convention utilizes the option described in
+the basic binary table definition to have additional characters
+following the datatype code character in the \Fkwn{TFORM}{nnn} value
+field.  The full form for the value of \Fkwn{TFORM}{nnn} within this
+convention is\\
+\centerline{\verb|'|\Fit{r}{\tt A:SSTR}\Fit{w/nnn}\verb|'|}
+where
+\begin{verse}
+\Fit{r} is an integer giving the total length including any delimiters
+(in characters) of the field, \\ 
+{\tt A} signifies that this is a character array field, \\
+{\tt :} indicates that a convention indicator follows,\\
+{\tt SSTR} indicates the use of the ``Substring Array'' convention,\\
+\Fit{w}  is an integer $\leq $ \Fit{r} giving the (maximum) number of
+characters in an 
+individual substring (not including the delimiter), and \\
+\Fit{/nnn} if present, indicates that the substrings 
+have variable-length and are delimited by an ASCII text character with
+decimal value \Fit{nnn} in the range 032 to 126 decimal, inclusive.
+This character is referred to as the delimiter character.  The
+delimiter character for the last substring will be an ASCII NUL.
+\end{verse}
+\noindent To illustrate this usage:
+\begin{verse}
+\verb|'40A:SSTR8'| signifies that the field is 40 characters wide and
+consists of an array of 5 8-character fixed-length substrings. 
+
+\verb|'100A:SSTR8/032'| signifies that the field is 100 characters wide
+and consists of an array of variable-length substrings where each
+substring has a maximum length of 8 characters and, except for the last
+substring,  is terminated by an ASCII SPACE (decimal 32) character. 
+\end{verse}
+
+Note that simple FITS readers that do not understand this substring
+convention can ignore the \Fkw{TFORM} characters following the
+\Frt{r}{A} and can interpret the field simply as a single long string
+as described in the basic binary table definition.
+
+The following rules complete the full definition of this convention:
+\begin{enumerate}
+
+\item In the case of fixed-length substrings, if \Fit{r} is not an
+integer multiple of \Fit{w} then the remaining odd characters are
+undefined and should be ignored.  For example if
+\Fkwn{TFORM}{nnn}\verb|='14A:SSTR3'|, then the field contains 4
+3-character substrings followed by 2 undefined characters.
+
+\item  Fixed-length substrings must always be padded with blanks if 
+they do not otherwise fill the fixed-length subfield.  The ASCII NUL
+character must not be used to terminate a fixed-length substring
+field.
+
+\item The character following the  delimiter character in
+variable-length substrings is the first character of the following
+substring.
+
+%\item  
+%If an array of variable-length substrings does not completely
+%fill the binary table field, then the last substring must be
+%terminated with an ASCII NUL character (value 000), rather than the substring
+%delimiter character.  
+
+\item The method of signifying an undefined or null substring within a 
+fixed-length substring array is not explicitly defined by this
+convention (note that there is no ambiguity if the variable-length
+format is used).  In most cases it is recommended that a completely
+blank substring or other adopted convention (e.g. \verb|'INDEF'|) be
+used for this purpose although general readers are not expected to
+recognize these as undefined strings.  In cases where it is necessary
+to make a distinction between a blank, or other, substring and an
+undefined substring use of variable-length substrings is recommended.
+
+
+\item Undefined or null variable-length substrings are designated by a 
+zero-length substring, i.e., by a delimiter character (or an ASCII NUL
+if it is the last substring in the table field) in the first position
+of the substring.  An ASCII NUL in the first character of the table
+field indicates that the field contains no defined variable-length
+substrings.
+
+\item  The ``Multidimensional Array''convention described in
+Appendix~\ref{app_dim} of this paper provides a syntax using the
+\Fkwn{TDIM}{nnn} keyword for describing multidimensional arrays of any
+datatype which can also be used to represent arrays of fixed-length
+substrings.  For a one dimensional array of substrings (a two
+dimensional array of characters) the ``Substring Array'' convention is
+preferred over the ``Multidimensional Array'' convention.
+Multidimensional arrays of (fixed length) strings require the use of
+the ``Multidimensional Array'' convention.
+
+\item This substring convention may be used in conjunction with 
+the ``Variable Length Array'' facility described in
+Appendix~\ref{app_varlen} of this paper.  In this case, the two
+possible full forms for the value of the \Fkw{TFORM} keyword are\\
+\Fkwn{TFORM}{nnn}\verb|='|\Fit{r}\verb|PA(|\Fit{maxelem}\verb|):SSTR|\Fit{w}\verb|/|\Fit{nnn}\verb|'|~and\\
+\Fkwn{TFORM}{nnn}\verb|='|\Fit{r}\verb|PA(|\Fit{maxelem}\verb|):SSTR|\Fit{w}\verb|'|\\
+for the variable and fixed cases, respectively.
+
+\end{enumerate}
+
+\vskip 1em
+This convention is optional and will not preclude other conventions.
+This convention is not part of the binary table definition.
+
+\begin{acknowledgements} 
+The authors would like to thank E. Greisen, D. Wells,
+P. Grosb\o l, B. Hanisch, E. Mandel, E. Kemper, S. Voels,
+B. Schlesinger, and many others for invaluable discussions and
+suggestions.
+\end{acknowledgements}
+
+
+\begin{thebibliography}{}
+\bibitem[1981]{paper1}
+Wells, D.~C., Greisen, E.~W., Harten R.~H. 1981, A\&AS, 44, 363
+%
+\bibitem[1981]{paper2}
+Greisen, E.~W. and Harten, R.~H. 1981, A\&AS, 44, 371
+%
+\bibitem[1988]{paper3}
+Grosb\o l, P., Harten, R.~H., Greisen, E.~W., Wells, D.~C. 1988,
+A\&AS, 73, 359
+%
+\bibitem[1988]{paper4}
+Harten, R.~H., Grosb\o l, P., Greisen, E.~W. and Wells, D.~C. 1988,
+A\&AS, 73, 365 
+\end{thebibliography}
+
+\end{document}

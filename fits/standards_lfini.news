@@ -1,0 +1,159 @@
+From lfini@chronos Wed Mar 31 11:02:36 1993
+Status: RO
+X-VM-v5-Data: ([nil nil nil nil nil nil nil nil nil]
+	["6924" "Tue" "30" "March" "1993" "13:24:17" "GMT" "Luca Fini" "lfini@chronos " nil "146" "SUMMARY: Opinions on standards" "^From:" nil nil "3"])
+Newsgroups: sci.astro
+Reply-To: lfini@arcetri.astro.it
+Organization: Osservatorio di Arcetri
+X-Newsreader: TIN [version 1.1 PL6]
+From: lfini@chronos (Luca Fini)
+Subject: SUMMARY: Opinions on standards
+Date: Tue, 30 Mar 1993 13:24:17 GMT
+
+
+
+Thanks to those who responded to my original posting:
+Eric W. Greisen, Wayne H. Warren Jr., Donald C. Wells
+
+Here is my summary of (and inevitably opinion on) the discussion.
+I hope that the original authors will not fell too much betrayed
+by my interpolation of their arguments.
+
+
+The first point is that the enforcing of standards is a way to rationalize 
+the work and to make life simpler:
+
+>>                                 (...)  No telescope in the world
+>> stands alone any longer so there is no reason for its users to
+>> tolerate getting data in formats that are unreadable except to
+>> special-purpose programs.  And this should be readable in considerable
+>> detail.  (...)
+
+But, moreover, it is a *necessary* approach for doing science:
+
+>> but I can't do science if I do not know the coordinates, brightness
+>> scales, etc.  (...)
+
+>>	"The purpose of standardization is not to enforce the common
+>>	mediocrity, but rather to aid the creative craftsman."
+
+
+as it has been in the past:
+
+>>   .... most common observations, such as photometry, spectroscopy,
+>> radial and rotational velocities, etc., employ the use of standard
+>> stars to match observational systems. ....
+
+One of the comments goes a little further on the long debated issue 
+about calibrated data:
+
+>>        (...)  Another standard that should be pushed much more than it
+>> is is the removal of the "instrumental signature" from the data.
+>> I.e., the flux and coordinate scales should be corrected (regridded
+>> and non-linearly scaled as needed) so that the output images are in
+>> rational defined units and image projections.  I understand that this
+>> cannot always be done in detail - especially say deconvolving images
+>> to remove synthesis beam patterns or the patterns produced by seconday
+>> support struts etc - but some efforts should be made in all cases.
+>> And a fully corrected (if no longer quite exactly right) image should
+>> be available to the user.
+
+Now dealing with specific examples of standards in astronomy,
+not surprisingly, FITS comes out as the most wide spread and appreciated
+one, with Tex and LaTeX coming seconds:
+
+>> As one of the original authors of FITS and currently developing
+>> standards for coordinates in FITS I am a great believer in enforced
+>> standards for data intercommunication. (...)
+
+>>                                     (...)  FITS format for the inter-
+>> change of data is a good example of widespread use of a standard, as
+>> is TeX and LaTeX for document processing. (...)
+
+>> I am sure that it will come as no surprise to you to hear that I
+>> strongly favor astronomy's data format standard, FITS! I am also
+>> strongly in favor of certain computing standards, e.g. IEEE-FP,
+>> Postscript, X-windows, TCP/IP, TeX, etc. (...)
+
+Then comes the stressing of the importance of standard programming
+techniques in software development:
+
+>>                                   (...) Software too is now a
+>> community resource - it costs a lot to produce and should be shared
+>> whenever possible.  Rational and acreful standards of conduct in
+>> coding are needed to make that work.  I and others have to figure out
+>> my code of today in another N years or in another place.
+
+>> I believe too many astronomers (...)
+>>          (...) miss the point about the need for standards to enhance
+>> the spatial and temporal longevity and value of their work.
+
+>>                                    (...) Standard languages are also
+>> important, of course. 
+
+A comment about importance and ways to enforce standards:
+
+>>                       (...) It is important that astronomers use a
+>> consistent, documented, interoperable *canonical* data format for
+>> initial data distribution as well as for longterm archival storage. In
+>> particular, the space agencies of the world should *enforce* the use
+>> of FITS for space mission data products. The major groundbased
+>> observatories should do likewise, especially for large telescope
+>> construction projects. (...)
+
+Now coming to problems concerning the difference between de-facto and
+de-iure:
+
+   [referring to data analysis, data archiving, etc.]
+>>                                      (...) Most of the items that you
+>> list above, although having no "formal" standards, are represented by
+>> certain packages and procedures that are widespread and that have
+>> become de facto standards among astronomers.
+
+>> In networking we have a strange situation: ISO's "OSI" protocol suite
+>> may be the de jure standard, but the de facto standard is the TCP/IP
+>> protocol suite; one can easily argue that the latter does exist but
+>> that the former does not! (...)
+
+Which suggests how standard should develop:
+
+>>                             (...) OSI failed because it developed
+>> top-down, out of an intensely political committee process which
+>> produced cubic meters of paper, but no (interoperable) code. TCP/IP
+>> succeeded because it developed bottom-up, out of an R&D process which
+>> produced working implementations and learned from them. The TCP/IP
+>> process was an example of what is today often called "rapid
+>> prototyping". The Internet Activities Board (IAB), which is the body
+>> which holds formal authority over TCP/IP, will not endorse any
+>> experimental protocol as a TCP/IP standard until interoperable
+>> implementations have been demonstrated. (...)
+
+I would add to this that when a de-facto standard proves to be a good one,
+it will easily develop into a more formalized one (de-iure). Less likely
+vice-versa.
+
+Finally some remarks on areas where a stronger standardization effort
+would prove fruitful:
+
+>> I think that the computing industry needs to invent an external
+>> canonical format to interchange tables between database systems. Each
+>> system has its own external format. The FITS BINTABLE extension is  a
+>> sufficient solution for astronomical computing people.
+
+>> [remote archive access is an area where] We need to have a small set
+>> of standards. I am very impressed with the effectiveness of WAIS
+>> (Z39.50): it is far from perfect, but the fact that already such a
+>> diverse set of archives can be searched with a single portable client
+>> user tool is an impressive demonstration of the synergistic power of
+>> standards -- such standards create *markets* which encourage growing
+>> sets of entrepreneurs to provide new services for growing sets of
+>> customers.
+
++------------------------------------------------------------------------+
+| Luca Fini                                                              |
+| Osservatorio Astrofisico di Arcetri     Tel.   +55 2752 253            |
+| L.go E.Fermi, 5                         Fax.:  +55 220039              |
+| 50125 Firenze                           e-mail: lfini@arcetri.astro.it |
+| Italia                                                                 |
++------------------------------------------------------------------------+
+

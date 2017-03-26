@@ -1,0 +1,240 @@
+[Note: The following text was prepared by Barry Schlesinger (FITS
+Hotline person at GSFC-NOST) as part of a comparison of various data
+formats which is being produced by NOST. This text is a *draft*. NOST
+has given me permission to place it in this archive.  -Don Wells]
+
+From: BSCHLESINGER@NSSDCA.GSFC.NASA.GOV
+To: dwells@cv3.CV.NRAO.EDU
+Subject: Draft FITS Section for Formats Comparison Booklet
+Date:    Thu, 7 May 1992 11:48:58 -0400 (EDT)
+
+---------------------------------------------------------------------
+                                     DRAFT
+
+                        FLEXIBLE IMAGE TRANSPORT SYSTEM
+
+Purpose
+        The Flexible Image Transport System (FITS) was developed by
+astronomers to be the standard format for data transport between
+installations.  Because each installation would have its own internal format,
+new software had to be written each time an particular user or group
+wished to transfer data to or from a new installation.  Developing a
+standard transport format reduces the effort needed for data transport:
+each installation needs only one software package to convert from its
+format to the standard transport format and from the standard transport
+format to its own internal format.  The original application was for digital
+images (hence the name, "Image"), but even at the time of origin, other
+applications were envisioned, and provision was made to allow them, hence
+the term, "Flexible". 
+
+Targeted user community and sponsoring organization
+        FITS is endorsed by the International Astronomical Union (IAU) as
+the standard format for data transport in the astronomical community. 
+Code SZ at NASA headquarters has instructed that all projects under Code
+SZ or supported by it must make their data available in FITS format. 
+Other user communities may choose to adopt FITS or use some of the
+features of FITS in developing their own format.  The IAU has established
+a Working Group to oversee the definition and development of the FITS
+standard. 
+
+Conceptual model
+        The basic component in FITS is the file, a byte stream ending with
+a logical end-of-file marker appropriate to the medium.  A FITS file is
+comprised of a sequence of Header and Data Units (HDUs).  Each HDU
+consists of a header made up of card images containing keyword=value
+statements in printable ASCII, describing the format and structure of its
+data, which immediately follow.  A number of different formats are possible
+for the data, but all of these formats can be mapped in some way to an
+array of one or more dimensions.  An HDU may consist only of a header,
+without data.  
+
+Relation to physical media
+        A FITS file is a purely logical structure.  Because it was originally
+developed for tape, much of the early literature describes FITS in that
+context. Medium-specific references are being removed from the standard,
+and conventions are being developed for individual media.  
+
+Platforms supported and portability
+        FITS is designed and intended to be usable on any hardware.  A
+FITS file can be transported either on a physical unit, such as tape or disk,
+or electronically, as befits a format designed for data transport.  Machine-
+specific FITS software may be needed to translate between FITS format and
+the data encoding native to a particular machine.
+        
+User view
+        To the user, FITS presents a data file with a prescribed overall
+format -- a sequence of HDUs with a number of possible formats.
+        The header of the first or primary HDU, the primary header, is
+always present.  There need not be data in this HDU, but if there are, they
+must be in the form of an array of 1 to 999 dimensions, called the primary
+data array. Values in this array must be in one a selected group of binary
+formats. Values for required keywords in the header describe the properties
+of the array: the number of axes, the length of each, and the data type of the
+members.  
+        The primary HDU may be followed by a set of additional HDUs
+called extensions.  A keyword in the primary header tells the reader
+whether or not extensions may be present in the file.            One extension
+type, ASCII Tables, has been endorsed as standard by the IAU FITS
+Working Group. In this structure, a two-dimensional matrix of bytes is
+mapped into a table whose entries are composed of printable ASCII
+characters.  
+        As FITS evolves, other types of extensions may be endorsed as
+standard in the future.
+
+Functions and flexibility
+        The principal use of FITS remains that for which it was originally
+designed, transport of data between installations.  A natural extension of
+this purpose is data archiving.  If a data archive uses its own special
+format, then most users, who do not use that format, must write software
+to translate between the archive format and theirs.  If the archival data are
+in standard format, the users may use standard software developed to
+handle that format.  
+        The primary data array is most obviously suitable for digital images;
+however, other data that map into an array or image can also be
+transported by a primary data array.  One example is a spectrum, which
+maps into an image where one axis is wavelength and the other the tracking
+axis.  Labels and scales for the axes can be specified by standard but
+optional keywords in the primary header.
+        The ASCII Tables format provides a method to package additional
+information about an image in the primary data array in the same file. It
+can also be used to distribute catalogues in FITS format.  Keywords
+reserved to the extension type allow the user to define the number, content,
+and size of the fields in the table.
+        FITS provides for data structures that cannot be represented by a
+simple array or ASCII tables by allowing users to create new types of
+extensions.   A type name in the header identifies the structure of each
+extension, and keywords in the header of each extension provide the size
+of the data following. Extensions of different types may appear in a file in
+any order.  A program that reads FITS files can use the type name and size
+information to identify and skip over extensions in a FITS file that it is not
+equipped to handle.  An extension type name may be used for only one
+structure; names must be registered with the IAU FITS Working Group.  
+        Standard FITS keywords allow the user to describe the origin and
+history of the data set and the material it contains.  In addition, users may
+define their own keywords to furnish additional metadata and information
+such as instrument status.      
+        
+Misapplications
+        Because of the "Image" in the name, FITS is sometimes incorrectly
+thought of as an image display format, in which the contents are stored in
+a way that allows easy conversion of the pixel values to screen greyscale or
+color, through the use of a viewer.  While the primary data array may
+represent an image, it need not.  Even if it does, software must be obtained
+to convert the FITS values to a form that can be displayed.  Thus, FITS is
+not necessarily the best way to transport images that are designed
+exclusively for display.
+
+Incorporated software
+        No software is incorporated as part of the definition of FITS. 
+Installations must develop their own software to read and write FITS or
+must obtain one of the independently developed packages described in the
+next section.  The NASA/OSSA Office of Standards and Technology (NOST)
+FITS Support Office is developing a FITS Product Conformance Tester,
+which will read files and check their conformance to the NOST Standard. 
+At present, a test prototype that can check required keywords in the
+primary data array and list sample members of the array is available on
+request for user testing. 
+ 
+Other utilities
+        The major astronomical image analysis packages -- AIPS
+(Astronomical Image Processing System), supported by the National Radio
+Astronomy observatory; IRAF (Image Reduction and Analysis Facility),
+supported by the National Optical Astronomy Observatories and ESO-
+MIDAS (Munich Image Data Analysis System), supported by the European
+Southern Observatory -- all have the capability to read FITS files, but the
+FITS software is not separable from the rest of the package.  The portable
+bitmap plus package can convert some FITS files into GIF format; more
+general capabilities claimed for recent upgrades have not been confirmed. 
+A few software packages have been made available to the public.  W. Pence
+of HEASARC has developed a set of FITS reading and writing routines in
+FORTRAN called FITSIO.  These routines must be incorporated by the user
+into more general software to process the file in question.  Software in C to
+read and list the headers of a FITS file is available from the NOST FITS
+Support Office.  Sample FITS data sets are available by anonymous ftp from
+fits.cx.nrao.edu, in the directory \FITS\TestFiles (case is significant).  The
+Astronomical Data Center has developed a FITS Tables Browser, which can
+be used to read the catalogue CD-ROM described below.
+
+How it is used
+        A user may receive FITS file in many ways: tape, diskette, or
+electronic transfer.  For tape or disk data sets, some information on
+physical blocking should be provided along with the physical data set.  It
+will usually be easier for the user if the first step is to determine the
+contents of the file by listing the contents of the header, using a program
+like that written by the FITS Support Office.  For reading FITS files, each
+installation will have established some software package as standard for its
+use, either one associated with one of the major astronomical image
+analysis packages, another widely distributed package such as FITSIO, or
+a locally developed FITS writer.  Local software will be used along with the
+FITS reader to convert in a convenient form for display or printout.  If there
+is a standard local data storage format, the FITS file may be converted to
+that format.   Local utility software can then be used with the converted
+data.
+        The process of writing FITS files is the reverse.  If an existing data
+set is to be converted to FITS, a locally developed package is used to create
+the file or provide input to one of the standard packages.  Using an
+appropriate FITS writer, it is also possible to create a new data set on FITS
+format.  The new FITS data set may be tape, disk, or an electronic file.
+
+Representative Applications
+        The original application of FITS was to transport digital images. 
+Images in a wide variety of wavelengths have been transported: near
+ultraviolet, optical, infrared, and radio.  FITS has also been used to
+transport the results of interferometry measurements.  A CD-ROM produced
+by the NSSDC Astronomical Data Center uses the ASCII Tables format
+extensively to store a large number of catalogues.  This format is also often
+use to hold an observing log accompanying an image.  In this application,
+the primary HDU would hold the image and an ASCII table extension would
+contain the observing log.
+
+Evolutionary process
+         A proposal for a new extension type or other refinement to FITS
+generally originates when the developer of a data set finds that the data can
+not reasonably fit into an existing standard or proposed FITS format.  The
+designer develops a concept for the new format, chooses a name for the
+extension type, and registers the name with the IAU FITS Working Group. 
+If the format appears to potentially have broader applications, the designer
+develops a formal proposal for a new standard extension, often discussing
+design issues with others interested in the format.  This proposal is
+distributed for review by the astronomical community.  Tests must be run
+using the proposed format to confirm that it can actually be used for data
+transport.  After the community has reviewed the proposal, any
+modifications have been made, and the format has been successfully used
+for data transport, the proposal is submitted for approval to the regional
+committees -- the European FITS Committee and the North American
+committee under the American Astronomical Society Working Group on
+Astronomical Software.  Following approval by the regional committees, it
+is submitted to the IAU FITS Working Group.  Approval by the Working
+Group establishes it as a standard extension.
+
+Current directions of evolution
+        A binary tables extension is currently being proposed for
+endorsement as a standard extension.  Like the ASCII Tables extension, the
+two dimensional matrix is viewed as a table; however, the individual fields
+are in binary, rather than FORTRAN format.  In addition an individual table
+field may be a vector or multidimensional matrix, not simply a single
+number. Binary tables are expected to be widely used once adopted,
+particularly in the field of high energy astrophysics, as in the Compton GRO
+results, where the data are typically an event list. 
+        Another proposed extension type would provide for simple images
+or data arrays, like the contents of the primary data array, to appear in
+extensions.
+        Additional areas under discussion include compression, bit streams,
+and an extension for use in some media to represent the tape end of file
+mark. 
+
+User support
+        A FITS Support Office has been established under the NOST.  This
+office answers queries on specific FITS topics, provides copies of some
+documents, and furnishes references for others.  The office is also
+developing some FITS software. The NOST FITS Support Office maintains
+an anonymous ftp directory (FITS) on nssdca.gsfc.nasa.gov including copies
+of some FITS documents, the current list of extension type names registered
+with the IAU, the software developed by the FITS Support Office to read and
+list FITS headers, and a list of FITS software packages whose developers
+have made them publicly available.  
+        The best way to remain aware of current developments in FITS is
+electronically.  New FITS documents, software, and extension proposals are
+announced on an electronic mail exploder fitsbits@fits.cx.nrao.edu, tied to
+the sci.astro.fits USEnet newsgroup.  This exploder/newsgroup also serves
+as the forum for discussion of FITS proposals, practices, and controversies. 

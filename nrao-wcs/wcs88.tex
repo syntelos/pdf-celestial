@@ -1,0 +1,434 @@
+\documentstyle[11pt]{article}
+\topmargin 0in
+\oddsidemargin 0in
+\evensidemargin 0in
+\headheight .125in
+\footheight .125in
+\textheight 9.0in
+\textwidth 6.5in
+\parindent 1em  % Paragraph indentation amount
+\parskip 1ex    % White space between paragraphs amount
+
+%  This document is a working DRAFT of a set of possible conventions to be
+% used in the FITS format for the representation of world coordinate systems.
+% This draft results from a working group meeting held at NRAO-Charlottesville
+% in January 1988.  No action has been taken on this draft by any of the
+% FITS committees at this time.
+%
+%					R. J. Hanisch
+%					Space Telescope Science Institute
+%					3700 San Martin Drive
+%					Baltimore, MD  21218
+%					hanisch@stsci.edu
+
+\begin{document}
+\pagestyle{plain}
+\thispagestyle{empty}
+
+
+\begin{center} \Large \bf
+World Coordinate Systems Representations\\
+Within the FITS Format\footnote{This document is a DRAFT only and has not
+been reviewed or approved by any of the standing FITS committees or the
+IAU Commission 5 Working Group on FITS.}\\
+\large
+\vspace*{2ex}
+R. J. Hanisch\\
+Space Telescope Science Institute\\
+D. G. Wells\\
+National Radio Astronomy Observatory\\
+\vspace*{2ex}
+DRAFT -- February 1988 -- DRAFT\\
+\end{center}
+
+
+\section{Introduction}
+When the original FITS format definition was published (Wells, Greisen, and
+Harten, 1981, {\it Astron. Astrophys. Suppl.} {\bf 44}, 363), a number of
+keywords were provided for the association of a {\it world coordinate system}
+(WCS) with the data array.  Unfortunately, the explicit definitions of these
+keywords were not given, so that thus far it has not generally been possible to
+convey WCS information from one data analysis system to another in a concise
+and unambiguous manner.  In other words, even though the syntax of the WCS
+information was defined, the semantics were not.  The purpose of this document
+is to define the syntax {\it and} semantics for the expression of world
+coordinate systems within the FITS format. 
+
+The AIPS Group of the National Radio Astronomy Observatory adopted a number
+of conventions for use within the AIPS system for the expression of world
+coordinates.  These conventions are fully expressed within the FITS format
+for sky images in several standard projection geometries.  It is these
+basic conventions that are to be defined as the standard for use within
+FITS.  The AIPS conventions, however, do not extend easily to data arrays
+of higher dimensionality, or to data arrays with skew world coordinate
+axes.  Moreover, in order to have the WCS be accurate to of order 0.1
+arcsec, the coordinate reference frame (FK4, FK5), equinox, and epoch
+must all be specified.  This paper presents the complete set of standards
+to be used within the FITS format for the specification of the most 
+common sky geometries.
+
+\section{The Basic Problem}
+
+The location of a pixel in a data array can be easily identified by giving
+its {\it pixel coordinate}, given that a pixel counting convention (0-based,
+1-based) is defined.  However, the vast amount of astronomical data requires
+an association between the pixel coordinate system and the {\it world} or
+{\it physical} coordinate system.  For example, an array of spectral flux
+measurements needs to be associated with wavelengths through some sort of
+dispersion solution, or an array of time-resolved flux measurements needs to 
+be associated with actual times in UTC.  In the simplest cases, these
+associations can be expressed in linear terms:
+\begin{displaymath}
+\hbox{\it world coordinate} = \hbox{\it pixel coordinate} \cdot \hbox{\it scale}
++ \hbox{\it offset}
+\end{displaymath}
+where {\it scale} is the pixel size (in world coordinate units) and {\it offset}
+is a zero-point correction.  In more common cases, however, the relation 
+between pixel coordinates and world coordinates is non-linear.  
+
+Perhaps the single most important example from astronomy is images of the
+sky. Any image of the sky is intrinsically a projection of the celestial sphere
+onto a plane.  Thus, the objective in giving a description of the coordinate
+system in a FITS header is to provide an unambiguous and accurate mapping of
+pixel coordinates in the image to coordinates on the celestial sphere
+(equatorial, ecliptic, galactic).
+
+There are three standard projection geometries which apply to the majority
+of optical, X-ray, and radio telescopes:  a tangent-plane projection
+(also known as a gnomonic projection), in which the linear displacement
+from the point of tangency is proportional to the tangent of the angular
+displacement, a sine projection (used by most radio interferometers), and
+a Schmidt camera projection.  A few east-west radio interferometers
+(such as the Westerbork Synthesis Radio Telescope) utilize a projection
+geometry based on the north celestial pole.  These geometries are
+illustrated in Figure 1.
+
+The problem of converting from pixel coordinates to world coordinates
+can be viewed in three major steps:
+
+\begin{enumerate}
+\item Convert the raw pixel coordinates into an idealized set of pixel
+coordinates, including any corrections for the rotation of the data
+array from the natural sky coordinates.  {\it This is a linear operation.}
+\item Convert the idealized pixel coordinates into sky coordinates by
+applying the proper geometric corrections for the type of projection.
+\item Correct the sky coordinates (if necessary) to include the effects
+of equinox, epoch, and coordinate reference frame.
+\end{enumerate}
+
+In practice, the first two steps above are generally combined mathematically
+into one step.  AIPS Memos 27 and 46 describe in detail the conversions 
+corresponding to the second step\footnote{Copies of these memos, written by Eric
+Greisen, are available from the National Radio Astronomy Observatory, AIPS
+Group, Edgemont Road, Charlottesville, VA 22903.}. The third step may be
+required for comparing image data from different telescopes or taken at
+different times.  The standard coordinate reference frames are equinox B1950.0
+within the FK4 reference frame (e.g., the SAO Catalog), and J2000.0 within the
+FK5 reference frame (e.g., the Space Telescope Guide Star Catalog). 
+
+
+\section{FITS WCS Definitions for Standard Sky Geometries}
+For a two-dimensional sky image ({\tt NAXIS} = 2, with two spatial 
+coordinates), a standard FITS header should use the following keywords to
+define the WCS: 
+
+{\tt CRVAL1, CRVAL2} -- the values of the world coordinates 
+{\it at the point of tangency.}  Values are given in decimal degrees.
+It is suggested that the values of {\tt CRVAL1} and {\tt CRVAL2} be given to
+double precision accuracies.  The values of {\tt CRVAL1} and {\tt CRVAL2} {\it
+do not change} with image subsetting operations.  The only way to change the
+values of {\tt CRVAL1} and {\tt CRVAL2} is to resample the data array onto a
+grid with a different point of tangency, or to transform the data into
+a different coordinate system (such as galactic longitude and latitute instead
+of right ascension and declination).   In the latter case, however, {\tt
+CRVAL1} and {\tt CRVAL2} still correspond to the same point on the celestial
+sphere. 
+
+{\tt CRPIX1, CRPIX2} -- the pixel values corresponding to the point of
+tangency.  Note that these values need not be integral values, and they
+need not correspond to a pixel that is physically within the array. For
+example, if a subset has been extracted from a larger image, the
+reference pixel/point of tangency may well lie outside the data array.
+
+{\tt CDELT1, CDELT2} -- the pixel size (in physical units, decimal
+degrees) along each coordinate axis {\it at the point of tangency}.
+
+{\tt CROTA2} -- the rotation angle (decimal degrees) between the
+`declination-like' coordinate axis and the 2nd axis of the pixel array.
+{\tt CROTA2} is measured positive in a counterclockwise direction.  See Figure
+2.  {\tt CROTA1} is not used.  If there is no rotation, the keyword {\tt CROTA2}
+need not appear.  FITS reading programs should assume a value for
+{\tt CROTA2} of zero if a value is not explicitly given in the FITS header.
+
+{\tt CTYPE1, CTYPE2} -- the type of world coordinate axes.  The {\tt CTYPE}
+value strings are eight characters in length, and are constructed from
+two four-character segments.  The first four characters give the type
+of world coordinate, and the second four characters give the type of
+projection geometry.  The first four-character string is left-justified
+and filled out to a length of four characters by appending hyphens; the
+second four-character string is right-justified and filled out to a length
+of four characters by prepending hyphens. The following coordinate pairs and
+geometries are recognized: 
+
+\begin{center}
+\begin{tabular}{cl}
+Coordinates & Description \\
+\hline
+\tt RA--, DEC- & equatorial coordinates $(\alpha,\delta)$ \\
+\tt GLON, GLAT & galactic coordinates $(\ell^{II},b^{II})$ \\
+\tt ELON, ELAT & ecliptic coordinates $(\lambda,\beta)$ \\
+ & \\
+Projection & Description \\
+\hline
+\tt -TAN & tangent plane (gnomonic) \\
+\tt -SIN & sine \\
+\tt -ARC & arc (Schmidt cameras) \\
+\tt -NCP & north celestial pole (east-west interferometers) \\
+\tt -STG & stereographic \\
+\tt -MER & Mercator \\
+\tt -AIT & Aitoff \\
+\tt -GLS & global sinusoidal \\
+\end{tabular}
+\end{center}
+
+An example of a valid {\tt CTYPE} is `{\tt DEC--TAN}'. Rigorous interpretation
+is not possible where unrelated coordinate types or geometries are mixed -- a
+combination of `{\tt RA---TAN}' with `{\tt GLON-AIT}', for example, is not
+meaningful.  Spatial coordinates must be supplied in logically consistent
+pairs.
+
+The fact that these {\tt CTYPE}s are defined does not imply that all systems
+supporting FITS input and output must understand them.  However, data arrays
+which map into one of the above coordinate systems and geometries should use
+this notation.  Extensions of the notation to other types of projections and
+other types of coordinates are certainly possible.
+
+Equatorial coordinates `{\tt RA--/DEC-}' require further qualification; see the
+discussion of coordinate reference frames below (section \ref{sec-refframes}). 
+
+Galactic coordinates `{\tt GLON/GLAT}' conform to the IAU definitions of
+1958 known as $(\ell^{II}, b^{II})$.
+
+Ecliptic coordinates `{\tt ELON/ELAT}' refer to the mean ecliptic and equinox
+of date, in the post-IAU 1976 system.  The date is determined via the 
+{\tt MJD-OBS} or {\tt DATE-OBS} keyword (section \ref{sec-refframes}). 
+
+For the tangent-plane, sine, and Schmidt projection geometries, transformations
+between the three coordinate systems $(\alpha,\delta)$, $(\ell^{II},b^{II})$,
+and $(\lambda,\beta)$, can be expressed via simple header modifications (to
+{\tt CRVAL1}, {\tt CRVAL2}, and {\tt CROTA2}). 
+
+The conventions described above do not accommodate coordinate systems with
+three or more data axes (three rotation angles are needed for {\tt NAXIS = 3},
+six for {\tt NAXIS = 4}, and ten for {\tt NAXIS = 5}, and the semantic
+definitions for the rotation angles become unwieldly) or with skew data axes.
+Rather than define a {\tt CSKEW} keyword, which would only have a
+straightforward interpretation for two-dimensional arrays, a generic coordinate
+description matrix can be used. The coordinate description (CD) matrix gives
+the partial derivatives of each physical coordinate axis with respect to each
+pixel coordinate axis at the point of tangency.  That is, we have new FITS
+keywords of the form {\tt CDiiijjj}\footnote{The STSDAS software uses the
+notation {\tt CDi\_j} rather than {\tt CDiiijjj}.  The advantage is that for
+typical WCS notations, the keywords are simpler and easier to read ({\tt 
+CD1\_1, CD1\_2, CD2\_1, CD2\_2} instead of {\tt CD001001, CD001002}, etc.).  
+The notation {\tt CDiiijjj} was originally proposed in order to assure 
+compatibility with
+the most general FITS image, i.e., a 999 $\times$ 999 dimensional image
+with all possible cross-terms in the CD matrix.  As this is a rather
+unlikely occurrence, and since STSDAS routinely handles only 2 (and 
+occasionally 3) dimensional images, it uses the simpler notation.
+[Note added 30 October 1992 by RJH.]}: 
+\begin{displaymath}
+\hbox{\tt CDiiijjj} = \left. \left( \frac{\partial \hbox{world coordinate 
+iii}} {\partial \hbox{pixel coordinate jjj}} \right)
+\right|_{\hbox{tangent point}}
+\end{displaymath}
+The indices {\tt iii} and {\tt jjj} run from 1 to {\tt NAXIS}, so that
+a {\tt NAXIS} $\times$ {\tt NAXIS} matrix is formed.
+For simple, non-rotated sky images, {\tt CD001001} = {\tt CDELT1}, 
+{\tt CD002002} = {\tt CDELT2}, and the cross-terms in the matrix are both zero
+and can be omitted from the FITS header. 
+
+One transforms from raw pixel coordinates $(x,y)$ to linear sky coordinates 
+$(l,m)$ (with rotation and skew removed), using the following relations:
+\begin{displaymath}
+\left[ \begin{array}{c} \Delta l \\ \Delta m \end{array} \right] = 
+\left[ \begin{array}{cc} {\tt CD001001} & {\tt CD001002} \\ {\tt CD002001}
+& {\tt CD002002} \end{array} \right] \left[ \begin{array}{c} \Delta x \\
+\Delta y \end{array} \right]
+\end{displaymath}
+where $(\Delta x, \Delta y)$ is the displacement in pixels from the reference
+pixel ({\tt CRPIX1}, {\tt CRPIX2}), and $(\Delta l, \Delta m)$ is the 
+displacement in degrees from the reference world coordinate ({\tt CRVAL1},
+{\tt CRVAL2}).
+
+In the case where the sky image is rotated with respect to the pixel
+array, it is straightforward to convert from the {\tt CDELT/CROTA} notation
+to the {\tt CD}-matrix notation:
+
+\begin{eqnarray*}
+{\tt CD001001} & = & {\tt CDELT1} \cos \theta \\
+{\tt CD001002} & = & \left| {\tt CDELT2} \right| \hbox{sign}({\tt CDELT1}) 
+ \sin \theta \\
+{\tt CD002001} & = & - \left| {\tt CDELT1} \right| \hbox{sign}({\tt CDELT2}) 
+ \sin \theta \\
+{\tt CD002002} & = & {\tt CDELT2} \cos \theta \\
+\end{eqnarray*}
+(The {\it sign} function represents the sign of its argument, and has the
+value +1 or $-1$.)
+
+The reverse transformation, from {\tt CD}-matrix to {\tt CDELT/CROTA} notation,
+is a bit more complicated.  The magnitudes of the {\tt CDELT}s are found from
+\begin{eqnarray*}
+\left| {\tt CDELT1} \right| & = & \sqrt{ {\tt CD001001}^2 + {\tt CD002001}^2 } \\
+\left| {\tt CDELT2} \right| & = & \sqrt{ {\tt CD001002}^2 + {\tt CD002002}^2 } \\
+\end{eqnarray*}
+The signs of the {\tt CDELT}s are determined from the determinant of the
+{\tt CD}-matrix.  That is, the sign of the determinant is equal to the sign
+of the product of the {\tt CDELT}s:
+\begin{displaymath}
+\hbox{sign}({\tt CDELT1} \cdot {\tt CDELT2}) = \hbox{sign}( {\tt CD001001}
+\cdot {\tt CD002002} - {\tt CD001002} \cdot {\tt CD002001})
+\end{displaymath}
+This equation does not determine the signs of {\tt CDELT1} and {\tt CDELT2}
+uniquely, but as long as the rest of the transformation is done consistently,
+it does not really matter.  As a matter of convention for astronomical
+images, if the determinant of the {\tt CD}-matrix is negative, then {\tt CDELT1}
+should be negative (consistent with a data matrix more or less aligned with
+right ascension and declination).
+
+Finally, the rotation angle is given by
+
+\begin{eqnarray*}
+{\tt CROTA2} & = & \arctan \left( \frac{ \hbox{sign}({\tt CDELT1} \cdot
+{\tt CDELT2}) {\tt CD001002}}{\tt CD002002} \right) \\
+             & = & \arctan \left( \frac{ - \hbox{sign}({\tt CDELT1} \cdot
+{\tt CDELT2}) {\tt CD002001}}{\tt CD001001} \right) \\
+\end{eqnarray*}
+
+In these expressions it is strongly recommended that implementors use the
+Fortran {\tt ATAN2} function or its equivalent in order to avoid the 
+180 degree ambiguity of the {\tt ATAN} function.
+Since both expressions are equally valid, it is recommended that the average
+values of the arguments to the {\it arctan} function be used in order to
+minimize computational round-off errors.  Similarly, if the values differ
+beyond the expected computational precision, users should be warned that
+the coordinate axes are not orthogonal.  If the sky image is skew or rotated
+and skew, then the CD matrix notation must be used. 
+
+The CD matrix should be incorporated into FITS headers according to the
+following plan:
+\begin{itemize}
+\item Any image with skew coordinate axes must use the CD matrix notation
+if the coordinate system is being represented.
+\item FITS images may be written using the {\tt CDELT/CROTA} notation for
+non-skew coordinate axes, but are strongly encouraged to add the CD matrix
+as well.
+\item All FITS reading programs should be able to interpret the {\tt
+CDELT/CROTA} notation if the CD matrix is not present.  If both the CD matrix
+and {\tt CDELT/CROTA} notations are given, the CD matrix takes precedence.
+Discrepancies between the two notations should be reported to the user. 
+\item Since the CD matrix notation is directly extensible to data arrays of
+three or more dimensions, it is the preferred notation for such cases. 
+\end{itemize}
+
+The developers of FITS I/O programs are urged to make the transition from the
+{\tt CDELT/CROTA} notation to the {\tt CDiiijjj} notation. 
+
+\section{Coordinate Reference Frames}
+\label{sec-refframes}
+
+In order to rigorously define the coordinate systems being used, several
+additional keywords are required.  For example, equatorial coordinates
+$(\alpha,\delta)$ are relative to a given equinox and epoch, and relative
+to a fundamental coordinate system.
+
+{\tt RADECSYS} is a new keyword which specifies the frame of reference for
+the equatorial coordinate system.  {\tt RADECSYS} is a character string with
+one of four possible values: 
+\begin{center} \begin{tabular}{cl}
+\tt RADECSYS & Definition \\
+\hline
+\tt FK4 & mean place, old (pre-IAU 1976) system \\
+\tt FK4-NO-E & mean place, old system but without e-terms \\
+\tt FK5 & mean place, new (post-IAU 1976) system \\
+\tt GAPPT & geocentric apparent place, post-IAU 1976 system \\
+\end{tabular} \end{center}
+If the {\tt CTYPE}s are an {\tt RA--/DEC-} pair, {\tt RADECSYS} should also
+be specified.  If {\tt RADECSYS} is not given, the reference frame is assumed
+to be {\tt FK4}.
+
+All three mean place types require knowing the epoch of the mean equator and
+equinox.  The term {\it equinox} is generally used to refer to this time, and
+this should be given using the new floating point keyword {\tt EQUINOX}. The
+default equinox for {\tt FK4} and {\tt FK4-NO-E} is {\tt 1950.0}, and for 
+{\tt FK5} it is {\tt 2000.0}. For {\tt RADECSYS = 'FK4'} or {\tt RADECSYS =
+'FK4-NO-E'} the number is interpreted as a Besselian epoch, whereas for {\tt
+RADECSYS = 'FK5'} the number is interpreted as a Julian epoch. 
+
+The previous FITS definition included the keyword {\tt EPOCH}, however, the use
+of this keyword was inconsistent with standard astrometric conventions. The use
+of the keyword {\tt EPOCH} should be discontinued in FITS headers.  FITS
+readers encountering {\tt EPOCH} should interpret it as
+equivalent to {\tt EQUINOX}. 
+
+The FK4 reference frame is not inertial -- there is a small but significant
+rotation relative to distant objects.  For this reason an epoch (specifying
+when the mean place was correct) is required in addition to an equinox (which
+specifies the reference frame). The epoch should be given in keywords {\tt
+MJD-OBS} or {\tt DATE-OBS}.  {\tt MJD-OBS} is a new keyword which specifies the
+time of observation in the TAI timescale in the form of a Modified Julian Date
+(JD - 2400000.5). The time is assumed to be representative of the observation
+for the purposes of velocity corrections, etc., and may, for example, be midway
+between the start and end of an exposure.  For many applications the 
+distinction between International Atomic Time (TAI) and the more familiar UTC
+may be ignored. If {\tt MJD-OBS} is absent, {\tt DATE-OBS} (in the format {\tt
+DD/MM/YY}) may be used instead.  However, because the latter is given only to 
+one day resolution and without the timescale being specified, the Modified
+Julian Date specification is preferable.
+
+In the absence of {\tt MJD-OBS} or {\tt DATE-OBS} it may be assumed that the
+date of observation is the same as the equinox, with a corresponding error
+introduced into coordinate calculations. 
+
+Coordinates given as geocentric apparent positions {\tt GAPPT} require only
+the additional specification of the epoch of the observation, supplied
+via the {\tt MJD-OBS} or {\tt DATE-OBS} keywords.
+
+
+\section{Extensions/Enhancements of the FITS Definitions}
+
+The conventions described here allow for the expression of standard sky
+projection geometries within FITS format data files.  Problems such as
+non-linear spectral dispersion solutions (polynomials, splines, piecewise
+linear), irregularly spaced data, and distortions to otherwise standard
+geometries, are not considered.  Rather than issue a recommended standard in
+these areas, where general solutions have yet to be designed and implemented,
+discussions and trial implementations will continue before a standard is
+defined. 
+
+\vspace*{.2in}
+
+{\bf Acknowledgements:}  The conventions described in this document were the
+result of a meeting sponsored by the National Aeronautics and Space
+Administration, Code EZ, held in Charlottesville, Virginia in January 1988.
+Attendees of the meeting were:
+
+\begin{tabular}{ll}
+Eric Greisen & National Radio Astronomy Observatory, AIPS Project \\
+Preben Grosb{\o}l & European Southern Observatory, Image Processing Group \\
+ & Chair -- European FITS Committee, Chair -- IAU FITS Task Force \\
+Bob Hanisch & Space Telescope Science Institute, STSDAS Project \\
+ & Chair -- AAS WGAS \\
+Dan Harris & Center for Astrophysics, ROSAT Project \\
+Bob Narron & Caltech, JPL, IPAC \\
+Randy Thompson & NASA -- GSFC, IUE Project \\
+Doug Tody & National Optical Astronomy Observatories, IRAF Project \\
+Pat Wallace & Rutherford Appleton Laboratory, Starlink Project \\
+Wayne Warren & NASA - GSFC, National Space Science Data Center \\
+Don Wells & National Radio Astronomy Observatory,\\
+ & Chair -- AAS WGAS FITS Committee \\
+\end{tabular}
+
+
+\end{document}

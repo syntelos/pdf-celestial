@@ -1,0 +1,318 @@
+Newsgroups: sci.astro.fits
+Subject: Who We Are (domains of voters)
+Distribution: sci
+
+I append a tabulation by domains of the 311 YES votes that were cast
+in the vote that created newsgroup sci.astro.fits. I produced this
+listing so that I could understand the nature and distribution of the
+people of the worldwide FITS community. The listing tells me that:
+
+* the FITS community is worldwide. YES votes were received from 14
+countries: AU, CA, CH, DE, FR, IT, JP, NL, NZ, SE, TR (two BITnet
+nodes), UK, US (edu, gov, mil, org), and ZA.
+ 
+* the FITS community includes people in commercial sites. YES votes
+were received from people at 17 companies. Some of them appear to be
+contractors for NASA spacecraft/facilities, and one (ATT.COM) is Bell
+Labs, but others have no obvious connection with astronomy research.
+ 
+* the FITS community includes university people, not just "big center"
+people. For example, in the EDU (US) domain YES votes were received
+from 48 different universities.
+
+* the FITS community includes "small" sites. It did not surprise me to
+receive YES votes from people in the large well-known university
+departments, many of which operate major observing facilities of their
+own, but I was definitely surprised (and pleased!) by the number of
+YES votes received from smaller institutions.
+
+* the FITS community includes space agency sites. YES votes were
+received from people on about 25 different NASA computers and about 4
+different ESA-related computers.
+
+* the FITS community includes non-astronomy people. YES votes were
+received from people who appear to be associated with other research
+disciplines.
+
+* the FITS community includes major observatories, data centers and
+software centers for all observed frequencies.  YES votes were cast by
+people in large well-known observatories and national and
+international centers all over the world, and spanning the full range
+of radiation frequencies at which astronomical phenomena are observed.
+Some obvious examples in which observatory/center/software names
+appear as subdomain names include atnf.csiro.au (8 votes), dao.nrc.ca
+(2), drao.nrc.ca (2), mpifr-bonn.mpg.de (1), ipac.caltech.edu (3),
+cfht.hawaii.edu (15), jach.hawaii.edu (2), keck.hawaii.edu (1),
+naic.edu (1), noao.edu (13), nrao.edu (18), stsci.edu (12),
+gag.observ-gr.fr (1), simbad.u-strasbg.fr (1), arcetri.astro.it (1),
+mtk.nao.ac.jp (2), nfra.nl (1), eso.org (12), oso.chalmers.se (3) and
+starlink.rutherford.ac.uk (2). In addition, major NASA and ESA
+spacecraft are observatories too; a scan down the nasa.gov domain list
+shows the names of at least 5 major facilities in addition to the
+names already listed: COBE, IUE, GRO, NSSDC and ROSAT.
+
+				-*-
+
+Note: in this listing SPAN machines are in the dnet.nasa.gov domain.
+
+ 311  total YES votes:
+  18 au
+   9   .csiro
+   8   .     .atnf
+       .     .rp
+   8   .edu
+   6   .   .anu
+       .   .   .cscgpo
+   5   .   .   .merlin
+   2   .   .utas
+       .   .    .cc.tasman
+       .   .    .phys.physvax
+       .oz.unsw.phys.isaac
+   7 bitnet
+           .citadel
+           .erenj
+           .scfmvs
+           .tritu
+           .triuvm11
+           .unc
+           .uqam
+  14 ca
+       .carleton.sce
+       .dal.atm
+   4   .nrc
+   2   .   .dao
+   2   .   .drao
+       .queensu.qucdn
+       .ubc.geop
+   3   .ucalgary
+       .        .acs
+       .        .cpsc
+       .        .iras
+   2   .utoronto.astro.vela
+       .uwo.julian
+   2 ch
+       .unibas.urz
+       .unige.scsun
+  18 com
+        .ateq
+        .att.hoh-2
+        .cwa.dtalk
+        .dec.nyo.riscy
+        .es.dsd
+        .fsg
+        .gd.gdwest
+   2    .ge
+        .  .crd.crdos1
+        .  .med.aslpet
+        .lockheed.lmsc.iscnvx
+        .mot.mcd.phx
+        .msen
+        .next@uucp.pixar%uucp.phuket
+        .notable
+        .rain.3cpu
+        .rockwell.cr.cca.hwking
+        .siemens.igor
+        .socal.airdata
+   5 de
+       .fzi.gate
+       .kfk.infpav4
+       .mpg.mpifr-bonn.mpirbn
+       .uni-erlangen.e-technik.lte
+       .uni-kl.rhrk
+ 169 edu
+   6    .arizona
+   4    .       .as
+   2    .       .lpl
+        .       .   .asgard
+        .asu.la.quasar
+        .auburn.ducvax
+   5    .berkeley
+        .        .bkyast
+        .        .ocf
+   3    .        .ssl
+        .bgsu.andy
+   2    .bu
+        .  .buast0
+        .  .buast4
+        .byu.astro
+        .calpoly.nike
+   8    .caltech
+        .       .bbso.suncub
+        .       .deimos
+   2    .       .eccles
+   3    .       .ipac
+        .       .tapir
+        .clark@uucp.clark%uucp.nsrvan
+        .clemson.phys.gamma
+        .colorado.pele
+        .cornell.cit.cornellc
+        .csun.solaria
+        .cuny.ccny.sci
+        .gatech.gtri01
+   2    .gettysburg.cc
+        .          .  .pluto
+  11    .harvard
+        .       .cfa203
+        .       .cfa214
+        .       .cfa236
+        .       .cfa242
+        .       .cfa244
+        .       .cfa246
+   3    .       .harvard
+        .       .       @cfa0
+   2    .       .       @decnet
+        .       .       @      .cfa8
+        .       .       @      .cfarg2
+        .       .jasra
+        .       .pelf
+  21    .hawaii
+  15    .      .cfht
+   3    .      .ifa
+   2    .      .   .galileo
+        .      .   .maile
+   2    .      .jach
+        .      .keck
+        .indiana@decnet.luna
+   6    .mit
+        .   .alioth
+   2    .   .athena
+        .   .lcs.silver
+   2    .   .space
+        .naic
+        .nmt.jupiter
+  13    .noao
+        .    .tuc.vela
+        .    @uucp.pyrrus
+  18    .nrao
+   4    .    .aoc
+        .    .   .negra
+   3    .    .   .zia
+   9    .    .cv
+        .    .  .colobus
+        .    .  .gorilla
+        .    .  .greystoke
+        .    .  .macabre
+   3    .    .  .polaris
+        .    .  .saips
+        .    .  .sngldsh
+        .    .cx.fits
+        .    .gb.lodestar
+        .orst.math
+        .pima.pimacc
+        .princeton.pupgg
+   2    .psu.astro
+        .purdue.cs
+   3    .rice
+        .    .regulus
+   2    .    .spacsun
+        .stanford.egret1
+  12    .stsci
+        .     .fos
+        .     .shadow
+        .sunysb.ccmail
+        .uchicago.galadriel
+   9    .ucsc
+   8    .    .helios
+        .    .topaz
+   2    .uiowa.physics
+        .     .       .space
+        .     .       .sunlight
+        .ukans.cc.oread
+        .ulowell.dragon
+        .umbc.umbc4
+   4    .umd.astro
+        .umsl.slvaxa
+        .uncecs@uucp.ecsvax
+        .unm.vesta
+   2    .utexas.as
+        .      .  .dorrit
+        .      .  .puck
+        .utoledo.phya.anwsun
+   5    .virginia
+   2    .        .astro
+        .        .     .astsun9
+        .        .     .karma
+   2    .        .clas.fermi
+        .        .seas.fulton
+        .vt.phys.astro
+   3    .washington
+        .          .cac
+   2    .          .phys
+        .          .    .phast
+        .          .    .tahoma
+   3    .wisc
+        .    .astro.uwast
+        .    .cs
+        .    .sal.larry
+        .wpi.wpi
+        .yale.cs
+   4 fr
+       .cict.cix
+       .cma.chimay
+       .observ-gr.gag
+       .u-strasbg.simbad
+  34 gov
+        .lanl.sstdp1
+  32    .nasa
+   2    .    .arc
+        .    .   .orion
+        .    .   .spectre
+   9    .    .dnet
+        .    .    .808.28
+        .    .    .cass05
+        .    .    .cobecl
+        .    .    .estsaa
+   2    .    .    .iuegtc
+        .    .    .mpe
+        .    .    .nhqvax
+        .    .    .vilspa
+  16    .    .gsfc
+        .    .    .aruba
+        .    .    .arupa
+        .    .    .grossc
+        .    .    .jansky
+   4    .    .    .nssdca
+        .    .    .rosgip
+        .    .    .rosserv
+        .    .    .serts
+   3    .    .    .stars
+        .    .    .tetra
+        .    .    .xebec
+   2    .    .jpl
+        .    .   .herca
+        .    .   .kuiper
+        .    .msfc.ssl
+   2    .    .nasamail
+        .nih.helix
+     it.astro.arcetri
+   3 jp.ac
+   2   .  .nao.mtk.c1
+       .  .oita-u.cc.oita-cc
+     mil.navy.nadn.mcdonald
+     net.uu.uunet@uucp.crpi
+     nl.nfra
+   6 nz.ac
+   3   .  .canterbury.csc
+   3   .  .vuw
+       .  .   .emf
+       .  .   .kauri
+       .  .   .matai
+  15 org
+  12    .eso
+        .fidonet.ofa123
+   2    .sub
+        .   .abg.ark
+        .   .gold.comet
+   6 se
+   3   .chalmers.oso
+       .lu.astro
+   2   .uu
+       .  .laban
+       .  .tdb.lucifer
+   4 uk.ac
+       .  .ic.cc
+       .  .oxford
+   2   .  .rutherford.starlink
+   2 za.ac
+       .  .ru.ruchem
+       .  .uct.ucthpx

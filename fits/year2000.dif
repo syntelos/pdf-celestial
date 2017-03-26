@@ -1,0 +1,42 @@
+11c27
+<                       Amended: Arnold Rots 1997-10-24T21:03:30
+---
+>                       Amended: Arnold Rots 1997-08-13T21:05:00
+14d29
+< 
+16,21c31,33
+< the DATE-OBS keyword, the same format applies to the value field of all
+< keywords beginning with the string "DATE" that have a value containing
+< date, and optionally time, information.  Known examples of such keywords,
+< used in the exchange of date information, are DATE, DATE-OBS, DATE-END,
+< and DATE-MAP.  We shall refer to these keywords collectively as DATExxxx.
+< 
+---
+> the DATE-OBS keyword, the same format applies to all keywords beginning
+> with the string "DATE" and which values contain date, and optionally time,
+> information.  We shall refer to these keywords collectively as DATExxxx.
+35d46
+< 
+112,113c123
+<    the date-string format defined in this proposal is used, in all HDUs
+<    created on earth.
+---
+>    the date-string format defined in this proposal is used.
+116d125
+< 
+128,137c137,140
+< century date (with the year "00" to be interpreted as "1900"), indefinitely.
+< Readers should be altered as soon as possible to cope with the new format.
+< In order to give adequate time for the major package writers to revise their
+< software, FITS writers should commence writing the new format between
+< 1999-01-01T00:00:00 and 2000-01-01T00:00:00.
+< 
+< FITS writing code which must be distributed and operated before 1999-01-01
+< should be coded to test the current year to decide whether to use the old
+< date format or the new format. Cases of DATE-OBS before 1900-01-01 should
+< always be written with the new format.
+---
+> century date, indefinitely.  Readers should be altered as soon as possible
+> to cope with the new format.  In order to give adequate time for the
+> major package writers to revise their software, FITS writers should commence
+> writing the new format between 1998-01-01T00:00:00 and 2000-01-01T00:00:00.

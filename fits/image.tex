@@ -1,0 +1,310 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%.Title: FITS Image Extension Proposal
+%
+%.Authors: J.D.Ponz, R.W. Thompson, J.R.Munoz    
+%.History: 20 Dec 1991      First draft
+%.History:  7 Feb 1992      Revision to include comments from B. Schlesinger
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+
+\documentstyle[11pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\parindent=0truecm              % paragraph indentation
+%\topmargin=-36pt                % top margin
+\textwidth=14.5truecm              % page width
+\textheight=22truecm             % length of the page
+%\textheight=8in                  % length of the page
+\topsep=0.5ex                    % space at the beginning of a list  h
+\itemsep=0.0ex                   % separation of items in a list
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{The {\sl FITS} IMAGE Extension. \\
+       A Proposal}
+\author{J.D. Ponz (ESA), R.W. Thompson (CSC), J.R. Mu\~{n}oz (ESA)\\
+TN/8017-01/JDP/920207}
+\date{7 February 1992}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This paper describes the {\sl FITS} IMAGE extension which
+provides a simple means for storing two or more related but not necessarily
+identical arrays in a single {\sl FITS} file. 
+The proposed extension is structured in a manner identical to that of a 
+standard {\sl FITS} header and data unit, thereby making it simple to 
+interpret and if desired, easily converted to separate {\sl FITS} primary 
+array files.
+\end{abstract}
+
+
+\section{Introduction}
+The IMAGE extension conforms to the generalized {\sl FITS} extension format
+described by Grosb\o l et al (ref. 3). It was first proposed by Mu\~{n}oz 
+(ref. 6)
+for use by the International Ultraviolet Explorer (IUE) project,
+as a means for combining image data with related auxiliary information
+which could not be easily stored using GROUP format or merged with the
+image data to create a single primary array. 
+The IMAGE extension is a simple replication of the primary data
+array with  the following features:
+
+\begin{enumerate}
+ \item Allows the storage of an unlimited number of multidimensional arrays.
+ (Note: support for multidimensional arrays has been suggested for, but is not
+ currently included in, the proposed binary table extension (ref. 7).
+ \item Arrays are stored in separate extensions, thereby allowing
+ each array to have its own header and semantic contents.
+ \item {\sl FITS} readers can easily skip over reading separate extensions.
+ \item No additional keywords or conventions need to be adopted.
+ \item Dividing each individual header and data unit in a {\sl FITS} IMAGE
+ extension file results in simple primary array format files without
+ any further processing (other than replacing the 
+ {\tt XTENSION = }\verb*+'IMAGE   '+ keyword with {\tt SIMPLE = T}).
+\end{enumerate}
+
+ The IMAGE extension is being proposed for use in the IUE Archive
+reprocessing project, to store data quality flags associated with 
+the spectral images.
+
+\newpage
+
+\section{Identification}
+The IMAGE extension may appear in a {\sl FITS} file if the primary header of 
+the {\sl FITS} file has the keyword {\tt EXTEND} set to {\tt T} and the first
+keyword of the associated extension header has 
+{\tt XTENSION = }\verb*+'IMAGE   '+.
+
+No other modifications are required although {\tt NAXIS = 0}
+is not recommended since it would not make sense to extend a non-existing 
+image with another image.
+
+\section{Extension Header}
+
+The extension header would begin in the first byte of the first record
+following the primary data array or the previous extension file. The
+format is identical to the primary header format and is described in the
+{\sl FITS} Draft standard (ref. 7). 
+The content of the header should be sufficient to
+allow a {\sl FITS} reader to decide if it should read or skip over the
+extension. 
+
+\subsection{Required Keywords}
+The card images in the header of the IMAGE extension use the following
+keywords in the order indicated in Table 1.
+
+{\small
+\begin{table}[htpb]
+\begin{center}
+\begin{tabular}{ll} \\
+\multicolumn{1}{c}{Principal}  & \multicolumn{1}{c}{Proposed IMAGE} \\
+\multicolumn{1}{c}{HDU}        & \multicolumn{1}{c}{Extension}      \\ \hline
+{\tt SIMPLE}      & {\tt XTENSION}$^{1}$ \\
+{\tt BITPIX}      & {\tt BITPIX}         \\
+{\tt NAXIS}       & {\tt NAXIS}          \\
+{\tt NAXISn}      & {\tt NAXISn}$^{2}$   \\
+{\tt EXTEND}$^{3}$& {\tt PCOUNT = 0}     \\
+{\tt END}         & {\tt GCOUNT = 1}     \\
+                  & {\tt END}            \\
+\hline
+\end{tabular}
+\end{center}
+$^1$  \verb*+XTENSION= 'IMAGE   '+ for the proposed extension.\\
+$^2$  {\tt n = 1, ..., NAXIS}.\\
+$^3$  Required only if extension present.
+
+\caption[Mandatory {\em FITS} keywords]                                        
+         {Mandatory {\em FITS} keywords for the Principal HDU and the
+          proposed IMAGE extension.}
+\end{table}              
+}
+
+\subsubsection{{\tt XTENSION} Keyword}
+The value field shall contain the character string \verb*+'IMAGE   '+.
+
+\subsubsection{{\tt BITPIX} Keyword}
+The value field shall contain an integer. The absolute value is used in 
+computing the size of the data structure. 
+It shall specify the number of bits that represent a data value.
+All {\tt BITPIX} values allowed in the Primary Header for the primary 
+data matrix are also allowed for the IMAGE extension header.
+
+\subsubsection{{\tt NAXIS} Keyword}
+The value field shall contain a non-negative integer no greater than 999,
+representing the number of axes in the data array.
+
+\subsubsection{{\tt NAXISn} Keywords}
+The value field of this indexed keyword shall contain a non-negative 
+integer, representing the number of positions along axis {\tt n}
+({\tt n= 1, 2, ..., NAXIS}) of the data array. 
+
+\subsubsection{{\tt PCOUNT} Keyword}
+The value field shall contain a non-negative integer that shall be used 
+in any way appropriate to define the data structure, consistent with the 
+equation for {\tt NBITS} in the {\sl FITS} Draft Standard (ref. 7).
+A simple  IMAGE extension will have {\tt PCOUNT = 0}.
+
+\subsubsection{{\tt GCOUNT} Keyword}
+The value field shall contain a non-negative integer that shall be used 
+in any way appropriate to define the data structure, consistent with the 
+equation for {\tt NBITS} in the {\sl FITS} Draft Standard (ref. 7).
+A simple IMAGE extension will have {\tt GCOUNT  = 1}.
+
+\subsubsection{{\tt END} Keyword}
+This keyword has no associated value. Columns 9-80 shall be filled with ASCII
+blanks.
+
+{\small
+\begin{table}[htpb]
+\begin{center}
+\begin{tabular}{lllll} \\ 
+\multicolumn{1}{c}{Conforming} & \multicolumn{1}{c}{Bibliographic} & 
+\multicolumn{1}{c}{Commentary} & \multicolumn{1}{c}{Observation}   & 
+\multicolumn{1}{c}{Array} \\ 
+\multicolumn{1}{c}{Extension} & \multicolumn{1}{c}{Keywords} & 
+\multicolumn{1}{c}{Keywords}  & \multicolumn{1}{c}{Keywords}   & 
+\multicolumn{1}{c}{Keywords} \\ \hline
+{\tt EXTNAME} &{\tt AUTHOR}  & {\tt COMMENT}  &{\tt DATE-OBS}&{\tt BSCALE} \\
+{\tt EXTVER}  &{\tt REFERENC}& {\tt HISTORY}  &{\tt TELESCOP}&{\tt BZERO}  \\
+{\tt EXTLEVEL}&              &\verb*+        +&{\tt INSTRUME}&{\tt BUNIT}  \\
+              &              &                &{\tt OBSERVER}&{\tt BLANK}  \\
+              &              &                &{\tt OBJECT}  &{\tt CTYPEn} \\
+              &              &                &{\tt EQUINOX} &{\tt CRPIXn} \\
+              &              &                &{\tt EPOCH}$^{1}$&{\tt CROTAn} \\
+              &              &                &              &{\tt CRVALn} \\
+              &              &                &              &{\tt CDELTn} \\
+              &              &                &              &{\tt DATAMAX}\\
+              &              &                &              &{\tt DATAMIN}\\
+\hline
+\end{tabular}
+\end{center}
+$^1$  See comment on {\tt EPOCH} in ref. 7.
+
+\caption[Reserved IMAGE extension keywords]
+         {Reserved keywords for the proposed IMAGE extension.
+          The keywords are defined in the {\em FITS} Draft Standard (ref.7).}
+\end{table}
+}
+
+\newpage
+
+\subsection{Reserved Keywords}
+Additional keywords, located in the extension header after 
+the {\tt GCOUNT} keyword and before {\tt END},
+may be used to describe history of the data, 
+characteristics of the observations, characteristics of the data array
+and other information.
+
+These keywords are optional but, when used to describe an extension, they shall 
+have the meaning described in the {\sl FITS} Draft Standard (ref. 7).
+Table 2 summarizes the reserved keywords.
+                                                                               
+        
+
+
+
+\section{Data Sequence}
+
+The data format is identical to that of a primary data array and
+is described in detail in the {\sl FITS} Draft Standard (ref. 7). 
+This format will allow each IMAGE extension to contain a single data array
+of 1-999 dimensions with a data structure and scale factors
+independent of other arrays.
+
+The IMAGE extension data shall begin in the first byte of the first
+record following the last header record. 
+The first value of each subsequent row of the array shall 
+immediately follow the last value of the previous row. 
+In this manner, the array structure is independent of the record structure. 
+Arrays of more than one dimension shall consist of
+a sequence such that the index of the first dimension varies most rapidly,
+and the index of the last dimension varies least rapidly.
+
+\newpage
+
+\section{Example IMAGE Extension Header}
+
+The following is an example of how this type of extension can be used.
+In this example, the primary data array contains an IUE
+linearized image file with the associated pixel quality flags stored
+using the IMAGE extension. 
+
+{\small
+\begin{verbatim}
+                           Main Header
+
+         1         2         3         4         5         6         7
+123456789012345678901234567890123456789012345678901234567890123456789012345...
+------------------------------------------------------------------------------
+SIMPLE  =                    T / Standard FITS format
+BITPIX  =                   16 / 2-Bytes, 2-s complement integers
+NAXIS   =                    2 / Number of axes
+NAXIS1  =                  768 / Number of pixels per row
+NAXIS2  =                  768 / Number of rows
+EXTEND  =                    T / Extensions may be present
+CTYPE1  = 'SAMPLE  '           / X axis
+CTYPE2  = 'LINE    '           / Y axis 
+BSCALE  =           3.1250E-02 / REAL = (FITS * BSCALE) + BZERO
+BZERO   =                   0. / Bias
+ORIGIN  = 'VILSPA  '           / Institution generating tape
+TELESCOP= 'IUE     '           / IUE telescope
+FILENAME= 'SWP12345.LIHI'      / Filename (camera)(image).LI(disp)
+DATE    = '12/10/92'           / Date tape was written as DD/MM/YY
+...
+END
+
+                        Extension Header
+
+         1         2         3         4         5         6         7
+123456789012345678901234567890123456789012345678901234567890123456789012345...
+------------------------------------------------------------------------------
+XTENSION= 'IMAGE   '           / IMAGE extension
+BITPIX  =                   16 / 2-Bytes, 2-s complement integers
+NAXIS   =                    2 / Number of axes
+NAXIS1  =                  768 / Number of pixels per row
+NAXIS2  =                  768 / Number of rows
+PCOUNT  =                    0 / Number of parameters per group 
+GCOUNT  =                    1 / Number of groups
+CTYPE1  = 'SAMPLE  '           / X axis
+CTYPE2  = 'LINE    '           / Y axis
+FILENAME= 'SWP12345.LFHI'      / Filename (camera)(image).LF(disp)
+EXTNAME = 'LFHI    '           / Data quality flags 
+...
+END
+\end{verbatim}
+}
+
+\newpage
+
+\section{References}
+
+\begin{enumerate}
+ \item Wells, D.C., Greisen, E.W., Harten, R.H. 1981,
+      "{\sl FITS}: A Flexible Image Transport System",
+      {\sl Astron. Astrophys. Suppl.}, {\bf 44}, 363-370.
+ \item Greisen, E.W., Harten, R.H. 1981,
+      "An Extension of {\sl FITS} for Small Arrays of Data",
+      {\sl Astron. Astrophys. Suppl.}, {\bf 44}, 371-374.
+ \item Grosb\o l, P., Harten, R.H., Greisen, E.W., Wells, D.C. 1988,
+      "Generalized Extensions and Blocking Factors for {\sl FITS}",
+      {\sl Astron. Astrophys. Suppl.}, {\bf 73}, 359-364.
+ \item Harten, R.H., Grosb\o l, P., Greisen, E.W., Wells, D.C. 1988,
+      "The {\sl FITS} Table Extension",
+      {\sl Astron. Astrophys. Suppl.}, {\bf 73}, 365-372.
+ \item Wells, E. W., Grosb\o l, P. 1990, 
+       "Floating Point Agreement for {\sl FITS}",
+       (available from the NOST {\sl FITS} Support Office).
+ \item Mu\~{n}oz, J.R. 1989, 
+       "IUE Data in {\sl FITS} Format",
+       ESA IUE Newsletter, {\bf 32}, 12-45.
+ \item NOST 1991,
+       "Implementation of the Flexible Image Transport System",
+       NOST 100-0.3b Draft Standard.
+       NASA/OSSA Office of Standards and Technology, 
+       Goddard Space Flight Center.
+\end{enumerate}
+
+\end{document}

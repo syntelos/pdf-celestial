@@ -1,0 +1,378 @@
+From bschlesinger@nssdca.gsfc.nasa.gov Fri Jan 27 15:03:12 1995
+Path: solitaire.cv.nrao.edu!hearst.acc.Virginia.EDU!portal.gmu.edu!europa.eng.gtefsd.com!news.umbc.edu!haven.umd.edu!ames!newsfeed.gsfc.nasa.gov!nssdca.gsfc.nasa.gov!bschlesinger
+From: bschlesinger@nssdca.gsfc.nasa.gov (Barry M. Schlesinger)
+Newsgroups: sci.astro.fits,sci.data.formats
+Subject: FITS basics and information (periodic posting) - 2/2
+Followup-To: poster
+Date: 27 Jan 1995 11:22 EDT
+Organization: NASA Goddard Space Flight Center -- Greenbelt, Maryland USA
+Lines: 358
+Distribution: world
+Expires: 23 Feb 1995 19:00 EST
+Message-ID: <27JAN199511222988@nssdca.gsfc.nasa.gov>
+Reply-To: fits@nssdca.gsfc.nasa.gov
+NNTP-Posting-Host: nssdca.gsfc.nasa.gov
+Summary: This posting discusses FITS software, on-line information 
+	  services, and NOST services
+News-Software: VAX/VMS VNEWS 1.41    
+Xref: solitaire.cv.nrao.edu sci.astro.fits:1014 sci.data.formats:774
+
+  		FITS basics and information, Part 2
+
+3 Software and Sample Data
+ 3.1 NOST 
+	All NOST software is available from the NOST ftp site (4.1).
+
+  3.1.1 FITS Product Conformance Tester with Instructions
+	The FITS Product Conformance Tester is a software package in C
+being developed by the NOST for validating FITS files.  The available
+prototype validates required keywords in the primary header and, at
+the user's option, prints selected values from the primary data array. 
+Even after finding an error in a required keyword, it will continue
+evaluating the file, looking for errors in required keywords.  If the
+syntax errors do not keep the software from making a reasonable guess
+as to the values of all the required keywords, and the resultant
+values are valid, it will try to read the primary data array if the user
+has so specified.                   
+	Because this software is still under development, it should not
+be run before reading the separate instructions file. 
+
+  3.1.2 Header Lister 
+	This program prints out all the headers in a FITS file, 
+including the primary header and all extension headers.  It does not 
+evaluate them for errors.  It is a useful tool for obtaining a quick 
+summary of the contents of a FITS file.
+
+  3.1.3 Error Test Files
+	These files consist of several versions of the same FITS file,
+a valid one and several with different kinds of header errors. They 
+are useful for testing the ability of software designed to read FITS
+files to cope with files that are not standard FITS or with errors in
+the file.  The file includes only a primary header and data array.  Be
+sure to use binary transfer for ftp access of FITS test files. 
+
+ 3.2 HEASARC
+	The NASA/Goddard High Energy Astrophysics Science Archive
+Research Center (HEASARC) has developed and maintains FITS software
+and utilities, including the FITSIO package and FTOOLS utilities.  
+See 4.2 for information on electronic access to FITSIO and supporting
+documentation. 
+	
+  3.2.1 FITSIO 
+	The FITSIO package, maintained by Bill Pence, provides
+FORTRAN software for easily reading and writing FITS format files.
+The current version is 3.7.  There is a C interface, consisting of a
+set of C macro definitions, one for each FITSIO subroutine,
+replacing the C wrapper routines of previous versions.   FITSIO runs
+on most types of machines.  It supports all the currently defined
+standard FITS extensions including IMAGE and BINTABLE and contains
+world coordinates subroutines for conversion between pixel and
+celestial coordinates.  There is also software support for the
+checksum proposal discussed in section 2.7.             
+
+  3.2.2 FTOOLS
+	James Kent Blackburn and Bill Pence document the FTOOLS
+collection of over 100 utility programs to create, examine, or modify
+FITS data files.  These programs are useful for examining the contents
+of FITS files and modifying them for input to more involved analysis
+tasks; they cannot generally be used for detailed data analysis or model
+fitting. The current version 3.2 was released in November 1994; new
+versions are released about every 3 months. Users have the option of
+installing the entire FTOOLS package, which includes many routines
+specific to high energy astrophysics, or a core set that contains
+only the routines that perform general operations on FITS files. 
+FTOOLS can be built as a package within IRAF or as a set of stand
+alone executable tasks.  FTOOLS is supported on the following
+platforms: 
+
+Unix: ALPHA/OSF, DEC/ULTRIX, SUN/SunOS, SUN/Solaris, MODCOMP/REALIX
+VMS:  ALPHA/VMS, VAX/VMS.
+
+Questions or comments should be sent to ftoolshelp@athena.gsfc.nasa.gov
+
+  3.2.3 VERIFITS
+	W. Pence (GSFC/HEASARC) has announced the VERIFITS program to
+verify the conformance of any FITS format data file on magnetic disk to
+the standard, checking keywords and data.  At user option it will list
+the total number of pixels, number of null pixels and maximum and
+minimum data values.  If it finds an error while evaluating the header,
+it normally ceases validation and reports the error. The VERIFITS
+program is a stand alone version of the fverify task that is included in
+the IRAF or Host FTOOLS package. Both VERIFITS and fverify perform the
+same verification checks, but fverify has a nicer user interface, as
+provided by the IRAF or Host environments. Several different binary
+executable versions of VERIFITS are available, for running on SUN
+workstations, DECstations, DEC Alphas running OSF/1 or VAX/VMS
+machines.The VERIFITS source code is also provided and may be easily
+linked with the FITSIO library to run on the other types of machine
+on which FITSIO is supported.  While VERIFITS has been extensively
+tested, under some unusual circumstances not covered by the tests it
+may still fail to detect a FITS format error or may issue an error
+message that does not accurately describe the problem.                     
+
+ 3.3 ADC FITS Tables Browser 
+	The Astrophysics Data Center has released the ADC FITS Table
+Browser, which has been tailored specifically for use with the ADC 
+CD-ROMs but may be used with other FITS ASCII Tables. It reads
+standard FITS ASCII tables and allows the user to interactively browse
+through them and selectively display any field or record in a table. 
+File extraction facilities allow the writing of all or part of the input
+table to disk in FITS or text file format. 
+	Copies of the program for MS-DOS and Unix are available by
+anonymous FTP on nssdc.gsfc.nasa.gov in the 
+directory /pub/ADC/software/ftb. See the file README.FTB for instructions
+on downloading, installation, and use. 
+
+ 3.4 Converting FITS Files to Image Format
+	Disclaimer: The mention of particular software packages is not
+necessarily intended as an endorsement of those packages to the 
+exclusion of others.  Users should obtain proper licensing for any
+proprietary package or format mentioned. Information about publicly
+available  nonproprietary packages is welcome, and, if the package
+appears  relevant and useful, will be added to this posting. 
+Information about  such packages should include how they can be
+obtained and whom to  contact with questions.  It should also
+describe any limits on the  FITS files that the package can handle
+(e. g., NAXIS must be 2; data  array members must be integers).         
+
+  3.4.1 Major Astronomical Imaging Packages
+	The three major astronomical imaging packages -- the
+Astronomical Image Processing System (AIPS), the European Southern
+Observatory Munich Image and Data Analysis System (ESO-MIDAS), and
+the Image Reduction and Analysis Facility (IRAF) -- provide
+facilities for displaying images stored in FITS files.  These
+packages are large and probably best installed on major systems. 
+AIPS was developed by the National Radio Astronomy Observatory
+(NRAO), and IRAF by the National Optical Astronomy Observatories;
+the origins provide an indication of the best applications.
+Europeans might find ESO-MIDAS more convenient.
+
+  3.4.2 pbm+
+	The Extended Portable Bitmap Toolkit (pbm+) can be used for
+converting many FITS files to image format. However, support is not
+guaranteed for all FITS files where the data are in the form of an
+image.  In particular, there may be problems when the data array
+members are in IEEE floating point format (BITPIX<0) or the array has
+more than two dimensions (NAXIS>2). 
+
+  3.4.3 IMDISP (IBM/PC)
+     Archie Warnock and Ron Baalke have announced release of version
+7.9 of the IMDISP program. IMDISP is an interactive image processing
+program that runs on an IBM PC computer and supports FITS input. 
+IMDISP 7.9 is available via anonymous ftp at explorer.arc.nasa.gov
+[128.102.32.10] in a file called imdisp79.zip in the pub/SPACE/SOFTWARE
+subdirectory. and at nssdc.gsfc.nasa.gov in the pub/ADC/software/imdisp
+subdirectory.  It may also be available (at least for the time being)
+through Simtel-20 [192.88.110.20] 
+
+ 3.4.4 Applications with xv 3.0
+	For a system that has xv 3.0, some unsupported modifications
+to apply it to FITS files exist.  Adam Bernstein
+(adam@dragon.jpl.nasa.gov) has made some additional modifications to
+the original set, to overcome some implementation problems.  They are
+available by ftp to csi.jpl.nasa.gov in the /pub/users/adam directory.
+They can handle files with any of the valid FITS values of BITPIX, and
+can handle NAXIS>2 provided NAXISn=1 for n>2 (a convention often used
+in radio astronomy). The file "convert.tar.Z" contains these changes,
+as well as a new program called "FITS2GIF" created to allow
+non-interactive conversion of a large number of FITS files to GIF
+format.  Use of xv 3.0 at a site must be licensed. 
+
+  3.4.5 ViewFITS (OS/2)	
+	Dominique Beauchamp, Universite Laval, Quebec City, has
+released version 0.4, rel. 1 of ViewFITS, a FITS reader for OS/2 2.1
+presentation manager.  It is on ftp.cdrom.com in /pub/os2/incoming,
+file name vf04r1.zip, although it will probably be moved to
+/pub/os2/2_1/graphics/vf04r1.zip. This program gives the user the
+opportunity to display FITS images (8,16 or 32 bits, integer or
+float), modifying the gray shade palette, doing negation and zooming
+out. 
+
+  3.4.6 FITS and the Macintosh
+	Thorsten Lemke, at Brunswick in Germany has added FITS support
+to GraphicConverter for the Macintosh and provided the following
+information.  GraphicConverter 1.7.7 or later can import FITS array
+files with all five permitted data types (8, 16, 32 bit integer and
+32, 64 bit real). Every FITS file will be converted to 8 bit gray scale
+on opening because this is the maximum number of grays on a Macintosh.
+GraphicConverter can convert FITS and other files to a lot of
+different graphic file formats i.e. PICT, TIFF, GIF, PCX, IFF, PPM... 
+GraphicConverter is available via ftp info-mac archives. 
+A mirror site is
+amug.org                 165.247.10.2     pub/ftp1/info-mac              1/1
+ALL                                       ftp email
+Arizona Macintosh Users Group, Phoenix, Arizona, USA
+
+GraphicConverter is in the folder grf/util/graphicconverter*
+
+	The site at NRAO, described in 4.3,contains a collection of
+Usenet postings and electronic mail messages about the use of FITS
+on Macintosh hardware, in fits/os-support/mac-os/. 
+
+  3.4.7 FITSview (Windows)
+	Bill Cotton at NRAO has announced an updated beta release,
+version 0.4.0, of FITSview, a FITS image viewer for Windows. 
+Celestial positions are determined using world coordinate
+projections. All defined FITS data types are supported, as are
+blanked pixels.  Two and three dimensional simple FITS images are
+supported. FITSview runs on Windows 3.1 or later and uses any
+multicolor (or multiple gray level) display. Extensive on-line
+documentation is included. It is available by ftp from the NRAO
+site:                              
+ ftp://fits.cv.nrao.edu/fits/os-support/ms-windows/fitsview/fitsv040.txt
+ ftp://fits.cv.nrao.edu/fits/os-support/ms-windows/fitsview/fitsview040.zip
+Installation is described in fitsv040.txt.
+
+ 3.5 World Coordinates
+	Two ANSI C functions, worldpos() and xypix(), convert 
+(RA, dec) <--> pixel location for 8 common types of projective
+geometries where "(RA,Dec)" are more generically (long,lat). These
+functions are based on the World Coordinates implementation of Classic
+AIPS. The software is in src/wcs/worldpos.tar.gz at the NRAO site
+(section 4.3) and supporting documentation can be found in
+documents/wcs/. 
+
+4 On-line Information Sources
+ 4.1 NOST 	
+	The NOST maintains a file of FITS information available by
+anonymous ftp from nssdca.gsfc.nasa.gov/fits or by DECnet copy from
+NSSDCA, in the directory FITS. A proposed reorganization could move
+the FITS material to a FITS subdirectory under a STANDARDS
+directory. NSSDCA is a VAX, and the files there cannot be accessed
+using Mosaic. Lynx  will work with URL
+ftp://nssdca.gsfc.nasa.gov/fits.  A copy of the NOST files can be
+reached using Mosaic from ftp://nssdc.gsfc.nasa.gov/pub/fits. 
+Because this site is not a mirror and must be manually revised,
+updates may lag those at NSSDCA.           
+	The FITS files include copies of the current NOST standard,
+the Definition of FITS, in flat ASCII, PostScript, and LaTeX.  Style
+and index files are provided for the LaTeX form.  The only difference
+among the three formats is that the ASCII form lacks typeface
+formatting; therefore, only one need be retrieved.  The draft
+revisions to the standard covering the specification of units are
+provided as a text file.  A current list of the extension type
+(structure) names registered with the IAU FITS Working Group is
+maintained. Also available, in LaTeX form, is a copy of the proposal
+for the IMAGE extension, an earlier version of the paper cited in
+2.1. The current version of the User's Guide is available in LaTeX,
+Unix(.Z)-compressed PostScript and uncompressed PostScript, along
+with a style file for the LaTeX version. A copy of the conventions
+for physical blocking on various media, as adopted by the IAU FITS
+Working Group, is available in flat ASCII text form.  The directory
+also contains a modified version of this posting. An AAREADME.DOC
+file describes the contents of the directory. 
+	A SOFTWARE subdirectory contains the FITS Product Conformance
+Tester prototype, along with instructions.  The instructions should be
+retrieved along with the software. The C software to read and list the
+headers of a FITS file is also in this subdirectory.  Another file
+provides information on publicly available FITS software packages. The
+ERRTEST subdirectory contains the error test files described in
+section 3.1.1. Remember that binary transfer should always be used for
+FITS files.  Both the SOFTWARE and ERRTEST subdirectories include
+AAAREADME.DOC files describing their content. 
+
+ 4.2 HEASARC
+	The HEASARC FITS software, utilities, and accompanying
+documentation are available as follows:
+
+ftp://legacy.gsfc.nasa.gov/software/fitsio 
+	contains the FITSIO package, and supporting documentation. 
+ftp://legacy.gsfc.nasa.gov/software/fitsio/verifits 
+	contains the VERIFITS validator and supporting documentation. 
+ftp://legacy.gsfc.nasa.gov/software/ftools/release 
+	contains the FTOOLS collection, and supporting documentation. 
+The FTOOLS software is being distributed as compressed tar files. 
+
+All three directories contain informational README files.
+
+ 4.3 NRAO
+	A library of FITS material can be found at
+ftp://fits.cv.nrao.edu/fits, located at NRAO.  This machine supports a
+WAIS server named nrao-fits which has an index of all of the
+FITS-related text files in the archive; the file nrao-fits.src is
+have descriptive README files; in addition, the
+available at think.com and at
+ftp://fits.cv.nrao.edu/fits/wais-sources/nrao-fits.src.  There is a
+World Wide Web server for the FITS Archive as well, at the URL
+http://fits.cv.nrao.edu.    
+	The documents subdirectory of the fits directory contains a
+number of subdirectories.  The BINTABLE draft for Astronomy and
+Astrophysics is, in various formats, in files bintable_aa.*. A
+proposals subdirectory is reserved for detailed proposals currently
+being considered by the FITS committees. It contains the two
+announcements of the checksum proposal, and a checksum subdirectory
+contains the proposal itself and some supporting material. A drafts
+subdirectory contains drafts of designs not yet submitted, for
+example, a proposed method for incorporating data compression under
+FITS.  The wcs subdirectory contains a draft of the current proposal
+for world coordinate system conventions now under community review
+and earlier documents and  presentations on world coordinates.                 
+	Other subdirectories of the fits directory include sample FITS
+files -- both actual data files and files specially constructed to
+test the ability of software to read all kinds of FITS structures,
+some code for particular environments, pointers to other code, and an
+archive of Usenet postings related to FITS. 
+
+4.4 HEAFITS Exploder
+	An electronic mail listserver called HEAFITS has been set up
+as a specialized group for discussion of High Energy Astrophysics-
+specific FITS issues that would not necessarily be of interest to the
+majority of subscribers to the existing sci.astro.fits newsgroup and
+fitsbits mailing list. To *subscribe* to the HEAFITS group, send the
+following one-line e-mail message to listserv@legacy.gsfc.nasa.gov: 
+		subscribe heafits Your Name 
+where 'Your Name' is your actual First and Last names. Messages to
+the actual mailing list are sent to heafits@legacy.gsfc.nasa.gov. 
+
+5. Some contributors (non-exhaustive list)
+
+A. Bernstein (JPL)
+D. Beauchamp (U. Laval)
+W. Cotton (NRAO)
+T. Lemke (U. of Brunswick)
+W. Pence (GSFC/HEASARC)
+D. Wells (NRAO)
+and the participants in sci.astro.fits and the fitsbits mailing list
+
+6. NOST Services 
+
+	The NOST library can provide printed copies of many of the
+documents listed above. Printed or electronic copies of the User's
+Guide and the NOST Standard, for those without ftp access, are
+available.  Because of restrictions set by the copyright holder, NOST
+can send copies of the four FITS papers only to non-profit
+organizations.  The NOST cannot provide copies of the IEEE floating
+point standard, which is copyright to IEEE. The NOST can be reached as
+follows: 
+
+(Postal) NASA/Science Office of Standards and Technology
+	 Code 633.2
+	 Goddard Space Flight Center
+	 Greenbelt MD 20771
+	 USA
+
+(Internet) nost@nssdca.gsfc.nasa.gov
+(DECnet) NCF::NOST
+
+Telephone: +1-301-286-3575 9:00 a. m. - 6:00 p. m., U. S. Eastern Time
+(-0500 from the last Sunday in October through the first Saturday in
+April; -0400 the remainder of the year) 
+	If the Librarian is unavailable, a phone mail system takes the
+call after four rings. 
+	Please mention this posting in your request.
+
+	Use the FITS office electronic mail address below for replies
+or questions. It is monitored by other NOST staff members when I am
+away from the office and provides a greater certainty of rapid
+response.  When communicating with the NOST library or FITS 
+Support Office, please provide your name, affiliation, and location. 
+
+					Barry M. Schlesinger
+					Coordinator,
+					NASA/NSSDC
+					NOST FITS Support Office
+		
++1-301-441-4205				fits@nssdca.gsfc.nasa.gov
+					NCF::FITS
+
+

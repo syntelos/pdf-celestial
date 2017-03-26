@@ -1,0 +1,307 @@
+\documentstyle{article}
+\setlength{\textwidth}{135mm}
+% process this file with standard LaTeX. D.Wells, NRAO-CV, 27Jun90.
+
+\begin{document}
+
+\begin{center}
+
+
+This text was prepared for an appendix to a volume\\
+produced in the Comp. Sci. Dept.  of the Univ. of Virginia\\
+to document a workshop on scientific databases held in April 1990.\\[30mm]
+
+{\large\bf FITS --- A Self-Describing Table Interchange Format}\\[10mm]
+
+Donald C.~Wells\footnote{{\tt dwells@nrao.edu}; 804-296-0277; Donald
+C.~Wells, National Radio Astronomy Observatory, Edgemont Road,
+Charlottesville, VA 22903-2475.}\\[5mm]
+
+National Radio Astronomy Observatory\footnote{NRAO is operated by Associated
+Universities, Inc., under agreement with the National Science
+Foundation.}\\[5mm]
+
+27 June 1990\\[20mm]
+
+\end{center}
+
+Basic FITS, the ``Flexible Image Transport System'', is a data format
+which was designed by astronomers in 1979\footnote{Wells, D.C. and
+Greisen, E.W., 1981, Astron. Astrophys. Suppl. Ser. {\bf 44}, 363-370,
+``FITS: A Flexible Image Transport System''.} to support interchange
+of {\em n\/}-dimensional integer and floating point matricies using a
+self-describing notation.  FITS is the de facto interchange format
+used by astronomers everywhere since 1980.  The rules of the format
+are controlled by the FITS Working Group of Commission~5 (Astronomical
+Data) of the International Astronomical Union, and there are North
+American and European FITS standards Committees as well. FITS is also
+the official interchange and archive format for NASA astrophysics
+missions, and NASA operates a FITS Support Office, including a
+hot-line service.\footnote{Barry Schlesinger, 301-794-4246, {\tt
+bschlesinger@ncf.span.nasa.gov}} There is an anonymous-guest archive
+for FITS matters\footnote{{\tt fits.cx.nrao.edu}, 192.33.115.8, in
+directory {\tt /FITS}; this text is {\tt /FITS/doc/fitsdbmsapp.tex}}
+and an E-mail exploder.\footnote{send requests to be added to the
+mailing list to {\tt fitsbits-request@fits.cx.nrao.edu}}
+
+The architecture of Basic FITS is extensible; the meta-rules for
+extensions are also a part of the standard.\footnote{Grosb{\o}l, P.,
+Harten, R.H., Greisen, E.W. and Wells, D.C., 1988, Astron. Astrophys.
+Suppl. Ser. {\bf 73}, 359-364, ``Generalized Extensions and Blocking
+Factors for FITS''.} In particular, extensions to transmit tables have
+been designed, and the ASCII tables extension is also a part of the
+FITS standard.\footnote{Harten, R.H., Grosb{\o}l, P., Greisen, E.W.
+and Wells, D.C., 1988, Astron. Astrophys.  Suppl. Ser.  {\bf 73},
+365-372, ``The FITS Tables Extension''.} Numerous CDROMs containing
+databases in the FITS ASCII tables format have been published by NASA
+projects during the past two years.  A binary tables extension to FITS
+has been proposed;\footnote{Cotton, W.D., 1990, ``FITS Binary Tables'',
+draft available from D.~Wells.} prototype implementations have
+demonstrated interoperability and this extension is currently being
+considered by the FITS committees for adoption.
+
+The FITS ASCII tables extension is capable of conveying a set of
+tables as a self-documenting machine-independent and OS-independent
+bytestream. The logical record size is 2880~bytes;\footnote{This
+(peculiar) size is rich in prime factors; it is commensurate with the
+word and byte sizes of all computers that have ever been sold in the
+commercial market. In 1979, when FITS was designed, machines with
+6-bit bytes and 24-, 36-, and 60-bit word sizes and ones-complement
+arithmetic were still commonly used by astronomers.  Indeed, the first
+FITS file was written by an IBM~360 (32-bit, twos-complement, EBCDIC
+codes, PL/I program) and was read by a CDC~6400 (60-bit,
+ones-complement, 6-bit ``Display'' codes, Fortran program); that
+interchange worked on the first try and the file is still readable
+today by all FITS readers, long after both original environments have
+become irrelevant to astronomical computing. Obviously a new format
+design today would use record lengths of $2^{n}$ but most astronomers
+believe that the principle of protecting the older bits is still
+important.} record blocking by integer factors from one to some limit
+(typically ten) is allowed on media for which it is a relevant
+concept.\footnotemark[7] The data structures are preceded by
+``headers'', which are 80-character lines in keyword-equals-value
+format. There are 36 header lines per logical record, and records are
+padded with blanks. FITS headers and tables extensions do not contain
+carriage returns or line feeds or other non-printing ASCII codes.
+
+The FITS ASCII tables extensions are appended to the Basic FITS binary
+matrix.  The matrix dimensions are allowed to be zero, but the minimum
+Basic FITS header must still be present. There are two reasons for
+this convention: (1)~FITS is a {\em family} of formats which have
+internal consistency, and this simplifies documentation, shortens
+learning time and made standards negotiations easier, and (2)~in many
+scientific applications auxiliary tabular data structures need to be
+associated with the main binary matrix data structures.
+
+In this appendix we will display a typical FITS table, a single
+table in a FITS file. The table has 2268 rows and 22 columns
+encoded in 80 ASCII characters. The data were produced by automatic
+software which searched images of the Northern sky produced from scans
+made by the 300-foot telescope at Green Bank, WV (the 300-foot
+collapsed in November 1988, about a year after these data were
+recorded), and were given to D.~Wells by James J.~Condon of NRAO for
+use in this appendix.  In the verbatim listings shown below two extra
+lines have been prefixed to the listing of each logical record to show
+the column alignments in the file, and the record number and line
+number are shown for each line (these are not a part of the FITS
+bytestream, of course). First, we show the minimum Basic FITS header:
+
+\pagebreak
+{\footnotesize \begin{verbatim}
+                 1         2         3         4         5         6         7         8
+ r/l    12345678901234567890123456789012345678901234567890123456789012345678901234567890
+
+01/01:  SIMPLE  =                    T / Standard FITS format (AA Suppl. 73, 365)       
+01/02:  BITPIX  =                    8 / 8-bit characters                               
+01/03:  NAXIS   =                    0 / No image data array present                    
+01/04:  EXTEND  =                    T / There may be standard extensions               
+01/05:  BLOCKED =                    T / Tape may be blocked (2880 byte records)        
+01/06:  TELESCOP= 'NRAO91M '           / 91m = 300-ft telescope (r.i.p.)                
+01/07:  INSTRUME= '7BEAM6CM'           / 7-beam receiver                                
+01/08:  OBJECT  = '87GB CAT'           / The 87GB 4.85 GHz source catalog               
+01/09:  EPOCH   =               1950.0 / Equinox (yr) of RA, dec values in table        
+01/10:  DATE-OBS= '01/10/87'           / Observation start date (dd/mm/yy)              
+01/11:  OBSERVER= 'CBS     '           / Condon, Broderick, and Seielstad               
+01/12:  ORIGIN  = 'NRAOCV  '           / Written at NRAO, Charlottesville               
+01/13:  DATE    = '11/06/90'           / Date file written (dd/mm/yy)                   
+01/14:  HISTORY  AIPS IMNAME = 'B1950.11H'                                              
+01/15:                                                                                  
+01/16:  COMMENT  This table contains all sources from the 87GB catalog                  
+01/17:  COMMENT  with hours of right ascension = 11 (equinox B1950)                     
+01/18:  COMMENT  derived from the Green Bank 4.85 GHz sky survey made in 1987           
+01/19:  COMMENT  with the 91-m telescope  (J. J. Condon, J. J. Broderick, and           
+01/20:  COMMENT  G. A. Seielstad 1989, A. J. 97, 1064),                                 
+01/21:  COMMENT  in standard FITS table format (see Astr. Ap. Suppl. 73, 365).          
+01/22:  COMMENT  Catalog reference:  P. C. Gregory and J. J. Condon,                    
+01/23:  COMMENT  Ap. J. Suppl., submitted May 1990.                                     
+01/24:  END                                                                             
+01/25:                                                                                  
+01/26:                                                                                  
+01/35:                                                                                  
+01/36:                                                                                  
+\end{verbatim} }
+
+The {\tt NAXIS} line declares that the binary matrix does not exist
+(it's dimensionality, the number of axes, is zero); the type of the
+matrix elements ({\tt BITPIX=8}) does not matter in this case. The
+following keyword-value pairs of this header are optional (except the
+{\tt END}). The next logical record begins the header of the ASCII
+table:
+
+{\footnotesize \begin{verbatim}
+                 1         2         3         4         5         6         7         8
+ r/l    12345678901234567890123456789012345678901234567890123456789012345678901234567890
+
+02/01:  XTENSION= 'TABLE   '           / Table extension                                
+02/02:  BITPIX  =                    8 / 8-bit characters                               
+02/03:  NAXIS   =                    2 / Simple 2-D matrix                              
+02/04:  NAXIS1  =                   80 / Number of characters per row                   
+02/05:  NAXIS2  =                 2268 / Number of rows = number of sources             
+02/06:  PCOUNT  =                    0 / No random parameters                           
+02/07:  GCOUNT  =                    1 / Only one group                                 
+02/08:  TFIELDS =                   22 / Number of fields per row                       
+02/09:  EXTNAME = 'B1950.11H'          / Name (Epoch.hours of right ascension)          
+02/10:  EXTVER  =                    1 / Version number                                 
+02/11:  EXTLEVEL=                    1 / Hierarchical level                             
+02/12:                                                                                  
+02/13:  TTYPE1  = 'RAH     '           / right ascension (hours)                        
+02/14:  TBCOL1  =                    1 / start in column 1                              
+02/15:  TFORM1  = 'I2      '           / 2-digit integer                                
+02/16:  TUNIT1  = 'HR      '           / units are hours                                
+02/17:  TNULL1  = '99      '                                                            
+02/18:                                                                                  
+02/19:  TTYPE2  = 'RAM     '           / right ascension (minutes)                      
+02/20:  TBCOL2  =                    3 / start in column 3                              
+02/21:  TFORM2  = 'I2      '           / 2-digit integer                                
+02/22:  TUNIT2  = 'MIN     '           / minutes of time                                
+02/23:  TNULL2  = '99      '                                                            
+02/24:                                                                                  
+02/25:  TTYPE3  = 'RAS     '           / right ascension (seconds)                      
+02/26:  TBCOL3  =                    5 / start in column 5                              
+02/27:  TFORM3  = 'E4.1    '           / xx.x SP floating point                         
+02/28:  TUNIT3  = 'S       '           / seconds of time                                
+02/29:  TNULL3  = '99.9    '                                                            
+02/30:                                                                                  
+02/31:  TTYPE4  = 'URAS    '           / rms uncertainty in RAS (seconds)               
+02/32:  TBCOL4  =                   10 / start in column 10                             
+02/33:  TFORM4  = 'E3.1    '           / x.x SP floating point                          
+02/34:  TUNIT4  = 'S       '           / seconds of time                                
+02/35:                                                                                  
+02/36:  TTYPE5  = 'DECDSIGN'           / declination sign                               
+\end{verbatim} }
+
+This is an extension of type ``{\tt TABLE}''; it is a 2-dimensional
+matrix of 8-bit bytes, with 80 bytes per row and 2268 rows in the
+matrix.  The keyword {\tt TFIELDS} on line~8 tells us that there are
+22 columns in the table. Keyword {\tt EXTNAME} specifies a name for
+this extension (multiple extension structures can be concatenated
+within a single FITS file, and can be distinguished by their names).
+Each of the table columns is documented by a set of five keywords.
+{\tt TTYPE}{\em ii} specifies the column label for the {\em ii}-th
+column.  {\tt TBCOL}{\em ii} specifies the ordinal in the matrix of
+the first character of the data field of the column, and {\tt
+TFORM}{\em ii} specifies the format (and the field width) in Fortran
+style. {\tt TUNIT}{\em ii} specifies the physical units of the column
+and {\tt TNULL}{\em ii} specifies the field value that signifies
+nulls. Here is the last header record:
+
+{\footnotesize \begin{verbatim}
+                 1         2         3         4         5         6         7         8
+ r/l    12345678901234567890123456789012345678901234567890123456789012345678901234567890
+
+05/01:                                                                                  
+05/02:  TTYPE20 = 'ZERO    '           / zero-level of fit (Jy)                         
+05/03:  TBCOL20 =                   67 / start in column 67                             
+05/04:  TFORM20 = 'E3.3    '           / (.)xxx SP floating point                       
+05/05:  TUNIT20 = 'JY      '           / Jansky                                         
+05/06:                                                                                  
+05/07:  TTYPE21 = 'PIXX    '           / x-coordinate pixel number                      
+05/08:  TBCOL21 =                   71 / start in column 71                             
+05/09:  TFORM21 = 'I4      '           / 4-digit integer                                
+05/10:                                                                                  
+05/11:  TTYPE22 = 'PIXY    '           / y-coordinate pixel number                      
+05/12:  TBCOL22 =                   76 / start in column 76                             
+05/13:  TFORM22 = 'I4      '           / 4-digit integer                                
+05/14:                                                                                  
+05/15:  AUTHOR  = 'P. C. Gregory and J. J. Condon'                                      
+05/16:  REFERENC= 'Ap. J. Suppl., submitted 1990 May'                                   
+05/17:  DATE    = '11/06/90'           / file generation data (dd/mm/yy)                
+05/18:                                                                                  
+05/19:  END                                                                             
+05/20:                                                                                  
+05/35:                                                                                  
+05/36:                                                                                 
+\end{verbatim} }
+
+The next FITS logical record begins the table itself, which extends
+for $63 (= 2268 / 36)$ FITS records. Here are the first and last rows
+of the table:
+
+{\footnotesize \begin{verbatim}
+                 1         2         3         4         5         6         7         8
+ r/l    12345678901234567890123456789012345678901234567890123456789012345678901234567890
+
+06/01:  11 0 1.5 1.0 +181916 19  63.2 226.9    67   10      1.13 0.96 -64  -3  513  362 
+06/02:  11 0 3.2 1.5 +322917 23  65.7 194.2    35    7      1.38 0.68  55  -1  512  735 
+06/03:  11 0 5.6 1.6 +27 6 9 26  65.6 207.3    30    7      1.58 0.75  44   0  511  253 
+06/04:  11 0 9.7 2.0 +451913 25  61.8 166.3    27    6      1.28 0.69 -55  -2  510   93 
+06/05:  11 011.0 1.1 +105913 20  59.4 240.1    67   11      1.15 0.67  -4  -6  509  601 
+06/06:  11 011.7 0.9 + 515 9 18  55.8 248.3   135   20      1.22 0.66 -10   1  509   86 
+
+68/04:  115859.9 2.1 + 917 1 44  68.3 267.0    40    9   W  1.94 1.32 -32  -4   92  450 
+68/05:  1159 5.1 1.5 +472035 19  67.7 146.2    50    8      0.87 0.69 -80   1  222  283 
+68/06:  1159 6.2 1.6 +231311 27  77.8 230.2    35    7      1.20 0.73 -71  -1  119  804 
+68/07:  1159 6.9 0.9 +113140 19  70.1 263.6   146   21      0.92 0.74 -51  -2   92  651 
+68/08:  115911.4 0.9 +144814 19  72.7 257.3   211   29      1.01 0.81 -59  -1   96  942 
+68/09:  115914.0 0.9 +105335 19  69.6 264.7   153   22      1.12 0.68   5   0   89  594 
+68/10:  115915.7 2.0 +502524 24  65.0 142.4    32    7      1.66 0.98 -65  -6  237  559 
+68/11:  115916.7 1.0 +393541 16  73.9 160.6   261   32      1.15 0.85   8   1  179  484 
+68/12:  115919.2 1.1 +3313 5 19  77.6 181.9    73   11      1.03 0.72  -8   1  150  806 
+68/13:  115920.1 1.2 +445634 17  69.8 149.6    90   11      0.87 0.71   7   0  205  960 
+68/14:  115920.7 1.1 +3651 2 18  75.7 168.4    86   12      1.24 0.96  88  -3  165  238 
+68/15:  115929.5 1.4 +3130 0 23  78.3 189.5    43    8      0.99 0.67 -84   0  140  653 
+68/16:  115930.2 1.2 +581838 14  57.9 135.5   268   27      1.09 0.81  -4   0  283  369 
+68/17:  115933.9 1.9 +504917 22  64.7 141.8    36    6      0.94 0.79 -13  -2  235  595 
+68/18:  115934.4 1.0 +13 228 20  71.4 261.1   107   16      1.15 0.84 -25   1   85  786 
+68/19:  115935.0 2.3 +595826 22  56.3 134.4    35    6      1.77 0.99  89  -5  293  518 
+68/20:  115936.1 1.2 +45 122 17  69.7 149.4    78   10      0.96 0.81 -78  -5  202   75 
+68/21:  115937.6 1.6 +342824 25  77.1 176.7    36    7      1.34 0.70 -43   0  149  918 
+68/22:  115939.8 1.0 +214047 19  77.2 236.8   116   16      1.04 0.72  25  -1  102  667 
+68/23:  115941.5 2.5 +552123 26  60.6 137.6    27    6      1.25 0.83 -48  -5  262  104 
+68/24:  115941.8 2.2 +622451 19  54.0 132.9    43    6      1.12 0.78  48  -2  308  736 
+68/25:  115942.0 1.4 +182235 25  75.3 248.3    44    8      1.33 0.94 -85  -3   93  372 
+68/26:  115942.6 1.8 +721656 11  44.6 128.3   140   12      1.07 0.79 -20  -1  378  722 
+68/27:  115946.2 1.4 + 85619 26  68.1 267.9    48   10      1.19 0.61 -22   0   74  419 
+68/28:  115946.4 1.2 + 83314 24  67.7 268.4    61   11      0.95 0.61 -41   1   74  384 
+68/29:  115951.3 2.4 +272523 41  78.9 210.0    32    8   W  2.04 1.31  37  -8  117  288 
+68/30:  115951.6 2.3 +534640 25  62.1 138.9    29    6      1.05 0.76 -41  -1  249  858 
+68/31:  115952.1 1.4 +141830 26  72.5 258.8    43    9      1.35 0.66 -70  -2   81  898 
+68/32:  115952.1 1.3 +133037 25  71.8 260.4    48    9   W  1.05 0.56   4  -3   79  827 
+68/33:  115954.1 2.2 +514810 26  63.8 140.7    28    6      1.40 0.87  18   0  236  682 
+68/34:  115956.7 1.9 +482732 25  66.8 144.4    42    7  E   1.49 1.14  32  -5  216  384 
+68/35:  115957.3 2.2 +142322 57  72.5 258.6    37    8   W  2.83 0.80  29  -5   79  905 
+68/36:  115957.7 1.9 +585831 19  57.3 134.9    44    7      1.35 0.92 -40   1  282  429 
+\end{verbatim} }
+
+This FITS bytestream consists of 68 logical records: 1 Basic FITS
+header record, 4 header records for the table header and 63 records
+for the table itself. The fact that the last row of the table {\em
+exactly} fills the $36^{th}$ line of the $63^{rd}$ record is
+accidental; normally the last record is padded with blanks. Also, the
+fact that the rows are 80 characters long, commensurate with 2880, is
+peculiar to this table; other tables might have other row lengths.  If
+the row length is not commensurate the rows of the FITS matrix are
+written as a contiguous stream without regard to logical record
+boundaries.  The total stream is $195840 (=68\times 2880)$ bytes long.
+
+This file is number 11 of 24, covering the eleventh hour of Right
+Ascension, the celestial longitude coordinate, and the total survey
+contains about 50000 sources.  Other analogous radio surveys at
+different frequencies can be compared and composite tables containing
+source strengths or non-detections as a function of frequency can be
+constructed.  Similar surveys in other frequency ranges (X-ray,
+ultraviolet, optical, infrared) can also be compared with this source
+list, and valuable astrophysical insight comes from such
+``panchromatic'' astronomy.
+
+\end{document}

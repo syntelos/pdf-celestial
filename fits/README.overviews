@@ -1,0 +1,12 @@
+	       FITS Overview Documents
+
+File name		Content
+-----------------------------------------------------------
+basics_{1,2}.txt	Answers to frequently-asked-questions (FITS Office)
+guide.sty		LaTeX style file for users_guide.tex (see below)
+history.news		Pre-FITS history 1976-1980 
+overview.txt		June92 draft by Barry Schlesinger (FITS Office)
+standards_lfini.news	A survey of opinion about standards in general
+table.{ps,tex}		"FITS---A Self-Describing Table Interchange Format"
+users_guide.{tex,ps...}	FITS Users Guide produced by NOST FITS Office
+who_we_are.txt		March92 demographic analysis of the FITS community

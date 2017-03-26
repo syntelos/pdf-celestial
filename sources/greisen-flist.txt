@@ -1,0 +1,5 @@
+http://www.aoc.nrao.edu/~egreisen/AnAI.pdf
+http://www.aoc.nrao.edu/~egreisen/AnAII.pdf
+http://www.aoc.nrao.edu/~egreisen/scs.pdf
+http://www.aoc.nrao.edu/~egreisen/scs.ps.gz
+http://www.aoc.nrao.edu/~egreisen/scs.ps

@@ -1,0 +1,3584 @@
+%  -*- this is a true latex file *-*
+%
+% NOTE: Check setting of the XXX (XXX=final, index, ...) variables below to 
+%   enable or suppress printing of an index or debugging statements
+%   Also note possible LaTeX incompatibilities with \printindex at the
+%   end of the document, which may become '\input standard.ind' on some
+%   systems which do not understand the '\printindex' command...
+
+%   		<=== declarations of logical vars XXX (XXX=final,index...)
+\newif\iffinal
+\newif\ifindex
+
+%		<=== set the logicals (make them either \XXXtrue or \XXXfalse)
+%		in the source us \ifXXX ... \else ... \fi
+\finaltrue
+\indextrue
+
+
+%		various DOCUMENTSTYLE, depending on choosen environment
+\ifindex
+  \iffinal
+    \documentstyle[11pt,nost1p1,makeidx]{book}             % final version
+  \else
+    \documentstyle[11pt,nost1p1,makeidx,showidx]{book}    % index debug version
+  \fi
+\else
+ \documentstyle[11pt,nost1p1]{book}                   % no index
+\fi
+
+%
+\author{ }
+\shorttitle{NOST {\em FITS\/} Definition} 
+
+\ifindex
+  \makeindex
+\fi
+
+\title{  Definition of the Flexible Image Transport System ({\em FITS\/}) }
+%
+\standardnumber{NOST 100-1.1}
+%
+\date{September 29, 1995}
+%
+\publisher{ NASA/Science Office of Standards and Technology \\
+            Code 633.2  \\
+            NASA Goddard Space Flight Center \\
+            Greenbelt MD 20771 \\ 
+            USA}
+\pubaddress{ NOST, Code 633.2, NASA Goddard Space Flight Center \\
+            Greenbelt MD 20771 \\
+            USA \\           
+            Internet: nost@nssdca.gsfc.nasa.gov \\
+            DECNET: NSSDCA::NOST \\
+            301-286-3575 }
+%
+\panel{  Robert J. Hanisch, Chair &
+             {\raggedright Space Telescope Science Institute} \\
+         Barry M. Schlesinger, Secretary   &
+             {\raggedright Hughes STX} \\
+         Lee E. Brotzman  &
+             {\raggedright Hughes STX} \\
+         Allen Farris  &
+             {\raggedright Space Telescope Science Institute} \\
+         Eric W. Greisen  &
+             {\raggedright National Radio Astronomy Observatory} \\
+         Edward Kemper  &
+             {\raggedright Hughes STX} \\
+         William D. Pence &
+             {\raggedright NASA Goddard Space Flight Center} \\
+         Peter J. Teuben  &
+             {\raggedright University of Maryland} \\
+         Randall W. Thompson &
+             {\raggedright Computer Sciences Corporation} \\
+         Michael E. Van Steenberg  &
+             {\raggedright NASA Goddard Space Flight Center} \\
+         Archibald Warnock &
+             {\raggedright A/WWW Enterprises} \\ 
+         Wayne H. Warren Jr. &
+             {\raggedright Hughes STX} \\
+         Richard A. White &
+             {\raggedright NASA Goddard Space Flight Center} \\ }
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
+%
+\begin{document} 
+
+\maketitle  
+                    %%% Cannot add \index here - no pagenumbers available
+\begin{authority}
+The NASA/Science Office of Standards and Technology
+(NOST) has been established to 
+serve the space science communities in evolving cost effective, interoperable
+data systems. The NOST performs 
+a number of functions designed to facilitate
+the recognition, development, adoption, and use of standards by the space
+science communities.
+
+Approval of a NOST standard requires verification by the NOST that the
+following requirements have been met: consensus of the technical 
+panel, proper adjudication of the comments received 
+from the targeted space and Earth science community, 
+and conformance to the accreditation process.
+
+A NOST standard represents the consensus of 
+the technical panel convened by
+the NASA/Science Office of Standards and Technology (NOST) 
+of the National Space Science Data Center (NSSDC) 
+of the National Aeronautics and Space Administration (NASA). 
+Consensus is established when the NOST Accreditation
+Panel determines that substantial agreement has been reached by the
+Technical Panel.  However, consensus does not necessarily imply 
+that all members were in
+full agreement with every item in the standard. NOST standards are not
+binding as published; however, they may serve as a basis for mandatory
+standards when adopted by NASA or other organizations.
+
+A NOST standard may be revised at any time, depending on 
+developments in the areas covered by the standard. Also, within five 
+years from the date of its issuance, this standard will be reviewed by 
+the NOST to determine whether it should 1) remain in effect without
+change,
+2) be changed to reflect the impact of new technologies or new
+requirements,
+or 3) be retired or canceled.
+
+The Technical Panels that developed this standard consisted of the following
+members:
+\end{authority}
+
+\tableofcontents
+\listoftables
+\listoffigures
+
+\chapter*{Introduction}
+   \addcontentsline{toc}{chapter}{Introduction}\markboth{}{}
+
+  The Flexible Image Transport System ({\em FITS\/}) evolved out of the
+  recognition that a standard format was needed for 
+  transferring astronomical data from one installation to another.  The 
+  original\index{Basic FITS}
+  form, or Basic {\em FITS\/} [1], was designed for 
+  the transfer of images and
+  consisted of a binary array, usually multidimensional, preceded by
+  an ASCII text\index{ASCII, text} header with information 
+  describing the organization and contents of the array.  
+  The {\em FITS\/} concept was later expanded to
+  accommodate more complex data\index{format, data} formats.   
+  A new format for image transfer, {\em random groups}, was defined [2] 
+  in which the data\index{random groups}
+  would consist of a series of arrays, 
+  with each\index{random groups, array}
+  array accompanied by
+  a set of associated\index{parameter}
+  parameters.  These formats were formally
+  endorsed by the International Astronomical Union\index{IAU}
+  (IAU) in 1982 [3]. Provisions for data structures 
+  other than simple arrays or groups
+  were made later.  These structures appear\index{extension}
+  in {\em extensions}, each  consisting of an ASCII header 
+  followed by the data whose organization it describes.  
+  A set of general rules governing such extensions [4] and 
+  a particular\index{ASCII tables} 
+  extension, {\em ASCII Tables} [5], were endorsed
+  by the IAU General Assembly in 1988 [6].  At the same 
+  General\index{IAU, 1988 General Assembly}
+  Assembly, an IAU {\em FITS\/} 
+  Working Group\index{FITS, Working Group} was formed with the 
+  mandate to maintain the existing {\em FITS\/} standards and to review, 
+  approve, and maintain future extensions to {\em FITS}, 
+  recommended practices for {\em FITS}, implementations, and the 
+  thesaurus of approved {\em FITS\/} keywords [7].  In 1989, the 
+  IAU Commission\index{IAU, Commission 5}
+  5 {\em FITS\/} Working Group approved a formal agreement [8] for the 
+  representation of floating point\index{floating point, FITS agreement}
+  numbers.
+  {\em FITS\/} was originally designed and defined for 9-track 
+  half-inch\index{tape, 9-track half-inch}
+  magnetic tape. However, as improvements in technology have brought
+  forward other data storage and data distribution media, it has
+  generally been agreed that the {\em FITS\/} format is to be
+  understood as a logical format and not defined in terms of the
+  physical characteristics of any particular data storage medium or
+  media. 
+  
+\chapter{Overview}
+\startstandard
+  
+  \section{Purpose}
+   This standard formally defines the {\em FITS\/} format 
+   for data structuring and exchange that is to be used where 
+   applicable as defined in Section~\ref{s:appl}. It is intended as a 
+   formal codification of the {\em FITS\/} format that has been 
+   endorsed by the IAU\index{IAU} for transfer of astronomical data, fully 
+   consistent with all actions and endorsements of the IAU and the 
+   IAU\index{IAU, Commission 5} Commission 5 {\em FITS\/} 
+   Working\index{FITS, Working Group} Group.  Minor ambiguities and
+   inconsistencies in {\em FITS\/} as described in the original papers are
+   eliminated.  The eventual goal is to submit this document to the 
+   IAU\index{IAU, Commission 5} Commission 5 {\em FITS\/} 
+   Working Group\index{FITS, Working Group} 
+   for endorsement as a universal standard for {\em FITS}.
+  
+  \section{Scope}
+   This standard specifies the organization and content of {\em FITS\/} data
+   sets, including the header and data, for all\index{format, standard} 
+   standard {\em FITS\/} formats: Basic {\em FITS}, the\index{Basic FITS}
+   random groups\index{random groups} structure, and the
+   ASCII tables\index{ASCII tables} extension. 
+   It also specifies minimum 
+   structural requirements for new extensions\index{extension}
+   and general principles governing the creation of 
+   new extensions, giving as an example the draft proposal for a
+   Binary Table\index{binary tables}
+   Extension.  For headers, it specifies the 
+   proper syntax for card images and defines 
+   required\index{keyword, required} 
+   and reserved\index{keyword, reserved} keywords.  For data, 
+   it specifies character and value representations and the ordering 
+   of contents within the byte stream.  It defines the general rules to which 
+   new extensions are required to conform.
+  
+  \section{Applicability}
+   \label{s:appl}
+   The IAU\index{IAU} has recommended that all astronomical computer 
+   facilities support {\em FITS\/} for the interchange of binary data.
+   All spacecraft projects and astrophysics data archives under the
+   management of the Astrophysics Division of the National
+   Aeronautics and Space Administration are required to make
+   processed data available to users in the {\em FITS\/} format defined 
+   by this standard, unless the Astrophysics Division specifically 
+   determines otherwise.  This standard may also be used to define 
+   the format for data transport in other disciplines, as may be 
+   determined by the appropriate authorities.
+  
+  \section{Organization and Recommendations}
+  
+   Following the definitions in Section \ref{s:def}, this document describes
+   the overall organization of a {\em FITS\/} file, the contents of 
+   the first (primary) header and data, and the rules for
+   creating new {\em FITS\/} extensions\index{extension} 
+   in Section \ref{s:org}. 
+   The next two sections provide additional details on the header and 
+   data, with a particular focus on the 
+   primary header\index{primary header}.  
+   Section \ref{s:head} provides details about header card image 
+   syntax and specifies those keywords required\index{keyword, required}
+   and reserved\index{keyword, reserved} in a 
+   primary header.  Section \ref{s:Drep} describes how different
+   data types are represented in {\em FITS}. The following sections
+   describe the headers and data of two standard {\em FITS\/}
+   structures\index{FITS, structure}, the now to be
+   deprecated\index{deprecate} 
+   random groups\index{random groups} records (Section \ref{s:Rgrp}) 
+   and the only current standard\index{ASCII tables} extension, 
+   ASCII Tables (Section \ref{s:exts}).  Throughout the document, 
+   deprecation of structures or syntax is noted where relevant.  
+   Files containing deprecated features are valid {\em FITS}, 
+   but these features should not be used in new files;
+   the old files using them remain standard because of the 
+   principle that no change in {\em FITS\/} shall cause 
+   a valid {\em FITS\/} file to become invalid.
+
+   The Appendixes contain material that is not part of the standard.  
+   The first two provide illustrations of {\em FITS\/} practice. Appendix
+   \ref{s:Bintbl} provides an example of a conforming 
+   extension, the\index{extension, conforming} 
+   draft proposal for the\index{conforming extension} 
+   {\em  Binary Table\/} Extension\index{binary tables} [9].
+   The generally accepted recommendations 
+   for the expression of the logical {\em FITS\/} format on various 
+   physical media are provided in Appendix \ref{s:phy} as a guide to 
+   {\em FITS\/} practices.  Appendix \ref{s:sdif} lists 
+   the differences between this standard and the specifications of 
+   prior publications; it also identifies those ambiguities in the
+   documents endorsed by the IAU\index{IAU}  on which
+   this standard provides specific rules.
+   The next four provide reference information: a tabular 
+   summary of the {\em FITS\/} keywords 
+   (Appendix \ref{s:summ}), a list 
+   of the ASCII character set\index{ASCII, characters}
+   and a subset designated ASCII text\index{ASCII, text} 
+   (Appendix \ref{s:Atxt}), the bit representation of the 
+   IEEE\index{IEEE, special values} special values 
+   (Appendix \ref{s:spf}), and a list of the reserved 
+   extension type\index{extension, type name} names (Appendix \ref{s:resn}).
+
+\chapter{References}
+  
+\begin{enumerate}
+  
+\item Wells, D. C., Greisen, E. W., and Harten, R. H. 1981, 
+ ``{\em FITS\/}: A Flexible Image Transport System,'' 
+ {\em Astron. Astrophys. Suppl.}, {\bf 44}, 363--370.
+  
+\item Greisen, E. W. and Harten, R. H. 1981, ``An Extension of 
+  {\em FITS\/} for\index{random groups} Small Arrays of Data,'' 
+  {\em Astron. Astrophys. Suppl.}, {\bf 44}, 371--374.
+    
+
+\item IAU.\index{IAU} 1983, {\em Information Bulletin} No. 49.
+          
+\item Grosb\o l, P., Harten, R. H., Greisen, E. W., and Wells, D. C. 1988,
+   ``Generalized Extensions and Blocking Factors for {\em FITS},'' 
+ {\em Astron. Astrophys. Suppl.}, {\bf 73}, 359--364.
+  
+\item Harten, R. H., Grosb\o l, P., Greisen, E. W., and Wells, D. C. 1988, 
+   ``The {\em FITS\/} Tables\index{ASCII tables} Extension,'' 
+   {\em Astron. Astrophys. Suppl.}, {\bf 73}, 365--372.
+
+\item IAU. 1988, {\em Information Bulletin} No. 61.
+
+\item McNally, D., ed. 1988, Transactions\index{IAU, Style Manual}
+ of the IAU, {\em Proceedings of 
+ the Twentieth General Assembly} (Dordrecht: Kluwer). 
+  
+\item Wells, D. C. and Grosb\o l, P. 1990, ``Floating Point Agreement
+   for\index{floating point, FITS agreement}
+   {\em FITS}.''  (available from the {\em FITS\/} Support Office) 
+
+\item Cotton, W. D., Tody, D. B., and Pence, W. D. 1995, ``Binary 
+    Table\index{binary tables} Extension to {\em FITS},'' 
+    {\em Astron. Astrophys. Suppl.}, in press.
+  
+\item ANSI. 1978, ``American National Standard for Information Processing:
+       Programming Language FORTRAN,''
+      ANSI X3.9--1978 (ISO 1539) (New York: American 
+      National\index{FORTRAN-77, ANSI manual}\index{ANSI, FORTRAN-77}
+      Standards Institute, Inc.).\index{ANSI, X3.9--1978}
+
+\item ANSI. 1977, ``American National Standard for Information Processing:
+        Code for Information Interchange,''
+      ANSI X3.4--1977 (ISO 646) (New York: American National 
+      Standards\index{ANSI, ASCII}\index{ASCII, ANSI}
+      Institute, Inc.). \index{ANSI, X3.4--1977}
+
+\item  IEEE. 1985, ``American National Standard -- 
+       IEEE Standard for Binary 
+       Floating Point Arithmetic''. ANSI/IEEE 754-1985 
+       (New York: American\index{ANSI, IEEE}\index{IEEE, ANSI}
+        National Standards Institute, Inc.). 
+
+\item ANSI. 1976, ``American National Standard for Information 
+        Processing: Unre\-cor\-ded Magnetic Tape,''
+        ANSI X3.40--1976\index{ANSI, tapes} (New York: American 
+        National Standards Institute, Inc.).\index{ANSI, X3.40--1976}
+
+\item ANSI. 1978, ``American National Standard for 
+      Information Processing: Magnetic Tape Labels and File Structure,''
+      ANSI X3.27--1978 (New York: American\index{ANSI, X3.27--1978} 
+        National Standards Institute, Inc.).
+ 
+\item ``Going AIPS,'' 1990, National Radio Astronomy Observatory, 
+      Charlottesville, VA.\index{Going AIPS}\index{AIPS, Going}
+
+\item Ponz, J. D., Thompson, R. W., and Mu\~{n}oz, J. R. 1994,
+   ``The {\em FITS\/} IMAGE\index{IMAGE} Extension,'' 
+   {\em Astron. Astrophys. Suppl.}, {\bf 105}, 53-55.
+  
+\item Mu\~{n}oz, J. R. ``IUE data in\index{FITS, IUE} 
+    {\em FITS\/} Format,'' 1989, ESA IUE Newsletter, {\bf 32}, 12-45.
+   
+\end{enumerate}
+  
+\chapter{Definitions, Acronyms, and Symbols}
+\label{s:def}
+
+\begin{description}
+\item[\hbox{\tt\char`\ }] Used to designate an ASCII blank.
+\item[AIPS] Abbreviation of Astronomical Image Processing\index{AIPS} 
+    System.
+\item[ANSI] Abbreviation of American National Standards\index{ANSI}
+    Institute.
+\item[Array]  A sequence of data values, of zero or more 
+    dimensions.\index{array}
+\item[Array value] The\index{array, value} value of an element of an array 
+     in a {\em FITS\/} file, without the application of the 
+     associated linear transformation to derive the
+     physical\index{physical value} value.
+\item[ASCII] Abbreviation of American National Standard Code 
+             for Information\linebreak[1] Interchange.
+\item[ASCII blank] Hexadecimal 20.
+\item[ASCII character] Any\index{ASCII, character} 
+      member of the 7-bit ASCII character set. 
+\item[ASCII text] ASCII characters\index{ASCII, text} 
+      hexadecimal 20-7E.
+\item[Basic {\em\bf FITS}] The {\em FITS\/} 
+      structure\index{FITS, structure} 
+       consisting of\index{Basic FITS}
+       the primary header\index{primary header} followed by a single
+       primary\index{primary data array} data array.
+\item[Bit] A single binary digit.
+\item[Byte] A string of eight bits treated as a single entity.
+\item[Card image] A sequence of 80 bytes containing\index{card image}
+         ASCII text\index{ASCII, text}, treated as a logical record.
+\item[CfA] Abbreviation of Harvard-Smithsonian Center for
+        Astrophysics.
+\item[Conforming extension] An extension whose keywords and
+         organization\index{conforming extension}
+         adhere to the requirements for conforming extensions defined 
+         in Section \ref{s:genext} of this 
+         standard.\index{extension, conforming}
+\item[Deprecate] To express earnest disapproval\index{deprecate}
+        of. This term is used to refer to obsolete structures that 
+        ought not to be used but remain valid.
+\item[Entry] A value or set of values (i. e., a vector)
+       associated with a specific row or column in a table.
+\item[ESO] Abbreviation of European Southern Observatory.
+\item[Extension] A\index{extension} {\em FITS\/} HDU 
+     appearing\index{HDU, extension} after the primary HDU in a 
+     {\em FITS\/} file.
+\item[Extension name] The identifier used to distinguish a particular 
+     extension HDU from others of the same type, appearing as the value
+     of the\index{EXTNAME} {\tt EXTNAME} 
+     keyword.\index{extension, name}
+\item[Extension type] An extension\index{format, extension} format.
+\item[Field] A set of zero or more table entries collectively described by a
+             single format.
+\item[File] A sequence of one or more records terminated by an end-of-file
+             indicator appropriate to the medium.
+\item[{\em\bf FITS}] Abbreviation of Flexible Image Transport System.
+\item[{\em\bf FITS} file] A file with a format that conforms to the 
+            specifications in this document.
+\item[{\em\bf FITS} logical record] A record of 23040 bits 
+            corresponding to 2880 8-bit bytes within a {\em FITS\/} file.
+\item[{\em\bf FITS} structure] One\index{FITS, structure} of the 
+               components of a {\em FITS\/} file: 
+               the primary\index{HDU, primary} HDU, 
+               the random groups\index{random groups} records, an 
+               extension\index{extension}, or, collectively, 
+               the special records\index{special records} following 
+               the last extension.
+\item[Floating point] A number whose bit structure is composed of a 
+            mantissa and exponent, whose ASCII representation contains 
+            an explicit decimal\index{floating point}
+            point and may include a power-of-ten exponent.
+\item[Group parameter value] The\index{group parameter value} 
+     value of one of the parameters preceding a group in the random groups
+     structure, without the application of the 
+     associated linear transformation.
+\item[GSFC] Abbreviation of Goddard Space Flight Center.
+\item[Header] A series of card images organized within 
+       one or more {\em FITS\/}
+       Logical Records which describes structures 
+       and/or data which follow it in the {\em FITS\/} file.
+\item[Header and Data Unit (HDU)] A data structure 
+       consisting of a
+       Header and the data the Header describes. Note that an\index{HDU}
+       HDU may consist entirely of a header with no data records.
+\item[IAU] Abbreviation of International Astronomical\index{IAU} Union.
+\item[IUE] Abbreviation of International Ultraviolet Explorer.\index{IUE}
+\item[IEEE] Abbreviation of Institute of Electrical and 
+        Electronic\index{IEEE} Engineers.
+\item[IEEE NaN] Abbreviation of IEEE Not-a-Number\index{IEEE, NaN} 
+        value.
+\item[IEEE special values] 
+        ($-0$, $\pm \infty$, NaN,
+	denormalized).\index{IEEE, special values}
+\item[Indexed keyword] A\index{keyword, indexed} keyword that is 
+       of the form of a fixed root with an appended integer count.
+\item[Keyword] The first eight bytes of a header card image.
+\item[Mandatory keyword] A\index{keyword, required} keyword that must 
+   be used in all {\em FITS\/} files or a keyword required 
+   in conjunction with particular\index{FITS, structure} {\em FITS\/}
+   structures.
+\item[Matrix] A data array of two or more dimensions.
+\item[NOAO] Abbreviation of National Optical Astronomy
+Observatories.\index{NOAO}
+\item[NOST] Abbreviation of NASA/Science Office of Standards and 
+       Technology\index{NOST}.
+\item[NRAO] Abbreviation of National Radio Astronomy 
+        Observatory\index{NRAO}.
+\item[Physical value] The\index{physical value} value in physical 
+   units\index{units} represented by a member
+   of an array and possibly derived from the array value\index{array, value} 
+   using the associated, but optional, linear transformation.
+\item[Picture element] A single location within an image array.
+\item[Pixel] Abbreviation of ``picture element''.
+\item[Primary data array] The\index{primary data array}
+   data array contained in the\index{HDU, primary} Primary HDU.
+\item[Primary header] The\index{primary header} first header 
+   in a {\em FITS\/} file, containing information on the 
+   overall contents of the file as well as on the
+   primary data array.
+\item[Record] A sequence of bits treated as a single logical entity.
+\item[Reference point] The point along a given\index{coordinate, axis}
+    coordinate axis\index{reference point}, given in 
+    units\index{units}
+    of pixel number, at which a value and increment are defined. 
+\item[Reserved keyword] An\index{keyword, reserved} optional keyword 
+   that may be used only in the manner defined in this standard.
+\item[Special records] A series of 23040-bit (2880 8-bit byte) records, 
+   following the primary\index{HDU, primary} HDU,\index{special records}
+   whose internal structure does not otherwise conform to that for
+   the primary HDU or to that specified for a conforming 
+   extension\index{conforming extension} in\index{extension, conforming}
+   this standard. 
+\item[Standard extension] A\index{standard extension}
+     conforming\index{conforming extension} 
+     extension\index{extension, conforming} 
+   whose\index{extension, standard} header and data 
+   content are specified explicitly in this standard.
+\item[STScI] Abbreviation of Space Telescope Science Institute.
+\item[Type name] The value of the {\tt XTENSION}
+   keyword\index{XTENSION} used to identify
+   the type\index{extension, type name} of the extension\index{extension} 
+   in the data following.
+\item[Valid value] A member of a data array or table corresponding to an
+   actual physical quantity.
+\end{description}
+  
+\chapter{FITS File Organization}
+  \label{s:org}
+
+  \section{Overall}
+   \label{s:overorg}
+
+   A {\em FITS\/} file shall be composed of the following {\em FITS\/} 
+   structures\index{FITS, structure}, in the 
+   order\index{order, {\em FITS\/} structures}
+   listed:
+   \begin{itemize}
+   \item Primary HDU\index{HDU, primary}
+   \item Random Groups structure (optional; allowed only if there is 
+   no primary data array\index{random groups})
+   \item Conforming Extensions\index{conforming extension}
+   (optional)\index{extension, conforming}
+   \item Other special records (optional)\index{special records}
+   \end{itemize}
+  
+   Each {\em FITS\/} structure\index{FITS, structure} shall 
+   consist of an integral number of {\em FITS\/} logical
+   records.  The primary HDU\index{HDU, primary} shall start 
+   with the first record of the
+   {\em FITS\/} file.  The first record of each subsequent 
+   {\em FITS\/} structure\index{FITS, structure} shall be 
+   the record immediately 
+   following the last record of the preceding {\em FITS\/} structure.  
+   The size of a {\em FITS\/} logical record shall be 23040 bits, 
+   corresponding to 2880 8-bit bytes. 
+  
+  \section {Individual {\em\bf FITS} Structures}
+   The primary HDU and every extension\index{extension} 
+   HDU\index{HDU, extension} shall consist of an
+   integral number of header records consisting of ASCII\index{ASCII, text} 
+   text, which may be followed by an integral number of data records.  
+   The first record of data shall be the record immediately following 
+   the last record of the header.
+  
+  \section{Primary Header and Data Array}
+   The first component of a {\em FITS\/} file shall be the 
+   primary\index{primary header}
+   header.  The primary header may, but need not be, followed by
+   a primary data\index{primary data array}
+   array. The presence or absence of a primary data 
+   array shall be indicated by the values of the {\tt NAXIS} 
+   or\index{NAXIS} {\tt NAXISn} keywords\index{NAXISn}
+   in the primary header (Section \ref{s:pman}).
+  
+   \subsection{Primary Header}
+   The header of a primary HDU\index{HDU, primary} shall consist of a 
+   series of card images\index{card image}
+   in ASCII\index{ASCII, text} text.  All header 
+   records shall consist of 36 card images.  
+   Card images without information 
+   shall be filled\index{fill} with ASCII blanks (hexadecimal 20).
+  
+   \subsection{Primary Data Array}
+   In {\em FITS\/} format, the \label{s:pdata}
+   primary\index{primary data array} data array shall consist of a 
+   single data array of 0-999~dimensions.  The data values shall be 
+   a byte stream with no embedded fill or blank space.  
+   The first value shall be in the first position of the first
+   primary data array record.  The first value of each subsequent row of the 
+   array shall be in the position immediately following the last 
+   value of the previous row.  Arrays of more than 
+   one\index{array, multidimensional}
+   dimension shall consist of a sequence such that the index along
+   axis 1 varies most rapidly, that along axis~2 next most rapidly, and
+   those along subsequent axes progressively less rapidly, with that
+   along axis {\tt m}, where {\tt m} is the value 
+   of {\tt NAXIS}\index{NAXIS},
+   varying least rapidly; i.e., the elements of an array
+   $A(x_{1}, x_{2}, \ldots, x_{m})$ shall be in the 
+   order\index{order, array index}
+   shown in 
+   Figure \ref{f:array}.  The index count along each axis shall begin 
+   with 1 and increment by 1 up to the value of 
+   the {\tt NAXISn}\index{NAXISn} keyword (Section \ref{s:pman}). 
+\begin{figure}[t]
+\begin{center}
+\begin{tabular}{c} \\
+          A(1, 1, \ldots, 1), \\ 
+          A(2, 1, \ldots, 1), \\ 
+          \vdots, \\ 
+          A({\tt NAXIS1}, 1, \ldots, 1), \\
+          A(1, 2, \ldots, 1), \\ 
+          A(2, 2, \ldots, 1), \\ 
+          \vdots, \\ 
+          A({\tt NAXIS1}, 2, \ldots, 1), \\
+          \vdots,          \\ 
+          A(1, {\tt NAXIS2}, \ldots, {\tt NAXISm}), \\  
+          \vdots,  \\ 
+          A({\tt NAXIS1}, {\tt NAXIS2}, \ldots, {\tt NAXISm}) \\
+\end{tabular}
+
+\caption[Array data sequence]
+   {Arrays of more than one dimension shall consist of a sequence 
+   such that the index along axis 1 varies most rapidly and 
+   those along subsequent axes progressively less rapidly. Except 
+   for the\index{array, multidimensional}
+   location of the first element, array structure is independent of 
+   record structure.}
+\label{f:array}
+\end{center}
+\end{figure}
+   If the data array does not fill the final record, the
+   remainder of the record shall be filled\index{fill} with zero values with
+   the same data representation as the values in the array. For IEEE
+   floating point\index{floating point} data, 
+   values of +0. shall\index{IEEE, floating point +0.0}
+   be used to fill the remainder of the record. 
+   
+  
+  \section{Extensions}
+  
+   \subsection{Requirements for Conforming Extensions}
+    \label{s:genext}  
+   All extensions\index{extension}, 
+   whether or not further described in this standard, shall
+   fulfill the following requirements to be in conformance with
+   this {\em FITS\/} standard.
+
+   \subsubsection{Identity}
+   \label{s:idy}
+   Each extension\index{conforming extension}
+   type\index{extension, conforming} 
+   shall have a unique type name, specified in the\index{extension, type name}
+   header according to the syntax codified in Section \ref{s:conf}.
+   To preclude conflict, extension type names must be 
+   registered\index{extension, registration}\index{registration, extension}
+   with the IAU\index{IAU, Commission 5}
+   Commission 5 {\em FITS\/} Working\index{FITS, Working Group} Group.  
+   The {\em FITS} Support Office\index{FITS, Support Office} shall 
+   maintain and provide a list of the registered extensions. 
+  
+   \subsubsection{Size Specification}
+   The total number of bits in the data of each extension
+   shall be specified in the header for that extension, in the
+   manner prescribed in Section \ref{s:conf}.
+  
+   \subsubsection{Compatibility with Existing {\em\bf FITS} Files}
+   No extension\index{extension} shall\index{FITS, structure} be 
+   constructed that invalidates existing {\em FITS\/} files. 
+  
+   \subsection{Standard Extensions}
+   A standard\index{standard extension} 
+   extension\index{extension, standard} shall be a 
+   conforming\index{conforming extension}
+   extension\index{extension, conforming} whose
+   organization and content are completely specified in this standard.
+   Only one {\em FITS\/} format
+   shall be approved for each type of data organization.  Each
+   standard extension shall have a unique type 
+   name.\index{extension, type name}
+  
+   \subsection{Order of Extensions}
+   An extension may follow the primary HDU\index{HDU, primary} (or 
+   random groups\index{random groups} records if 
+   present) or another conforming\index{conforming extension}
+   extension\index{extension, conforming}. 
+   Standard\index{standard extension} 
+   extensions\index{extension, standard} 
+   and other conforming extensions may appear 
+   in any order\index{order, extensions}
+   in a {\em FITS\/} file.
+  
+  \section{Special Records}
+   The first 8 bytes of special records must\index{special records}
+   not contain the string\index{XTENSION}
+   ``\verb+XTENSION+''.  It is recommended that they not contain the
+   string\index{SIMPLE, in special records} 
+   ``\verb*+SIMPLE  +''.
+   The records must have the standard {\em FITS\/} 23040-bit
+   record length. The contents of special records are not otherwise
+   specified by this standard.
+  
+  
+\chapter{Headers}
+  \label{s:head}
+  
+  \section{Card Images}
+  
+   \subsection{Syntax}
+   Header card images\index{card image}
+   shall consist of a keyword, an
+   optional value, and an optional comment.  Except
+   where specifically stated otherwise\index{order, keyword}
+   in this standard, keywords may appear in any order.
+  
+   \subsection{Components}
+  
+   \subsubsection{Keyword (bytes 1-8)}
+       \label{s:keyw}
+The keyword shall be a left justified, 8-character, blank\index{fill} 
+filled, ASCII string with no embedded blanks.  All 
+digits (hexadecimal 30 to 39,``{\tt 0123456789}'') and 
+upper case\index{case, sensitivity}
+Latin alphabetic characters\index{keyword, valid characters}
+(hexadecimal 41 to 5A, 
+``{\tt ABCDEFG} {\tt HIJKLMN} {\tt OPQRST} {\tt UVWXYZ}'') are 
+permitted; no lower case characters shall be used.  The 
+underscore\index{underscore}
+(hexadecimal  5F, ``{\tt \_}'') and 
+hyphen\index{hyphen}
+(hexadecimal 2D, ``{\tt -}'') are also permitted.  No other characters
+are permitted.  For indexed\index{keyword, indexed}
+keywords, the\index{indexed, keyword} counter shall not have leading zeroes.
+
+   \subsubsection{Value Indicator (bytes 9-10)}
+   If this field contains an ASCII ``\verb*+= +'', the keyword 
+   must have an associated value field, unless it is a commentary
+   keyword\index{keyword, commentary} as defined in 
+   Section \ref{s:comk}.
+
+   \subsubsection{Value/Comment (bytes 11 - 80)}
+   This field, when used, shall contain the value, if any, of
+   the keyword, followed by optional comments.  Separation of
+   the value and comments by a
+   slash (hexadecimal 2F, ``{\tt /}''), and a 
+   space between the value and the slash\index{slash}
+   are strongly recommended. The
+   value shall be the ASCII text representation of a string or
+   constant, in the format specified in Section \ref{s:valC}.  
+   The comment may contain any ASCII\index{ASCII, text} text. 
+             
+  \section{Keywords}
+   \label{s:key}
+                                   
+   \subsection{Mandatory Keywords}
+   Mandatory\index{keyword, required} keywords are required as 
+   described in the remainder of this subsection. They may be used only as
+   described in this standard. \label{s:man}
+  
+   \subsubsection{Principal}
+   Principal mandatory keywords other than {\tt SIMPLE} 
+   are\index{SIMPLE, in primary header}
+   required in all {\em FITS\/} headers. The {\tt SIMPLE} keyword is
+   required in all\index{primary header} primary headers. 
+   The card images of any primary header must contain the keywords 
+   shown in Table \ref{t:hdr1} in the 
+   order\index{keyword, order}\index{order, keyword}
+   given. \label{s:pman}
+                                                
+
+\begin{table}[htpb]
+ \begin{center}
+   \begin{tabular}{cl}
+       1      & {\tt SIMPLE} \\
+       2      & {\tt BITPIX} \\
+       3      & {\tt NAXIS} \\
+       4      & {\tt NAXISn}, {\tt n} = 1, \ldots, {\tt NAXIS} \\
+              & \vdots \\
+              & (other keywords) \\
+              & \vdots \\
+       last   & {\tt END} \\
+   \end{tabular}
+ \end{center}
+ \caption{Principal mandatory keywords.}
+ \label{t:hdr1}
+\end{table}
+
+ The total number of bits in the primary data array, 
+ exclusive of fill that is needed after the data to complete the last record 
+ (Section \ref{s:overorg}), must be given by the\index{array, size}
+ following expression:
+
+\begin{eqnarray}  
+   \mbox{{\tt NBITS}} &=&  
+                     |\mbox{{\tt BITPIX}}|  \times \nonumber \\
+                 & & (\mbox{{\tt NAXIS1}} \times 
+                 \mbox{{\tt NAXIS2}} \times  \cdots \times \mbox{{\tt
+NAXISm}}),
+\end{eqnarray}
+ \noindent
+ where {\tt NBITS} is\index{NBITS}
+ non-negative and the number of bits excluding fill, 
+ {\tt m} is the value\index{NAXIS} of {\tt NAXIS}, and\index{BITPIX}
+ {\tt BITPIX} and\index{NAXISn} the {\tt NAXISn} represent 
+ the values associated with those keywords.          
+  
+   \paragraph{{\tt SIMPLE} Keyword}
+ The value field shall contain a logical constant with the
+ value {\tt T} if the file conforms to this standard. 
+ This keyword is mandatory only for the primary
+ header.  A value of {\tt F} signifies that the file does not 
+ conform to this standard in some 
+ significant way.\index{SIMPLE, in primary header}
+  
+   \paragraph{{\tt BITPIX} Keyword}
+ The value field shall contain an integer.  The\index{BITPIX}
+ absolute value is used 
+ in computing the sizes of data structures.  It shall specify
+ the number of bits that represent a data value. The only valid values 
+ of {\tt BITPIX} are given in Table \ref{t:bitpix}.
+
+\begin{table}[htpb]  
+\begin{center}
+ \begin{tabular}{rl} \\
+     Value  & \multicolumn{1}{c}{Data Represented}     \\ \hline
+          8 & Character or unsigned binary integer     \\
+         16 & 16-bit twos-complement binary integer    \\ 
+         32 & 32-bit twos-complement binary integer    \\ 
+        -32 & IEEE single precision floating point     \\
+        -64 & IEEE double precision floating point     \\
+  \end{tabular}
+\end{center}
+\caption{Interpretation of valid {\tt BITPIX} value.}
+\label{t:bitpix}
+\end{table}
+  
+   \paragraph{{\tt NAXIS} Keyword}
+ The value field shall contain a non-negative integer no greater than
+ 999, representing the number of axes in an ordinary data\index{NAXIS}
+ array. A value of zero signifies that no data follow the
+ header in the\index{HDU} HDU.
+
+   \paragraph{{\tt NAXISn} Keywords}
+   \label{s:naxisn}
+ The value field of this indexed keyword\index{indexed, keyword}
+ shall contain a non-negative 
+ integer, representing the number of positions along axis {\tt n} of 
+ an ordinary data array.  The {\tt NAXISn} must be present 
+ for all values {\tt n = 1,...,NAXIS}. A value of zero for any of 
+ the {\tt NAXISn} signifies that no data follow the
+ header in the\index{HDU} HDU. If {\tt NAXIS} is equal to 0, 
+ there should not be any\index{NAXISn} {\tt NAXISn} keywords.
+  
+   \paragraph{{\tt END} Keyword}
+ This keyword has no associated value.  Columns 9-80\index{END}
+ shall be filled with ASCII blanks.
+  
+   \subsubsection{Conforming Extensions}
+
+\label{s:conf}
+  The use of\index{conforming extension}
+   extensions\index{extension, conforming} necessitates 
+   a single additional keyword\index{keyword, required} in the 
+    primary header\index{primary header} of the {\em FITS\/} file. 
+
+   \paragraph{{\tt EXTEND} Keyword}
+   \label{s:ext}
+   If the {\em FITS\/} file may contain extensions, 
+   a card image\index{EXTEND}
+   with the keyword {\tt EXTEND} and the value field containing the
+   logical value {\tt T} must appear in the primary header
+   immediately after the last {\tt NAXISn} 
+   card\index{NAXISn} image, or, if
+   {\tt NAXIS}=0, the {\tt NAXIS} card\index{NAXIS} image. 
+   The presence of this keyword with the value {\tt T} in the 
+   primary header does not require that extensions be present.
+
+\bigskip
+
+   The card images of any extension header must use the
+   keywords\index{keyword, required} defined in Table \ref{t:hdr2} 
+   in the order\index{order, keyword}\index{keyword, order}
+   specified.  This
+   organization is required for any conforming extension,
+   whether or not further specified in this standard.
+
+\begin{table}[htpb]
+ \begin{center}
+   \begin{tabular}{cl}
+       1      & {\tt XTENSION} \\
+       2      & {\tt BITPIX} \\
+       3      & {\tt NAXIS} \\
+       4      & {\tt NAXISn}, {\tt n} = 1, \ldots, {\tt NAXIS} \\
+              & \vdots \\
+              & (other keywords, including \ldots ) \\
+              & {\tt PCOUNT} \\
+              & {\tt GCOUNT} \\
+              & \vdots \\
+       last   & {\tt END} \\
+   \end{tabular}
+ \end{center}
+ \caption{Mandatory keywords in conforming extensions.}
+ \label{t:hdr2}
+\end{table}
+
+
+ The total number of bits in the extension data array 
+ exclusive of fill that is needed after the data to complete the last record 
+ (Section \ref{s:overorg}) such as that for the 
+ primary data array\index{primary data array} 
+ (Section \ref{s:pdata}) must be given by the\index{array, size}
+ following expression:
+
+\begin{eqnarray}  
+   \mbox{{\tt NBITS}} &=&  
+                     |\mbox{{\tt BITPIX}}| \times \label{eq:extbit}
+                      \mbox{{\tt GCOUNT}} \times \nonumber \\
+                & &  (\mbox{{\tt PCOUNT}} + \mbox{{\tt NAXIS1}} \times 
+                 \mbox{{\tt NAXIS2}} \times  \cdots \times \mbox{{\tt
+NAXISm}}),
+\end{eqnarray}
+ \noindent
+ where {\tt NBITS} is\index{NBITS}
+ non-negative and the number of bits excluding fill, 
+ {\tt m} is the value\index{NAXIS} of {\tt NAXIS}, and\index{BITPIX}
+ {\tt BITPIX}, {\tt GCOUNT}, 
+ {\tt PCOUNT}, and\index{NAXISn} the {\tt NAXISn}
+represent\index{PCOUNT}
+ the\index{GCOUNT} values associated with those keywords.          
+     
+   \paragraph{{\tt XTENSION} Keyword}
+ The value field shall contain a character string
+ giving\index{XTENSION}
+ the name\index{extension, type name} of the extension type.  This keyword is
+ mandatory for an extension header and must not appear
+ in the primary header\index{primary header}.  
+ For an extension that is not a
+ standard\index{standard extension} extension, the type name must not 
+ be the same as that of a standard\index{extension, standard} extension. 
+
+ The IAU Commission 5 {\em FITS\/} Working Group\index{IAU, Commission 5}
+ may\index{FITS, Working Group} specify additional 
+ type names that must be used only to identify
+ specific types of extensions; the full list shall be available from 
+ the {\em FITS\/} Support\index{FITS, Support Office} Office.
+  
+   \paragraph{{\tt PCOUNT} Keyword}
+ The value field shall contain an integer that shall be\index{PCOUNT}
+ used in any way appropriate to define the data structure,
+ consistent with equation \ref{eq:extbit}. 
+  
+   \paragraph{{\tt GCOUNT} Keyword}
+ The value field shall contain an integer that shall be\index{GCOUNT}
+ used in any way appropriate to define the data structure,
+ consistent with equation \ref{eq:extbit}. 
+  
+\subsection{Other Reserved Keywords}
+ \label{s:resk}
+   These\index{keyword, reserved} keywords are optional but may be used 
+   only as defined in this standard.
+   These keywords apply to any {\em FITS\/} 
+   structure\index{FITS, structure} 
+   except where specifically further restricted.
+  
+\subsubsection{Keywords Describing the History or Physical
+ Construction of the HDU}
+ \label{s:dhist}
+ \paragraph{{\tt DATE} Keyword}
+ The value\index{HDU} field shall contain a character 
+ string\index{DATE}
+ giving the date on which the HDU was created, 
+ in the form {\tt DD/MM/YY}, 
+ where {\tt DD} shall be the day of the month, 
+ {\tt MM} the month number,
+ with January given by 01 and December by 12, and {\tt YY} 
+ the last two digits of the year. Specification of the date 
+ using Universal Time\index{Universal Time} is 
+ recommended.  Copying of a {\em FITS\/} file does not require changing 
+ any of the keyword values in the file's HDUs.
+  
+ \paragraph{{\tt ORIGIN} Keyword}
+ The value field shall contain a character 
+ string\index{ORIGIN}
+ identifying the organization creating the {\em FITS\/} file.
+  
+ \paragraph{{\tt BLOCKED} Keyword}
+ This keyword may be used only in the primary  \label{s:block}
+ header.  
+ It\index{BLOCKED} shall appear within the 
+ first 36 card images of the {\em FITS\/} file.
+ (Note:  This keyword thus cannot appear if {\tt NAXIS} is\index{NAXIS} 
+ greater than 31, or if {\tt NAXIS} greater than 30 and the 
+ {\tt EXTEND} keyword\index{EXTEND} is present.) 
+ Its presence with the required logical value of {\tt T} advises that 
+ the physical block size of the {\em FITS\/} file on which it
+ appears may be an integral multiple of the logical record length,
+ and not necessarily equal to it.
+ Physical block size and logical record length may be
+ equal even if this keyword is present or unequal if it
+ is absent.  It is reserved primarily to prevent its use
+ with other meanings. The issuance of this standard 
+ deprecates\index{deprecate} the\index{BLOCKED}
+ {\tt BLOCKED} keyword.
+  
+     \subsubsection{Keywords Describing Observations}
+     \label{s:kobs}
+ \paragraph{{\tt DATE-OBS} Keyword}
+ The value field shall contain a character 
+ string\index{DATE-OBS}
+ giving the day on which the observations represented by the array were 
+ made, in the form {\tt DD/MM/YY}, where {\tt DD} shall be the day of the
+ month, {\tt MM} the month number, with January given by
+ 01 and December by 12, and {\tt YY} the last two digits of the year.
+ Specification of the date using Universal\index{Universal Time} 
+ Time is recommended.
+
+ \paragraph{{\tt TELESCOP} Keyword}
+ The value field shall contain a character 
+ string\index{TELESCOP}
+ identifying the telescope used to acquire the data
+ contained in the array.
+  
+ \paragraph{{\tt INSTRUME} Keyword}
+ The value field shall contain a character 
+ string\index{INSTRUME}
+ identifying the instrument used to acquire the data
+ contained in the array.
+  
+ \paragraph{{\tt OBSERVER} Keyword}
+ The value field shall contain a character string\index{OBSERVER}
+ identifying who acquired the data associated with the header. 
+   
+ \paragraph{{\tt OBJECT} Keyword}
+ The value field shall contain a character 
+ string\index{OBJECT}
+ giving the name of the object observed.
+  
+ \paragraph{{\tt EQUINOX} Keyword}
+ The value field shall contain a floating point number\index{EQUINOX}
+ giving the equinox in years for the celestial 
+ coordinate system\index{coordinate, system}
+ in which positions given in either the header or data
+ are expressed.
+  
+ \paragraph{{\tt EPOCH} Keyword}
+ The value field shall contain a floating point number\index{EPOCH}
+ giving the equinox in years for the celestial 
+ coordinate system\index{coordinate, system}
+ in which positions given in either the header or data
+ are expressed.  This document deprecates\index{deprecate} 
+ the use of the {\tt EPOCH} 
+ keyword and thus it shall not be used in {\em FITS\/} files
+ created after the adoption of this standard; rather, the
+ {\tt EQUINOX} keyword\index{EQUINOX} shall be used.
+  
+    \subsubsection{Bibliographic Keywords}
+  
+ \paragraph{{\tt AUTHOR} Keyword}
+ The value field shall contain a character 
+ string\index{AUTHOR}
+ identifying who compiled the information
+ in the data associated with the header. This keyword
+ is appropriate when the data originate in a published
+ paper or are compiled from many sources.
+  
+ \paragraph{{\tt REFERENC} Keyword}
+ The value field shall contain a character 
+ string\index{REFERENC}
+ citing a reference where the data associated with the
+ header are published.
+  
+ \subsubsection{Commentary Keywords}
+  \label{s:comk}
+  
+ \paragraph{{\tt COMMENT} Keyword}
+  This\index{keyword, commentary}
+  keyword shall have no associated value\index{COMMENT};
+ columns 9-80 may contain any ASCII\index{ASCII, text} text. 
+ Any number of {\tt COMMENT} card images may appear in a header.
+  
+ \paragraph{{\tt HISTORY} Keyword}
+ This keyword shall have no associated value\index{HISTORY};
+ columns 9-80 may contain any ASCII\index{ASCII, text} text. 
+  The text should
+ contain a history of steps and procedures associated
+ with the processing of the associated data.
+ Any number of {\tt HISTORY} card images may appear in a header.
+  
+ \paragraph{Keyword Field is Blank}
+ Columns 1-8 contain ASCII blanks. Columns 9-80 may contain any 
+ ASCII\index{ASCII, text} text. 
+ Any number of card images with blank keyword fields 
+ may appear in a header.
+
+   \subsubsection{Array Keywords}
+   \label{s:array}
+   These keywords are used to describe the contents of an
+   array, either alone or in a series of\index{array}
+   random\index{random groups} groups.
+   They are optional, but if they appear in the header describing 
+   an array or groups, they must be used as defined in this
+   section of this standard. They shall not be used in headers
+   describing other structures unless the meaning is the same
+   as that for a primary or groups array.
+  
+   \paragraph{{\tt BSCALE} Keyword}
+ This keyword shall be used, along with the {\tt BZERO}
+ keyword, when the array pixel values are not the true\index{BSCALE}
+ physical\index{physical value} values, to transform the 
+ primary data array\index{primary data array} values to
+ the true physical values they represent, using equation \ref{eq:bscl}.
+ The value field shall contain a floating point number representing the
+ coefficient of the linear term in the scaling equation, the
+ ratio of physical value to array value\index{array, value} 
+ at zero offset.  The default value for this keyword is 1.0.  
+ 
+  \paragraph{{\tt BZERO} Keyword}
+ This keyword shall be used, along with the {\tt BSCALE}
+ keyword, when the array pixel values are not the true\index{BZERO}
+ physical values, to transform the primary data array values to
+ the true values.   The value field shall contain a floating
+ point number representing the physical value
+ corresponding to an array value of zero.  The default value for this 
+ keyword is 0.0.
+
+ The transformation equation is as follows:\index{scaling, data}
+\begin{eqnarray}  
+  \mbox{physical value} & = & \mbox{{\tt BZERO}} + \mbox{{\tt
+BSCALE}}
+                              \times \mbox{array value} \label{eq:bscl}
+\end{eqnarray}
+  
+   \paragraph{{\tt BUNIT} Keyword}
+ The value field shall contain a character 
+ string\index{BUNIT},
+ describing the physical units\index{units} in which the quantities 
+ in the array, after application\index{BSCALE} of {\tt BSCALE} 
+ and {\tt BZERO},
+ are\index{BZERO} expressed.  Use of the units defined in the IAU
+ Style Manual [7] is\index{IAU, Style Manual} recommended. 
+ If the value of {\tt BUNIT} represents an 
+ angular measure\index{angular measure}, the
+ use of decimal degrees is recommended. 
+
+   \paragraph{{\tt BLANK} Keyword}
+ This keyword shall be used only in headers with\index{BLANK}
+ positive values of\index{BITPIX} {\tt BITPIX} 
+ (i.e., in arrays with integer data).
+ Columns 1-8 contain the string, ``\verb*+BLANK   +'' (ASCII blanks in
+ columns 6-8). The value field shall contain an integer that
+ specifies the representation of array values\index{array, value} 
+ whose physical values\index{physical value} are undefined. 
+  
+   \paragraph{{\tt CTYPEn} Keywords}
+ The value field shall contain a character 
+ string, giving\index{CTYPEn}
+ the name of the coordinate\index{coordinate, axis}
+ represented by axis {\tt n}. 
+ Where this coordinate represents a physical quantity, 
+ units\index{units} defined in the 
+ IAU Style Manual [7] are\index{IAU, Style Manual} 
+ recommended.
+ 
+   \paragraph{{\tt CRPIXn} Keywords}
+ The value field shall contain a floating point number\index{CRPIXn},
+ identifying the location of a reference point\index{reference point} 
+ along axis {\tt n},
+ in units\index{units} of the axis index. 
+ This value is based upon a counter that runs
+ from 1 to {\tt NAXISn} with\index{NAXISn} an increment of 1 per pixel. 
+ The reference point value need not be that for the center of a pixel 
+ nor lie within the actual  data array.  Use comments to indicate 
+ the location of the index point relative to the pixel.
+  
+   \paragraph{{\tt CRVALn} Keywords}
+ The value field shall contain a floating point number\index{CRVALn},
+ giving the value of the coordinate\index{coordinate, value} 
+ specified by\index{CTYPEn} the {\tt CTYPEn}
+ keyword at the reference\index{CRPIXn} 
+ point {\tt CRPIXn}.  
+ If {\tt CTYPEn} denotes a celestial 
+ coordinate\index{coordinate, celestial}, 
+ such as right ascension or declination, 
+ {\tt CRVALn} shall be expressed in units\index{units} of
+ decimal degrees. 
+
+   \paragraph{{\tt CDELTn} Keywords}
+ The value field shall contain a floating point number\index{CDELTn},
+ giving the partial derivative of the coordinate specified
+ by the {\tt CTYPEn} keywords\index{CTYPEn} with respect to the pixel 
+ index, evaluated at the reference\index{CRPIXn} 
+ point {\tt CRPIXn}, in units\index{units} of the 
+ coordinate specified by  the {\tt CTYPEn} keyword.
+ If {\tt CTYPEn} denotes a celestial 
+ coordinate,\index{coordinate, celestial}
+ such as right ascension or declination, 
+ {\tt CDELTn} shall be expressed in units of degrees. 
+
+   \paragraph{{\tt CROTAn} Keywords}
+ This keyword is used to indicate a rotation from a\index{CROTAn}
+ standard coordinate system\index{coordinate, system}
+ described by\index{CTYPEn} the {\tt CTYPEn} to
+ a different coordinate system in which the values in the
+ array are actually expressed. Rules for such rotations are
+ not further specified in this standard; the rotation should
+ be explained in comments. The value field shall contain
+ a floating point number, giving the rotation angle\index{angle}
+ in degrees between
+ axis {\tt n} and the direction implied by the coordinate system
+ defined by {\tt CTYPEn}.
+  
+   \paragraph{{\tt DATAMAX} Keyword}
+ The value field shall always contain a floating point\index{DATAMAX}
+ number, regardless of the value of {\tt BITPIX}. This\index{BITPIX}
+ number
+ shall give the maximum valid physical value\index{physical value} 
+ represented in the array, exclusive of any\index{IEEE, special values} 
+ special values.
+  
+   \paragraph{{\tt DATAMIN} Keyword}
+ The value field shall always contain a floating point\index{DATAMIN}
+ number, regardless of the value of {\tt BITPIX}. This\index{BITPIX}
+number
+ shall give the minimum valid physical value represented
+ in the array, exclusive of any special values.
+  
+\subsubsection{Extension Keywords}
+   These keywords are used to describe an\index{extension} extension.    
+  
+  
+   \paragraph{{\tt EXTNAME} Keyword}
+ The value field shall contain a character 
+ string, to be\index{EXTNAME}
+ used to distinguish\index{extension, name}
+ among different extensions of the same\index{XTENSION} 
+ type, i.e., with the same value of {\tt XTENSION}, 
+ in a {\em FITS\/} file.
+  
+   \paragraph{{\tt EXTVER} Keyword}
+ The value field shall contain an integer, to be used to\index{EXTVER}
+ distinguish among different extensions in a {\em FITS\/} file
+ with the same type and name, i.e., the same values for 
+ {\tt XTENSION} and {\tt EXTNAME}. The
+ values need not start with 1 for the first extension with
+ a particular value of {\tt EXTNAME} and need not be in
+ sequence for subsequent values. If the {\tt EXTVER} keyword
+ is absent, the file should be treated as if the value
+ were 1.
+  
+   \paragraph{{\tt EXTLEVEL} Keyword}
+ The value field shall contain an integer, specifying the\index{EXTLEVEL}
+ level in a hierarchy of extension levels of the extension
+ header containing it.  The value shall be 1 for the highest
+ level; levels with a higher value of this keyword shall be
+ subordinate to levels with a lower value. If the {\tt EXTLEVEL}
+ keyword is absent, the file should be treated as if the
+ value were 1.
+  
+   \subsection{Additional Keywords}
+  
+   \subsubsection{Requirements}              
+ New keywords\index{keyword, new}
+   may be devised in addition to those
+   described in this standard, so long as they are consistent
+   with the generalized rules for keywords and do not conflict
+   with mandatory or reserved keywords.\index{keyword, new}
+  
+   \subsubsection{Restrictions}
+   No keyword in the primary header\index{primary header} shall specify
+the\index{keyword, restrictions}
+   presence of a specific extension\index{extension} in 
+   a {\em FITS\/} file; only the {\tt EXTEND} keyword\index{EXTEND}
+   described in Section \ref{s:ext} shall be used
+\index{keyword, restrictions}
+   to indicate the possible presence of extensions. No keyword
+   in either the primary or extension header shall explicitly
+   refer to the physical block size, other than the {\tt BLOCKED}
+   keyword\index{BLOCKED} of Section \ref{s:block}.
+  
+  \section{Value}
+   \label{s:valC}
+
+    \subsection{General Format Requirements}  
+   \label{s:GFR}
+   Unless otherwise specified, the value field 
+   must be written in a notation consistent with the 
+   list-directed\index{list-directed, read}
+   read operations in\index{ANSI, FORTRAN} 
+   ANSI\index{FORTRAN-77, list-directed read} FORTRAN-77 [10]. 
+   The structure shall be determined by the type of the variable. 
+   The fixed\index{format, fixed} format is required for values of 
+   mandatory keywords\index{format, keywords}
+   and recommended for values of all others.  This standard imposes no 
+   requirements on case sensitivity\index{case, sensitivity}
+   of character\index{character string} strings
+   other than those explicitly specified.
+
+  \subsection{Fixed Format} 
+  
+   \subsubsection{Character String}  
+    \label{s:ffch}
+   If the value is a character string, column 11 shall 
+   contain\index{character string}
+   a single quote (hexadecimal code 27, ``\verb+'+''); the string shall follow, 
+   starting in column 12, followed by a closing single quote
+   (also hexadecimal code 27) that should not occur before
+   column 20 and must occur in or before column 80.  Reading the 
+   data values in a {\em FITS\/} file should not require 
+   decoding any more than the first eight characters of 
+   a character string value of a keyword.  The character string 
+   shall be composed only of ASCII\index{ASCII, text} text. 
+   A single quote is represented within a string as two successive 
+   single quotes, e.g., O'HARA = {\tt 'O''HARA'}. Leading blanks are
+   significant; trailing blanks are not.    
+  
+   \subsubsection{Logical Variable}
+   If the value is a logical constant, it shall appear as a {\tt T}
+   or {\tt F} in\index{logical value} column 30.
+  
+   \subsubsection{Integer}
+   \label{s:ffi}
+   If the value is an integer, the ASCII representation shall
+   appear right justified in columns 11-30.  For a\index{integer value}
+   complex\index{complex, integer} integer,
+   the imaginary part shall be right justified in columns 31-50.
+   This format for complex integers\index{integer value, complex}
+   does not correspond to ANSI 
+   FORTRAN-77\index{FORTRAN-77, list-directed read}
+   list-directed read.\index{list-directed, read}
+   
+\subsubsection{Real Floating Point Number}
+    \label{s:ffrfp}
+   If the value is a real floating point number, 
+   the ASCII\index{floating point}
+   representation shall appear in columns 11-30.
+   Letters in the exponential form shall be upper case.
+   The value shall be right justified, and the decimal point must
+   appear.  Note: The full precision of 64-bit values can not
+   be expressed as a single value using the fixed format. 
+  
+   \subsubsection{Complex Floating Point Number}
+  \label{s:ffcfp}
+      If the value is a complex floating point number, the ASCII
+   representation of the real part shall appear 
+   in the\index{floating point, complex} same\index{complex, floating point}
+   manner as a real floating point number (see above). The ASCII 
+   representation of the imaginary part shall appear in columns 31 - 50. 
+   Letters in the exponential form shall be upper case. The value
+   shall be right justified, and the decimal point must appear.
+   This format for complex floating point numbers does not 
+   correspond to ANSI FORTRAN-77\index{FORTRAN-77, list-directed read}
+   list-directed read.\index{list-directed, read}
+   Note: The full precision of 64-bit values can not
+   be expressed as a single value using the fixed format. 
+  
+ \section{Units}
+  \label{s:Units}
+ The units\index{units} of all {\em FITS\/} header keyword values, 
+ with the exception of
+ measurements of angles,\index{angle} should 
+ conform with the recommendations in the
+ IAU Style Manual\index{IAU, Style Manual}
+ [7]. For angular measurements,\index{angular measure}
+ degrees are the
+ recommended units (with the value of\index{BUNIT} 
+ \verb*+BUNIT   = 'deg     '+), and degrees
+ are the required units for celestial 
+ coordinate\index{coordinate, celestial}
+ systems\index{coordinate, system} specified with
+ the {\tt CTYPEn},\index{CTYPEn} {\tt CRVALn},\index{CRVALn} 
+ {\tt CDELTn}, and\index{CDELTn} {\tt CROTAn} keywords.\index{CROTAn} 
+  
+  \chapter{Data Representation}
+   \label{s:Drep}
+  Primary and extension\index{extension} data shall be 
+  represented in one of the\index{format, data} formats
+  described in this section.  {\em FITS\/} data shall be interpreted to 
+  be a byte stream.  Bytes are in order\index{byte order}\index{order, byte}
+  of decreasing significance. 
+  The byte that includes the sign bit\index{sign, bit}
+  shall be first, and the byte 
+  that has the ones bit shall be last.   
+  
+  \section{Characters}
+   Each character shall be represented by\index{ASCII, character} 
+   one byte.  A character
+   shall be represented by its 7-bit ASCII [11] code in the low order 
+   seven bits in the byte.  The high-order bit shall be zero.
+  
+  \section{Integers}
+  
+   \subsection{Eight-bit}
+   Eight-bit integers shall be unsigned binary integers, contained 
+   in one byte.\index{integer value, 8 bit}
+  
+   \subsection{Sixteen-bit}
+   Sixteen-bit integers shall be twos-complement
+   signed binary\index{twos-complement}
+   integers, contained in two bytes.\index{integer value, 16 bit}
+  
+   \subsection{Thirty-two-bit}
+   Thirty-two-bit integers shall be twos-complement\index{twos-complement}
+   signed
+   binary integers, contained in four\index{integer value, 32 bit}
+   bytes. 
+
+  \section{IEEE-754 Floating Point}
+    Transmission of 32- and 64-bit floating\index{IEEE, floating point}
+    point data within the {\em FITS\/} 
+    format shall use the\index{ANSI, IEEE} ANSI/IEEE-754 standard [12].
+    {\tt BITPIX = -32} and 
+    {\tt BITPIX = -64} signify 32- and 64-bit IEEE floating 
+    point\index{IEEE, floating point}
+    numbers, respectively; the absolute value of {\tt BITPIX} 
+    is\index{BITPIX}
+    used for computing the sizes of data structures. The full 
+    IEEE set of number forms is allowed for {\em FITS\/} 
+    interchange, including all special\index{IEEE, special values}
+    values (e.g., the\index{IEEE, NaN} ``Not-a-Number'' 
+    cases\index{IEEE, floating point}).
+    The order of the bytes will be\index{order, byte}
+    sign\index{sign, bit} and exponent\index{byte order} first,
+    followed by the mantissa bytes in order of decreasing significance.  
+    The {\tt BLANK} keyword\index{BLANK}
+    should not be used when {\tt BITPIX = -32} or\index{BITPIX}
+    {\tt -64}.  Use of\index{BSCALE} the {\tt BSCALE} and {\tt BZERO}
+    keywords\index{BZERO} is not recommended. 
+
+   \subsection{Thirty-two-bit Floating Point}
+  
+   \subsubsection{Structure}
+    Table \ref{t:s32} describes the bit structure of 32-bit floating point
+    standard numeric values.
+
+    \begin{table}[htpb]  
+      \begin{center}
+        \begin{tabular}{cc}  \\
+            Bit Positions   &  Content     \\ 
+            (first to last) &              \\ \hline
+                       1    &   sign       \\                     
+                   2 - 9    &   exponent   \\
+                  10 - 32   &   mantissa   \\
+         \end{tabular}
+      \end{center}
+      \caption{Content of 32-bit floating point bit positions.}
+      \label{t:s32}
+    \end{table}
+  
+\subsubsection{Interpretation}
+   Standard numeric values of IEEE\index{IEEE, floating point}
+   32-bit floating point numbers are 
+   interpreted according to the following rule:    
+   
+    \begin{eqnarray}  
+          value & = & (-1)^{\mbox{sign}}   \times 
+                      2^{(\mbox{exponent}-127)} \times
+                      \mbox{mantissa}
+      \end{eqnarray}  
+   
+    The IEEE NaN (Not-a-Number) values\index{IEEE, NaN}
+    shall be used to represent
+    undefined values.  All IEEE\index{IEEE, special values}
+    special values are recognized.
+    
+   \subsection{Sixty-four-bit Floating Point}
+  
+    \subsubsection{Structure}
+    Table \ref{t:s64} describes the bit structure of 64-bit floating 
+    point\index{floating point, 64 bit} standard numeric values.
+
+     \begin{table}[htpb]  
+      \begin{center}
+         \begin{tabular}{cc}             \\
+           Bit Positions    &  Content   \\
+           (first to last)  &            \\ \hline
+                        1   &  sign      \\
+                   2 - 12   &  exponent  \\
+                  13 - 64   &  mantissa  \\
+         \end{tabular}
+      \end{center}
+      \caption{Content of 64-bit floating point bit positions.}
+      \label{t:s64}
+    \end{table}
+  
+\subsubsection{Interpretation}
+      Standard numeric values for IEEE\index{IEEE, floating point} 
+      64-bit floating point numbers are 
+      interpreted according to the following rule:    
+      
+       \begin{eqnarray}  
+          value & = & (-1)^{\mbox{sign}}   \times 
+                      2^{(\mbox{exponent}-1023)} \times
+                      \mbox{mantissa}
+       \end{eqnarray}  
+
+       The IEEE NaN (Not-a-Number) values\index{IEEE, NaN} 
+       shall be used to represent undefined values.  All 
+       IEEE\index{IEEE, special values} special values are recognized.
+  
+\chapter{Random Groups Structure}
+    \label{s:Rgrp}
+
+  
+Although it is standard {\em FITS}, the random groups 
+structure\index{random groups}
+has been used almost exclusively for applications in
+radio\index{interferometry}
+interferometry; outside this field, few {\em FITS\/} readers can read 
+data in random groups format.  A proposed binary 
+tables\index{binary tables} extension will eventually
+be able to accommodate the structure described by random groups. While
+existing {\em FITS\/} files use the format, and it is therefore 
+included in this standard, its use for future applications is 
+deprecated\index{deprecate} by this document.
+  
+\section{Keywords}
+  \subsection{Mandatory Keywords}
+   If the random groups format records follow the\index{primary header} 
+   primary header, the\index{keyword, required} card \label{s:rangr} 
+   images of the primary header must use the keywords 
+   defined in Table \ref{t:hdrrg} in the 
+   order\index{order, keyword}\index{keyword, order}
+   specified. 
+  
+ \begin{table}[htbp]
+ \begin{center}
+  \begin{tabular}{cl}
+     1     & {\tt SIMPLE}  \\
+     2     & {\tt BITPIX}  \\
+     3     & {\tt NAXIS}  \\
+     4     & {\tt NAXIS1}  \\
+     5     & {\tt NAXISn}, {\tt n}=2, \ldots, value of {\tt NAXIS}  \\ 
+           &  \vdots \\                       
+           &  (other keywords, which must include \ldots) \\  
+           &  {\tt GROUPS}  \\
+           &  {\tt PCOUNT}  \\
+           &  {\tt GCOUNT}  \\
+           &  \vdots  \\                         
+     last  &  {\tt END} \\
+   \end{tabular} 
+ \end{center}
+ \caption{Mandatory keywords in primary header preceding random
+groups.} 
+
+ \label{t:hdrrg}                      
+\end{table}
+
+ The total number of bits in the random groups records 
+ exclusive of the fill described in Section \ref{s:grdata} must be
+ given by the following\index{array, size}
+ expression:
+
+\begin{eqnarray}  
+   \mbox{{\tt NBITS}} &=&  
+                     |\mbox{{\tt BITPIX}}| \times 
+                     \mbox{{\tt GCOUNT}} \times \nonumber \\
+                & &  (\mbox{{\tt PCOUNT}} + \mbox{{\tt NAXIS2}} \times 
+                 \mbox{{\tt NAXIS3}} \times  \cdots \times \mbox{{\tt
+NAXISm}}),
+\end{eqnarray}
+\noindent
+ where {\tt NBITS} is\index{NBITS}
+ non-negative and the number of bits excluding fill, 
+ {\tt m} is the value\index{NAXIS} of {\tt NAXIS}, and\index{BITPIX} 
+ {\tt BITPIX}, {\tt GCOUNT}, 
+ {\tt PCOUNT}, and\index{NAXISn} the {\tt NAXISn}
+represent\index{PCOUNT}
+ the\index{GCOUNT} values associated with those keywords.          
+ 
+   \subsubsection{{\tt SIMPLE} Keyword}
+   The card image containing this keyword is structured in 
+   the\index{SIMPLE} same way as if a 
+   primary data array\index{primary data array} 
+   were present (Section \ref{s:man}).
+  
+   \subsubsection{{\tt BITPIX} Keyword}
+   The card image containing this keyword is structured as 
+   prescribed in\index{BITPIX}
+   Section \ref{s:man}.
+  
+   \subsubsection{{\tt NAXIS} Keyword}
+   The value field shall contain an integer ranging from 1 to\index{NAXIS}
+   999, representing one more than the number of axes in each
+   data array.
+  
+   \subsubsection{{\tt NAXIS1} Keyword}
+   The value field shall contain the integer 0, a signature of\index{NAXIS1}
+   random groups format indicating that there is no\index{primary data
+array} 
+   primary data array.
+  
+   \subsubsection{{\tt NAXISn} Keywords (n=2, \ldots, value of {\tt
+NAXIS})}
+   The value field shall contain an integer, representing 
+   the\index{NAXISn} number of positions along axis {\tt n-1} of the 
+   data array in each group.
+  
+   \subsubsection{{\tt GROUPS} Keyword}
+   The value field shall contain the logical constant {\tt T}. 
+   The\index{GROUPS}
+   value {\tt T} associated with this keyword implies that random groups 
+   records are present.
+  
+   \subsubsection{{\tt PCOUNT} Keyword}
+   The value field shall contain an integer equal to the
+number\index{PCOUNT}
+   of parameters\index{parameter} preceding each group.
+  
+   \subsubsection{{\tt GCOUNT} Keyword}
+   The value field shall contain an integer equal to the\index{GCOUNT}
+   number of random groups present.
+  
+   \subsubsection{{\tt END} Keyword}
+   The card image containing this keyword is structured as described 
+   in\index{END} Section \ref{s:man}.
+  
+  \subsection{Reserved Keywords}
+  \label{s:rgrrk}   
+   \subsubsection{{\tt PTYPEn} Keywords}
+    \label{s:ptyp}
+   The\index{keyword, reserved} value field shall contain a character string 
+   giving\index{PTYPEn}
+   the name of parameter\index{parameter} {\tt n}.  If the {\tt PTYPEn} 
+   keywords for more than one value of {\tt n} have the same associated 
+   name in the value field, then the data value for the parameter 
+   of that name is to be obtained by adding the derived data values 
+   of the corresponding parameters.  This rule provides a mechanism by 
+   which a random parameter may have more precision than the
+accompanying 
+   data array members; for example, by summing two 16-bit values with the 
+   first scaled relative to the other such that the sum forms a number of 
+   up to 32-bit precision.
+ 
+   \subsubsection{{\tt PSCALn} Keywords}
+    \label{s:pscl}
+   This keyword shall be used, along\index{PSCALn}
+   with the {\tt PZEROn}
+   keyword, when the n$^{\rm th}$ {\em FITS\/} group parameter 
+   value\index{group parameter value} is not the true
+   physical value\index{physical value}, to transform the 
+   group parameter value to the true physical values it represents, 
+   using equation \ref{eq:pscl}. 
+   The value field shall contain a floating point number representing 
+   the coefficient of the linear term in equation \ref{eq:pscl}, the scaling 
+   factor between true values and group parameter values 
+   at zero offset.  The default value for this keyword is 1.0. 
+  
+   \subsubsection{{\tt PZEROn} Keywords}
+   \label{s:pzer}
+   This keyword shall be used, along\index{PZEROn}
+   with the {\tt PSCALn} keyword, when 
+   the n$^{\rm th}$ {\em FITS\/} group parameter 
+   value\index{group parameter value} is not the true physical
+   value, to transform the group parameter value to the physical value.  
+   The value field shall contain a floating point number,
+   representing the true value corresponding to a group
+   parameter value of zero.  The default value for this keyword is 0.0.  
+   The transformation equation is as follows:\index{scaling, data}
+
+\begin{eqnarray}  
+    \mbox{physical value} & = & \mbox{{\tt PZEROn}} + \mbox{{\tt PSCALn}}
+                                \times {group parameter value} \label{eq:pscl}
+\end{eqnarray}  
+  
+\section{Data Sequence}
+ \label{s:grdata}
+  Random groups data shall consist of a set of groups.  The number of
+  groups shall be specified by the {\tt GCOUNT} keyword in the associated
+  header record.  Each group shall consist of the number
+  of\index{GCOUNT}
+  parameters\index{parameter} specified by the {\tt PCOUNT} 
+  keyword\index{PCOUNT} followed by an array with the number of 
+  members {\tt GMEM} given\index{random groups, array} 
+  by the following\index{array, size}
+  expression:
+
+\begin{eqnarray}  
+   \mbox{{\tt GMEM}} &=&  
+                     (\mbox{{\tt NAXIS2}} \times 
+                 \mbox{{\tt NAXIS3}} \times  \cdots \times \mbox{{\tt
+NAXISm}}).
+\end{eqnarray}
+
+\noindent
+  where {\tt GMEM} is the number of members in the data array in a group,
+  {\tt m} is the value\index{NAXIS} of {\tt NAXIS}, 
+  and\index{NAXISn} the {\tt NAXISn} represent 
+  the values associated with those keywords.
+
+  The first parameter of the first group shall appear in the first
+  location of the first data record.  The first element of each array shall
+  immediately follow the last parameter associated with that group.
+  The first parameter of any subsequent group shall immediately follow
+  the last member of the array of the previous group.  The arrays shall
+  be organized internally in the same way as an 
+  ordinary\index{primary data array} primary data array. 
+  If the groups data do not fill the final record, the remainder 
+  of the record shall be filled\index{fill} with zero values in the same
+  way as a primary data array (Section \ref{s:pdata}). 
+If random groups records are present, there shall be no primary data 
+  array.
+  
+\section{Data Representation}
+  
+  Permissible data representations are those listed in Section 
+  \ref{s:Drep}.  Parameters\index{parameter} and members of associated
+data
+  arrays shall have the same representation.  Should more precision
+  be required for an associated parameter than for a member of a data
+  array, the parameter shall be divided into two or more addends,
+represented
+  by the same value\index{PTYPEn} for the {\tt PTYPEn} keyword. 
+  The value shall be the sum of the physical values\index{physical value}, 
+  which may have been obtained\index{scaling, data} 
+  from the group parameter values\index{group parameter value} 
+  using\index{PSCALn} 
+  the {\tt PSCALn} and {\tt PZEROn} keywords.\index{PZEROn}
+  
+  \chapter{ Standard Extensions}
+     \label{s:exts}
+
+  \section{ASCII Tables Extension}
+     \label{s:ATabl}
+   Data\index{standard extension} shall\index{extension, standard} 
+   appear as an ASCII Tables\index{ASCII tables} extension if the primary
+   header of the {\em FITS\/} file has the keyword\index{XTENSION}
+   {\tt EXTEND} set\index{EXTEND} to {\tt T} and the first keyword of 
+   that extension\index{TABLE, extension}
+   header has \verb*+XTENSION= 'TABLE   '+.
+   
+   \subsection{Mandatory Keywords}
+       \label{s:atmk}
+   The\index{keyword, required} card images in the header of an ASCII
+Tables
+   Extension must use the keywords defined in Table \ref{t:hdr3}
+   in the order\index{order, keyword}\index{keyword, order}
+   specified.
+  
+\begin{table}[htbp]
+ \begin{center}
+  \begin{tabular}{cl}
+       1 & {\tt XTENSION} \\
+       2 & {\tt BITPIX} \\
+       3 & {\tt NAXIS} \\
+       4 & {\tt NAXIS1} \\
+       5 & {\tt NAXIS2} \\
+       6 & {\tt PCOUNT} \\
+       7 & {\tt GCOUNT} \\
+       8 & {\tt TFIELDS} \\
+         & \vdots \\
+         & (other keywords, which must include \ldots ) \\
+         & {\tt TBCOLn}, n=1,2,\ldots,k where k is the value of {\tt
+TFIELDS} \\
+         & {\tt TFORMn}, n=1,2,\ldots,k where k is the value of {\tt
+TFIELDS} \\
+         & \vdots \\
+    last  & {\tt END} \\
+   \end{tabular} 
+ \end{center}
+ \caption{Mandatory keywords in ASCII tables extensions.}
+ \label{t:hdr3}                      
+\end{table}
+
+   \paragraph{{\tt XTENSION} Keyword}
+ The\index{XTENSION} value field shall contain the
+character\index{TABLE} 
+ string \\ \verb*+'TABLE   '+.
+  
+   \paragraph{{\tt BITPIX} Keyword}
+ The value field shall contain the integer 8, denoting\index{BITPIX}
+ that the array contains ASCII\index{ASCII, character} characters.  
+  
+   \paragraph{{\tt NAXIS} Keyword}
+ The value field shall contain the integer 2, denoting\index{NAXIS}
+ that the included data array is two-dimensional: rows and
+ columns.
+  
+   \paragraph{{\tt NAXIS1} Keyword}
+ The value field shall contain a non-negative integer, 
+ giving\index{NAXIS1}
+ the number of ASCII characters in each row of the table.
+  
+   \paragraph{{\tt NAXIS2} Keyword}
+ The value field shall contain a non-negative integer, 
+ giving\index{NAXIS2}
+ the number of rows in the table.
+  
+   \paragraph{{\tt PCOUNT} Keyword}
+ The value field shall contain the integer 0.\index{PCOUNT} 
+  
+   \paragraph{{\tt GCOUNT} Keyword}
+ The value field shall contain the integer 1; the data\index{GCOUNT}
+ records contain a single table.
+  
+   \paragraph{{\tt TFIELDS} Keyword}
+ The value field shall contain a non-negative integer 
+ representing\index{TFIELDS}
+ the number of fields in each row.  The maximum
+ permissible value is 999.
+  
+   \paragraph{{\tt TBCOLn} Keywords}
+ The value field of this indexed keyword shall contain an 
+ integer\index{TBCOLn}
+ specifying the column in which field {\tt n} starts.  
+ The first column of a row is numbered 1.
+           
+   \paragraph{{\tt TFORMn} Keywords}
+ The value field of this indexed keyword shall contain a\index{TFORMn}
+ character string
+ describing the FORTRAN-77 [10] format\index{FORTRAN-77, format}
+ in which field {\tt n} is
+ coded. The formats\index{format}
+ in Table \ref{t:tabF} are permitted for encoding.
+
+\begin{table}[htpb]
+\begin{center}
+ \begin{tabular}{rl} \\
+    Field Value  & Data Type                                   \\ \hline
+           Aw    &  Character                                  \\
+           Iw    &  Integer                                    \\
+           Fw.d  &  Single precision real                       \\
+           Ew.d  &  Single precision real, exponential notation \\
+           Dw.d  &  Double precision real, exponential notation \\
+ \end{tabular}
+\end{center}
+\caption{Valid {\tt TFORMn} format values in {\tt TABLE} extensions.}
+\label{t:tabF}
+\end{table}
+
+ Repetition of a format\index{FORTRAN-77, format} from one field to 
+ the next must be indicated by using separate pairs\index{TBCOLn} 
+ of {\tt TBCOLn} 
+ and {\tt TFORMn} keywords for each field; format repetition 
+ may not be indicated by prefixing the format by a number.
+  
+   \paragraph{{\tt END} Keyword}
+ This keyword has no associated value.  Columns 9-80\index{END}
+ shall contain ASCII blanks.
+  
+ \subsection{Other Reserved Keywords}
+ \label{s:atork}
+  In\index{keyword, reserved} addition to the mandatory keywords 
+  defined in section \ref{s:atmk},
+  these keywords may be used to describe the structure of an
+  ASCII Tables data array. They are optional, but if they
+  appear within an ASCII Tables extension header, they must
+  be used as defined in this section of this standard. 
+
+ % what about EXTNAME, EXTVER and EXTLEVEL ?
+   \paragraph{{\tt TSCALn} Keywords}
+ This indexed keyword shall be used, along with the {\tt TZEROn}
+ keyword, when the quantity in field {\tt n} does not\index{TSCALn}
+ represent a true physical quantity.  The value
+ field shall contain a floating point number
+ representing the coefficient of the linear term in 
+ equation \ref{eq:tscl}, which must be used 
+ to compute the true physical value\index{physical value} of
+ the field.  The default value for this keyword is 1.0.
+ This keyword may not be used for A-format fields.
+
+   \paragraph{{\tt TZEROn} Keywords}
+ This indexed keyword shall be used, along with the {\tt TSCALn} keyword,
+ when the quantity in field {\tt n} does not represent a
+true\index{TZEROn}
+ physical quantity.  The value field shall contain a 
+ floating point number representing the zero point 
+ for the true physical value of field {\tt n}.  The default
+ value for this keyword is 0.0.  This keyword may 
+ not be used for A-format fields.
+
+ The transformation equation used to compute a true
+ physical value from the quantity in field {\tt n} is\index{scaling, data}
+\begin{eqnarray}                                      
+   \mbox{physical value} & = & \mbox{{\tt TZEROn}} + \mbox{{\tt
+TSCALn}}
+                               \times \mbox{field value}. \label{eq:tscl}
+\end{eqnarray}
+ 
+   \paragraph{{\tt TNULLn} Keywords}
+ The value field for this indexed keyword shall contain 
+ the character\index{TNULLn}
+ string that represents\index{value, undefined} 
+ an undefined value for field {\tt n}. 
+ The string is implicitly blank filled\index{fill} to the width of the field.
+ 
+   \paragraph{{\tt TTYPEn} Keywords}
+ The value field for this indexed keyword shall contain a\index{TTYPEn}
+ character string, giving the name of field {\tt n}.  It is recommended 
+ that only letters, digits, and 
+ underscore\index{underscore} (hexadecimal code 5F, ``{\tt \_}'')
+ be used in the name.  However, string comparisons with the values 
+ of {\tt TTYPEn} keywords should not be case sensitive. 
+ The use of identical names for
+ different fields should be avoided.
+ 
+   \paragraph{{\tt TUNITn} Keywords}
+ The value field shall contain a character 
+ string\index{TUNITn} describing the physical units\index{units} 
+ in which the quantity in field 
+ {\tt n}, after any application\index{TSCALn} of {\tt TSCALn}
+ and {\tt TZEROn}, is\index{TZEROn} expressed.  
+ Use of the units\index{units} defined in the 
+ IAU\index{IAU, Style Manual} Style Manual [7] is recommended. 
+ If the quantity in field {\tt n} represents an 
+ angular measure,\index{angular measure}
+ the use of decimal degrees is recommended 
+ (\verb*+TUNITn  = 'deg     '+).
+
+   \subsection{Data Sequence}
+   The table is constructed from a two-dimensional array of 
+   ASCII\index{ASCII, character} characters.
+   The row length and the number of rows shall be those specified, 
+   respectively, by the {\tt NAXIS1}\index{NAXIS1} 
+   and {\tt NAXIS2}\index{NAXIS2} keywords
+   of the associated header records.  The
+   number of characters in a row and the number of rows in the
+   table shall determine the size of the character array.  Every row
+   in the array shall have the same number of characters.  The
+   first character of the first row shall be at the start of the record
+   immediately following the last header record.  The first
+   character of subsequent rows shall follow immediately the
+   character at the end of the previous row,
+   independent of the record structure.  The positions in the last
+   data record after the last character of the last row of the data
+   array shall be filled\index{fill} with ASCII blanks.
+  
+   \subsection{Fields}
+   Each row in the array shall consist of a sequence of fields,
+   with one entry in each field.  For every field, the FORTRAN-77
+   format\index{FORTRAN-77, format} of the
+   information contained, location in the row of the beginning of the
+   field and (optionally) the field name, shall
+   be specified in keywords of the associated header records.  A
+   separate format keyword must be provided for each field.  The
+   location and format of fields shall be the same for every row.
+   Fields may overlap.  There may be characters in a table
+   row that are not included in any field.
+  
+   \subsection{Entries}
+   All data in an ASCII tables extension record shall 
+   be ASCII text\index{ASCII, text} in formats that conform to the 
+   rules for fixed field input in ANSI 
+   FORTRAN-77\index{FORTRAN-77, format} [10] format, including
+   implicit decimal points.
+   The only possible formats shall be those specified 
+   in Table \ref{t:tabF}.  If values of -0 and +0 must be 
+   distinguished, then the sign character\index{sign, character} should 
+   appear in a separate field in character format.  
+   {\tt TNULLn} keywords\index{TNULLn} may be used 
+   to specify a character
+   string that represents\index{value, undefined}
+   an undefined value in each field. The
+   characters representing an undefined value may differ from field
+   to field but must be the same within a field.  ASCII Table 
+   extension data should be decoded as though 
+   the FORTRAN-77 OPEN statement specifier 
+   BLANK is set to NULL.  That is, blanks
+   within the fields are not to be interpreted as zeroes;
+   zeroes must be given explicitly.
+  
+\section{Other Standard Extensions}
+   At the effective date of this standard there are no 
+   other NOST\index{NOST} standard 
+   extensions.
+
+
+\chapter{Restrictions on Changes}
+  \label{s:Restrict}
+   Any structure that is a valid {\em FITS\/} 
+   structure\index{FITS, structure} shall remain 
+   a valid {\em FITS\/} structure at all future times. Use of certain 
+   valid {\em FITS\/} structures may be 
+   deprecated\index{deprecate} by this or 
+   future {\em FITS\/} standard documents.
+  
+  
+\appendix  
+  
+  
+\chapter{Draft Proposal for Binary Table Extension}
+    \label{s:Bintbl}
+   (This Appendix is not part of the NOST {\em FITS\/} Standard but 
+   is included for informational purposes only.)         
+  
+This appendix contains a draft proposal for the 
+Binary Table extension\index{extension}, type name ``BINTABLE'', 
+as distributed\index{BINTABLE, extension}
+by\index{binary tables} W. D. Cotton (NRAO) and D. Tody (NOAO), 
+dated September 20, 1991.  
+With their permission, that proposal is reproduced
+nearly verbatim; the only changes are those required for 
+stylistic consistency with the rest of this document.
+The BINTABLE extension has been developed from the earlier
+A3DTABLE extension\index{A3DTABLE, extension}
+implemented in\index{AIPS} AIPS by NRAO\index{NRAO}.
+It supports all features of the earlier, more limited extension.  
+Since that time, a revised version of 
+that extension [9], which fully supports all features described 
+here, has been endorsed by the IAU
+FITS Working\index{FITS, Working Group} Group.  (The material in 
+Section \ref{s:binapp}, the appendix to the paper, is not 
+part of the officially endorsed standard but is considered to 
+represent recommended conventions.)
+Because this revision to the NOST standard is intended to address only
+the issue of units, and because the existing appendix describes the
+principal features of the extension, illustrating an application of
+the rules for conforming\index{conforming extension}
+extensions\index{extension, conforming}, the text of the earlier
+proposal is included as the remainder of this Appendix, as it was for
+version 1.0.  The rules of the extension as endorsed will be codified
+into the body of version 2 of the standard. 
+
+\section{Abstract}
+
+    This paper describes the {\em FITS\/} binary tables which are a
+flexible and efficient means of transmitting a wide variety of data
+structures.  Table rows may be a mixture of a number of numerical, 
+logical and character data entries.  In addition, each entry is allowed
+to be a single dimensioned array.  Numeric data are kept in 
+IEEE\index{IEEE} formats.
+
+\section{Introduction}
+
+   The Flexible Image Transport System ({\em FITS\/}) [1], [2]
+has been used for a number of years both
+as a means of transporting data between computers and/or processing
+systems and as an archival format for a variety of astronomical data.
+The success of this system has resulted in the introduction of
+enhancements.  In particular, considerable use has been made of the
+records following the ``main'' data file.  Grosb\o l {\it et al.} [4] 
+introduced a generalized header format for 
+extension\index{extension} ``files''
+following the ``main'' data file, but in the same physical file.
+Harten {\it et al.} [5] defined an ASCII table\index{ASCII tables} 
+structure which could convey information that could be 
+conveniently printed as a table.
+This paper generalizes the ASCII tables and defines an efficient means
+for conveying a wide variety of data structures as\index{extension}
+ ``extension'' files.
+
+\section {Binary Tables}
+
+   The binary tables are tables in the sense that they are
+organized into rows and columns.  They are multi-dimensional since
+an entry, or set of values associated with a given row and column, can
+be an array of arbitrary size.  These values are represented in a
+standardized binary form.  Each row in the table contains an entry for
+each column.  This entry may be one of a number of different data
+types, 8 bit unsigned integers, 16 or 32 bit signed integers, logical, 
+character, bit, 32 or 
+64 bit floating point or complex values.  The datatype and
+dimensionality are independently defined for each column but each row
+must have the same structure.  Additional information associated with
+the table may be included in the table header as keyword/value
+pairs.
+
+   The binary tables come after the ``main'' data file, if any, 
+in a {\em FITS\/} file and follow the standards for generalized extension
+tables defined in [4].
+
+The use of the binary tables requires the use of a single
+additional keyword in the main header:
+
+\paragraph{{\tt EXTEND} (logical)} 
+if\index{EXTEND} 
+true (ASCII {\tt 'T'}) indicates that there {\it may} 
+be extension files following the data records and, if there are, 
+that they conform to the generalized extension file header standards.
+
+\section {Table Header}
+
+The table header begins at the first byte in the first record following the
+last record of main data (if any) or following the last record of the
+previous extension file.  The format of the binary table
+header is such that a given {\em FITS\/} reader can decide if it wants
+(or understands) it and can skip the table if not.
+
+A table header consists of one or more 2880 8-bit byte logical records
+each containing 36 80-byte ``card images'' in the form:
+
+\begin{verbatim}
+     keyword = value    / comment
+\end{verbatim}
+where the keyword begins in column 1 and contains up to eight
+characters and the value begins in column 10 or later.  Keyword/value
+pairs in binary table headers conform to standard {\em FITS\/} usage.
+
+   The number of columns in the table is given by the value associated
+with keyword\index{TFIELDS} {\tt TFIELDS}.  
+The type, dimensionality, labels, units,\index{units} 
+blanking values, and display formats for entries in column {\tt nnn} may be
+defined by the values\index{TUNITn} 
+associated\index{TNULLn} with the\index{TDISPnnn} keywords {\tt
+TFORMnnn}, 
+{\tt TTYPEnnn}, {\tt TUNITnnn}, {\tt TNULLnnn}, and {\tt TDISPnnn}.  
+Of these\index{TFORMn} only {\tt TFORMnnn} is required but the
+use\index{TTYPEn} of 
+{\tt TTYPEnnn} is strongly recommended.  An entry
+may be omitted from the table, but still defined in the header, 
+by using a zero element count in the {\tt TFORMnnn}
+entry.
+
+      The required keywords {\tt XTENSION}, {\tt BITPIX}, 
+{\tt NAXIS}, {\tt NAXIS1}, {\tt NAXIS2}, {\tt PCOUNT}, {\tt GCOUNT}
+and {\tt TFIELDS} must be in order; other keywords follow these in an
+arbitrary\index{order, keyword}\index{keyword, order}
+order.  The required keywords\index{keyword, required}
+in a binary table header record
+are:
+
+\paragraph{{\tt XTENSION} (character)} indicates\index{XTENSION} the
+type 
+of extension file, this must be the first keyword in the header.  
+This is \verb*+'BINTABLE'+ for\index{BINTABLE} the binary tables.
+
+\paragraph{{\tt BITPIX} (integer)} gives\index{BITPIX} the number of 
+bits per ``pixel'' value.  For binary tables this value is 8.
+
+\paragraph{{\tt NAXIS} (integer)} gives\index{NAXIS} the number of
+``axes''; 
+this value is 2 for binary tables.
+
+\paragraph{{\tt NAXIS1} (integer)} gives\index{NAXIS1} 
+the number of 8 bit bytes in each ``row''.
+This should correspond to the sum of the values defined in the
+{\tt TFORMnnn} keywords.
+
+\paragraph{{\tt NAXIS2} (integer)} gives\index{NAXIS2}
+ the number of rows in the table.
+
+\paragraph{{\tt PCOUNT} (integer)} is used\index{PCOUNT}
+to tell the number of bytes 
+{\it following} the regular portion of the table.  These bytes are allowed
+but no meaning is attached to them in this document.
+{\tt PCOUNT} should normally be 0 for binary 
+tables (see however Section \ref{s:varlen}).
+
+\paragraph{{\tt GCOUNT} (integer)} gives\index{GCOUNT} the number of 
+groups of data defined as for the random group main data records. 
+This is 1 for binary tables.
+
+\paragraph{{\tt TFIELDS} (integer)} gives\index{TFIELDS} the number of 
+fields (columns) present in the table. 
+
+\paragraph{{\tt TFORMnnn}\protect\footnotemark[1]\ (character)} 
+\footnotetext[1]{The ``{\tt nnn}'' in keyword names indicates an integer 
+index in the range 1 - 999.  The integer is left justified with no leading
+zeroes, e.g. {\tt TFORM1}, {\tt TFORM19}, etc.} gives\index{TFORMn} 
+the size and data type of field {\tt nnn}. 
+Allowed values of {\tt nnn} range from 1 to the value associated 
+with {\tt TFIELDS}.  Allowed values of {\tt TFORMnnn}
+are of the form rL, rX, rI, 
+rJ, rA, rE, rD, rB, rC, rM, or rP (logical\index{logical value}, 
+bit, 16-bit integers, 32-bit\index{integer value}
+integers, characters, single precision, double precision, unsigned
+bytes, complex\index{complex, floating point} 
+{pair of single precision values}, double complex 
+{pair\index{complex, double} of double precision values} 
+and variable length array descriptor\index{variable length array}
+\index{array, variable length}
+[64 bits]) where r=number of elements.  If the element count is absent, it
+is assumed to be 1.  A value of zero is allowed.
+Note: additional characters may follow the datatype code character
+but they are not defined in this document.
+
+
+   The number of bytes determined from summing the {\tt TFORMnnn} 
+values\index{TFORMn} should equal {\tt NAXIS1} but\index{NAXIS1} 
+{\tt NAXIS1} should be used as the definition of
+the actual length of the row.
+
+\paragraph {{\tt END}} is\index{END} always the last keyword in a
+header.  
+The remainder of the {\em FITS\/} logical (2880--byte) record 
+following the {\tt END} keyword is blank filled.
+
+
+The optional standard keywords are:
+
+\paragraph {{\tt EXTNAME} (character)} can\index{EXTNAME} 
+be used to give a name\index{extension, name} to the extension file
+to distinguish it from other similar files.  The name may have a
+hierarchical structure giving its relation to other files (e.g., 
+``map1.cleancomp'')
+
+\paragraph {{\tt EXTVER} (integer)} is\index{EXTVER}
+ a version number which can be used with {\tt EXTNAME} to
+identify a file.
+
+\paragraph {{\tt EXTLEVEL} (integer)} specifies\index{EXTLEVEL} 
+the level of the extension file in a hierarchical structure.  
+The default value for {\tt EXTLEVEL} should be 1.
+
+\paragraph {{\tt TTYPEnnn} (character)} gives\index{TTYPEn}
+ the label for field {\tt nnn}. 
+ 
+\paragraph {{\tt TUNITnnn} (character)} gives\index{TUNITn} 
+the physical units\index{units} of field {\tt nnn}.
+
+\paragraph {{\tt TSCALnnn} (floating)} gives\index{TSCALn} 
+the scale factor for field {\tt nnn}. True\_value =
+{\em FITS\/}\_value $\ast$ {\tt TSCAL} + {\tt TZERO}.  
+Note: {\tt TSCALnnn} and {\tt TZEROnnn} are not\index{scaling, data}
+defined for A, L, P, or X format fields. Default value is 1.0.
+
+\paragraph {{\tt TZEROnnn} (floating)} 
+gives\index{TZEROn} the offset for field {\tt nnn}. (See
+{\tt TSCALnnn}.) Default value is 0.0.
+
+\paragraph {{\tt TNULLnnn} (integer)} gives\index{TNULLn} 
+the undefined value\index{value, undefined} 
+for integer (B, I, and J) field {\tt nnn}.  
+Section \ref{s:btdr} discusses the conventions for indicating
+invalid data\index{data, invalid} of other data types.
+
+\paragraph {{\tt TDISPnnn} (character)} gives\index{TDISPnnn} 
+the Fortran 90 format suggested for the display 
+of field {\tt nnn}.  Each byte of bit and byte arrays will be
+considered to be a signed integer for purposes of display.  The allowed
+forms are Aw, Lw, Iw.m, Bw.m (Binary, integers only), Ow.m (Octal, 
+integers only), Zw.m (Hexadecimal, integers only) Fw.d, Ew.dEe, ENw.d, 
+ESw.d,  Gw.dEe, and Dw.dEe where w is the width of 
+the displayed value in characters, m is the minimum number of digits
+possibly requiring leading zeroes, d is the number of digits to the
+right of the decimal, and e is the number of digits in the exponent.
+All entries in a field are displayed with a single, repeated format.
+If\index{ANSI, FORTRAN} Fortran 90 formats 
+are not available to a reader which prints
+a table then equivalent FORTRAN 77 formats may be substituted.
+Any {\tt TSCALnnn} and\index{TSCALn} 
+{\tt TZEROnnn} values\index{TZEROn} should be applied before display
+of the
+value.  Note that characters and logical values may be null (zero
+byte) terminated.
+
+\paragraph {{\tt TDIMnnn} (character)} This\index{TDIMnnn} 
+keyword is reserved for use by the convention described in 
+Section \ref{s:mdim}.
+
+\paragraph {{\tt THEAP} (integer)} This\index{THEAP} 
+keyword is reserved for use by the
+convention described in Section \ref{s:varlen}.
+
+\paragraph {{\tt AUTHOR} (character)} gives\index{AUTHOR} 
+the name of the author or creator of the table.
+
+\paragraph {{\tt REFERENC} (character)} gives\index{REFERENC} 
+the reference for the table. 
+
+Nonstandard keyword/value pairs adhering to the {\em FITS\/} keyword 
+standards are allowed although a reader may chose to ignore them.
+
+
+\section{Conventions for Multidimensional Arrays}
+
+     There is commonly a need to use data structures more complex than
+the one dimensional definition of the table entries
+defined for this table format.\index{array, multidimensional}
+Multidimensional\index{multidimensional entries} arrays, or more
+complex structures, may be implemented by passing dimensions or other
+structural information as either column entries or keywords in the header.
+Passing the dimensionality as column entries has the advantage that
+the array can have variable dimension (subject to a fixed maximum
+size and storage usage).  A convention is suggested in 
+Section \ref{s:mdim}. 
+
+\section{Table Data Records}
+
+\label{s:btdr}
+The binary table data records begin with the next logical record
+following the last header record. If the intersection of a row and
+column is an array then the elements of this array are contiguous and
+in order\index{order, array index}
+of increasing array index.  Within a row, columns are
+stored in order of increasing column number.  Rows are given in order
+of increasing row number.  All 2880--byte logical records are
+completely filled with no extra bytes between columns or rows.
+Columns and rows do not necessarily begin in the first byte of a
+2880--byte record.  Note that this implies that a given word may not
+be aligned in the record along word boundaries of its type; words may
+even span 2880--byte records.  The last 2880--byte record should be
+zero byte filled past the end of the valid data.\index{alignment, word}
+
+   If word alignment is ever considered important for efficiency
+considerations then this may be accomplished by the proper design of
+the table.  The simplest way to accomplish this is to order the
+columns by data type (M, D, C, P, E, J, I, B, L, A, X) and then add
+sufficient padding in the form of a dummy column of type B with the
+number of elements such that the size of a row is either an integral
+multiple of 2880 bytes or an integral number of rows is 2880 bytes.
+
+The data types are defined in the following list (r is the
+number of elements in the entry):
+
+\paragraph{rL} A logical value\index{logical value}
+ consists of an ASCII ``T'' indicating true 
+and ``F'' indicating false.  A null character (zero byte)
+indicates an invalid\index{value, invalid} value.
+
+\paragraph{rX} A bit array\index{bit array} will start 
+in the most significant bit of the byte
+and the following bits in the order\index{order, bit}
+of decreasing significance in the
+byte.  Bit significance is in the same order as for integers.  A bit
+array entry consists of an integral number of bytes with trailing bits
+zero.
+
+   No explicit null value\index{value, null} 
+is defined for bit arrays but if the
+capability of blanking bit arrays is needed it is recommended that one
+of the following conventions be adopted: 1) designate a bit
+in the array as a validity bit, 2) add an L type column to indicate
+validity of the array or 3) add a second bit array which contains a
+validity bit for each of the bits in the original array.  Such
+conventions are beyond the scope of this general format design and
+in general readers will not be expected to understand them.
+
+\paragraph{rB}  Unsigned 8-bit integer with bits in
+decreasing order of significance.  
+Signed values may be passed with\index{TSCALn}
+appropriate\index{TZEROn} values of {\tt TSCALnnn} and {\tt
+TZEROnnn}.
+
+\paragraph{rI} A 16-bit twos-complement\index{twos-complement}
+integer with the bits
+in decreasing order of\index{integer value}
+significance.  Unsigned values may be passed with
+appropriate values of {\tt TSCALnnn} and {\tt TZEROnnn}.
+
+\paragraph{rJ} A 32-bit twos-complement\index{twos-complement}
+integer with the bits
+in decreasing order of significance.  Unsigned values may be passed with
+appropriate values of {\tt TSCALnnn} and {\tt TZEROnnn}.
+
+\paragraph{rA} Character strings are represented by ASCII characters
+in\index{ASCII, character} their natural order.  \index{order, characters}
+A character string\index{character string} may  be terminated before its
+explicit length by an ASCII NULL character. An ASCII NULL as the first
+character will indicate an undefined string i.e. a NULL string. Legal
+characters are printable ASCII characters in the range \verb|' '| 
+(hex 20) to \verb|'~'| (hex 7E) inclusive and ASCII NULL after the
+last valid character.  Strings the full length of the field are not
+NULL terminated. 
+
+\paragraph{rE} Single precision floating point\index{floating point}
+values are in IEEE 32-bit
+precision format in the order: sign bit, exponent and mantissa in
+decreasing order of significance. The IEEE NaN (not a number) values
+are\index{IEEE, NaN} used to indicate an invalid number; 
+a value with all bits set is
+recognized as a NaN. All IEEE special\index{IEEE, special values}
+values are recognized.
+
+\paragraph{rD}  Double precision floating point values are in IEEE 64-bit
+precision format in the order: sign bit, exponent and mantissa in
+decreasing order of significance.  The IEEE NaN values are used to
+indicate an invalid number; a value with  all bits set is recognized
+as a NaN. All IEEE special values are recognized. 
+
+\paragraph{rC}  A Complex value\index{floating point, complex}
+consists\index{complex, floating point} of a pair of IEEE 32-bit
+precision floating point values with the first being the real and the
+second the imaginary part.  If either word contains a NaN value the
+complex value is invalid.
+
+\paragraph{rM} Double precision complex values.  These consist of a
+pair of IEEE 64-bit precision floating point values with the first
+being the real and the second the imaginary part.  If either word
+contains a NaN value the complex value is invalid.
+
+\paragraph{rP} Variable length array descriptor.  An element is equal in
+size to a pair of 32-bit integers (i.e., 64 bits).  The anticipated use of
+this data type is described in Section \ref{s:varlen}.
+Arrays of type P are not
+defined; the r field is permitted, but values other than 0 or 1 are
+undefined.  For purposes of printing, an entry of type P should be
+considered equivalent to 2J.
+
+\section{Example Binary Table Header }
+The following is an example of a binary table header which has
+19 columns using a number of different data types and dimensions.
+Columns labeled ``IFLUX'', ``QFLUX'', ``UFLUX'', ``VFLUX'', 
+``FREQOFF'', ``LSRVEL'' and ``RESTFREQ'' are arrays of dimension 2.
+Columns labeled ``SOURCE'' and ``CALCODE'' are character strings of
+length 16 and 4 respectively.  The nonstandard keywords ``NO\_IF'', 
+VELTYP'', and ``VELDEF'' also appear at the end of the header.
+The first two lines of numbers are only present to show card columns
+and are not part of the table header.
+ 
+{\small \begin{verbatim}
+         1         2         3         4         5         6
+1234567890123456789012345678901234567890123456789012345678
+901234
+XTENSION= 'BINTABLE'           / Extension type
+BITPIX  =                    8 / Binary data
+NAXIS   =                    2 / Table is a matrix
+NAXIS1  =                  168 / Width of table row in bytes
+NAXIS2  =                    5 / Number of rows in table
+PCOUNT  =                    0 / Random parameter count
+GCOUNT  =                    1 / Group count
+TFIELDS =                   19 / Number of columns in each row
+EXTNAME = 'AIPS SU '           / AIPS source table
+EXTVER  =                    1 / Version number of table 
+TFORM1  = '1I      '           / 16-bit integer
+TTYPE1  = 'ID. NO.         '   / Type (label) of column  1
+TUNIT1  = '        '           / Physical units of column  1
+TFORM2  = '16A     '           / Character string
+TTYPE2  = 'SOURCE          '   / Type (label) of column  2
+TUNIT2  = '        '           / Physical units of column  2
+TFORM3  = '1I      '           / 16-bit integer
+TTYPE3  = 'QUAL            '   / Type (label) of column  3
+TUNIT3  = '        '           / Physical units of column  3
+TNULL3  = 32767                / Undefined value for column 3
+TFORM4  = '4A      '           / Character string
+TTYPE4  = 'CALCODE         '   / Type (label) of column  4
+TUNIT4  = '        '           / Physical units of column  4
+TFORM5  = '2E      '           / Single precision array
+TTYPE5  = 'IFLUX           '   / Type (label) of column  5
+TUNIT5  = 'JY      '           / Physical units of column  5
+TFORM6  = '2E      '           / Single precision array
+TTYPE6  = 'QFLUX           '   / Type (label) of column  6
+TUNIT6  = 'JY      '           / Physical units of column  6
+TFORM7  = '2E      '           / Single precision array
+TTYPE7  = 'UFLUX           '   / Type (label) of column  7
+TUNIT7  = 'JY      '           / Physical units of column  7
+TFORM8  = '2E      '           / Single precision array
+TTYPE8  = 'VFLUX           '   / Type (label) of column  8
+TUNIT8  = 'JY      '           / Physical units of column  8
+TFORM9  = '2D      '           / Double precision array.
+TTYPE9  = 'FREQOFF         '   / Type (label) of column  9
+TUNIT9  = 'HZ      '           / Physical units of column  9
+TSCAL9  = 1.0D9                / Scaling factor of column 9
+TZERO9  = 0.0                  / Offset of column 9
+TFORM10 = '1D      '           / Double precision
+TTYPE10 = 'BANDWIDTH       '   / Type (label) of column 10
+TUNIT10 = 'HZ      '           / Physical units of column 10
+TFORM11 = '1D      '           / Double precision
+TTYPE11 = 'RAEPO           '   / Type (label) of column 11
+TUNIT11 = 'DEGREES '           / Physical units of column 11
+TFORM12 = '1D      '           / Double precision
+TTYPE12 = 'DECEPO          '   / Type (label) of column 12
+TUNIT12 = 'DEGREES '           / Physical units of column 12
+TFORM13 = '1D      '           / Double precision
+TTYPE13 = 'EPOCH           '   / Type (label) of column 13
+TUNIT13 = 'YEARS   '           / Physical units of column 13
+TFORM14 = '1D      '           / Double precision
+TTYPE14 = 'RAAPP           '   / Type (label) of column 14
+TUNIT14 = 'DEGREES '           / Physical units of column 14
+TFORM15 = '1D      '           / Double precision
+TTYPE15 = 'DECAPP          '   / Type (label) of column 15
+TUNIT15 = 'DEGREES '           / Physical units of column 15
+TFORM16 = '2D      '           / Double precision array
+TTYPE16 = 'LSRVEL          '   / Type (label) of column 16
+TUNIT16 = 'M/SEC   '           / Physical units of column 16
+TFORM17 = '2D      '           / Double precision array
+TTYPE17 = 'RESTFREQ        '   / Type (label) of column 17
+TUNIT17 = 'HZ      '           / Physical units of column 17
+TDISP17 = 'D17.10'             / Display format of column 17
+TFORM18 = '1D      '           / Double precision array
+TTYPE18 = 'PMRA            '   / Type (label) of column 18
+TUNIT18 = 'DEG/DAY '           / Physical units of column 18
+TFORM19 = '1D      '           / Double precision array
+TTYPE19 = 'PMDEC           '   / Type (label) of column 19
+TUNIT19 = 'DEG/DAY '           / Physical units of column 19
+NO_IF   =      2
+VELTYP  = 'LSR     '
+VELDEF  = 'OPTICAL '
+END
+
+\end{verbatim}}
+
+
+\section{Acknowledgments}
+
+   The authors would like to thank E. Greisen, D. Wells, P. Grosb\o l, 
+B. Hanisch, E. Mandel, E. Kemper, S. Voels, B. Schlesinger, W. Pence
+and many others for invaluable discussions and suggestions.
+
+\section{Appendixes to Draft Proposal for Binary Tables Extension}
+\label{s:binapp}
+\subsection{``Multidimensional Array'' Convention}
+\label{s:mdim}
+It is anticipated that binary tables will need to contain data
+structures more complex that those describable by the basic notation.
+Examples of these are multidimensional arrays\index{array, multidimensional}
+and nonrectangular data
+structures.  Suitable\index{multidimensional entries}
+ conventions may be defined to pass these
+structures using some combination of keyword/value pairs and table
+entries to pass the parameters of these structures.
+
+   One case, multidimensional arrays, is so common that it is prudent
+to describe a simple convention.  The ``Multidimensional array'' convention
+consists of the following:  any column with a dimensionality of 2
+or larger will have an associated character keyword
+{\tt TDIMnnn}='(l, m, n, ...)' where l, m, n, ... are 
+the\index{TDIMnnn} dimensions of the
+array.  The data is ordered\index{order, array index}
+such that the array index of the
+first dimension given (l) is the most rapidly varying and that of the last
+dimension given is the least rapidly varying.
+The size implied by the {\tt TDIMnnn} keyword will equal the
+element count specified in\index{TFORMn} 
+the {\tt TFORMnnn} keyword.  The adherence to this
+convention will be indicated by the presence of a {\tt TDIMnnn} keyword
+in
+the form described above.
+
+    A character string\index{character string} 
+is represented in a binary table by a one-dimensional 
+character array, as described in section \ref{s:btdr}.  For
+example, a FORTRAN CHARACTER*20 variable could be represented in a
+binary table as a character array declared as {\tt TFORMn} = '20A '. 
+Arrays
+of character strings, i.e., multidimensional character arrays, may be
+represented using the {\tt TDIMnnn} notation.  If a column is an array of
+strings then each string may be null terminated.  For example, if
+{\tt TFORMn}='20A' and {\tt TDIMn}='(5, 4)' then the entry consists of 4
+strings of
+up to 5 characters each of which may be null terminated.
+
+\vskip 1em
+This convention is optional and will not preclude other conventions.
+This convention is not part of the proposed binary table definition.
+
+\subsection{``Variable Length Array'' Facility}
+\label{s:varlen}
+    One of the most attractive features of binary tables is that any field
+of the table can be an array.  In the standard case this is a fixed size
+array, i.e., a fixed amount of storage is allocated in each record for the
+array data - whether it is used or not.  This is fine so long as the arrays
+are small or a fixed amount of array data will be stored in each record, but
+if the stored array length varies for different records, it is necessary to
+impose a fixed upper limit on the size of the array that can be stored.  If
+this upper limit is made too large excessive wasted space can result and the
+binary table mechanism becomes seriously inefficient.  If the limit is set
+too low then it may become impossible to store certain types of data in the
+table.
+
+The ``variable length array'' construct presented\index{array, variable length}
+here was devised to deal\index{variable length array}
+with this problem.  Variable length arrays are implemented in such a way
+that, even if a table contains such arrays, a simple reader program which
+does not understand variable length arrays will still be able to read the
+main table (in other words a table containing variable length arrays
+conforms to the basic binary table standard).  The implementation chosen
+is
+such that the records in the main table remain fixed in size even if the
+table contains a variable length array field, allowing efficient random
+access to the main table.
+
+Variable length arrays are logically equivalent to regular static arrays, 
+the only differences being 1) the length of the stored array can differ for
+different records, and 2) the array data is not stored directly in the table
+records.  Since a field of any datatype can be a static array, a field of
+any datatype can also be a variable length array (excluding type P, the
+variable length array descriptor itself, which is not a datatype so much
+as a storage class specifier).  Conventions such
+ as {\tt TDIMnnn} apply\index{TDIMnnn} equally
+to both to variable length and static arrays.
+
+A variable length array is declared in the table header with a special
+field datatype specifier of the form
+
+\begin{verbatim}
+     rPt(maxelem)
+\end{verbatim}
+where the ``P'' indicates the amount of space occupied by the array
+descriptor in the data record (64 bits), the element count ``r'' should be
+0, 1, or absent, {\tt t} is a character denoting the datatype of the array
+data (L, X, B, I, J, etc., but not P), and {\tt maxelem} is a quantity
+guaranteed to be equal to or greater than the maximum number of elements
+of
+type {\tt t} actually stored in a table record.  There is no built-in upper
+limit on the size of a stored array; {\tt maxelem} merely reflects the size
+of the largest array actually stored in the table, and is provided to avoid
+the need to preview the table when, for example, reading a table containing
+variable length elements into a database that supports only fixed size
+arrays.
+
+For example, 
+\begin{verbatim}
+     TFORM8  = 'PB(1800)'         / Variable length byte array
+\end{verbatim}
+indicates that field 8 of the table is a variable length array of type byte, 
+with a maximum stored array length not to exceed 1800 array elements
+(bytes
+in this case).
+
+The data for the variable length arrays in a table is not stored in the
+actual data records; it is stored in a special data area, the heap, 
+following the last fixed size data record.  What is stored in the data
+record is an {\it array descriptor}.  This consists of two 32 bit integer
+values: the number of elements (array length) of the stored array, followed
+by the zero-indexed byte offset of the first element of the array, measured
+from the start of the heap area.  Storage for the array is contiguous.  The
+array descriptor for field N as it would appear embedded in a data record
+is
+illustrated symbolically below.
+
+\begin{verbatim}
+     field N-1  ;  { nelem  offset }  ;  field N+1 \end{verbatim}
+If the stored array length is zero there is no array data, and the offset
+value is undefined (it should be set to zero).  The storage referenced by an
+array descriptor must lie entirely within the heap area; negative offsets
+are not permitted.
+
+A binary table containing variable length arrays consists of three main
+segments, as follows:
+
+\begin{verbatim}
+     table header
+     record storage area (data records)
+     heap area (variable array data)
+\end{verbatim}
+
+The table header consists of one or more 2880 byte 
+{\em FITS\/} logical records with the last record 
+indicated by the keyword {\tt END} somewhere in the record.  The
+record storage area begins with the next 2880 byte logical record following
+the last header record and is {\tt NAXIS1}*{\tt NAXIS2} 
+bytes\index{NAXIS1} in\index{NAXIS2} length.  
+The zero indexed byte offset of the heap measured from 
+the start of the record storage area is given by 
+the {\tt THEAP} keyword\index{THEAP} in the header.  If this keyword
+is missing the heap is assumed to begin with the byte immediately following
+the last data record, otherwise there may be a gap between the last stored
+record and the start of the heap.  If there is no gap the value of the heap
+offset is {\tt NAXIS1}*{\tt NAXIS2}.  The total length 
+in bytes of the area following the last stored record (gap plus heap) 
+is given by the {\tt PCOUNT} keyword\index{PCOUNT} in the
+table header.
+
+For example, suppose we have a table containing 5 168 byte records, with
+a
+heap area 2880 bytes long, beginning at an offset of 2880, thereby aligning
+the record storage and heap areas on {\em FITS\/} record boundaries 
+(this alignment is not necessarily recommended but is useful for our
+example).  The data
+portion of the table consists of 2 2880 byte {\em FITS\/} records, 840 bytes
+of
+which are used by the 5 table records, 
+hence {\tt PCOUNT} is 2*2880-840, or 4920 bytes.
+
+\begin{verbatim}
+     NAXIS1  =                  168 / Width of table row in bytes
+     NAXIS2  =                    5 / Number of rows in table
+     PCOUNT  =                 4920 / Random parameter count
+       ...
+     THEAP   =                 2880 / Byte offset of heap area
+\end{verbatim}
+
+\vskip 1em
+While the above description is sufficient to define the required features of
+the variable length array implementation, some hints regarding usage of the
+variable length array facility may also be useful.
+
+Programs which read binary tables should take care to not assume more
+about
+the physical layout of the table than is required by the specification.  For
+example, there are no requirements on the alignment of data within the
+heap.  If efficient runtime access is a concern one may want to design the
+table so that data arrays are aligned to the size of an array element.  In
+another case one might want to minimize storage and forgo any efforts at
+alignment (by careful design it is often possible to achieve both goals).
+Variable array data may be stored in the heap\index{order, variable array}
+in any order, i.e., the data
+for record N+1 is not necessarily stored at a larger offset than that for
+record N.  There may be gaps in the heap where no data is stored.  Pointer
+aliasing is permitted, i.e., the array descriptors for two or more arrays
+may point to the same storage location (this could be used to save storage
+if two or more arrays are identical).
+
+Byte arrays are a special case because they can be used to store a
+``typeless''  data sequence.  Since {\em FITS\/} is a machine independent
+storage format, some form of machine specific data conversion (byte
+swapping, floating point format conversion) is implied when accessing
+stored data with types such as integer and floating, but byte arrays
+are copied to and from external storage without any form of
+conversion. 
+
+An important feature of variable length arrays is that it is possible that
+the stored array length may be zero.  This makes it possible to have a
+column of the table for which, typically, no data is present in each stored
+record.  When data is present the stored array can be as large as necessary.
+This can be useful when storing complex objects as records in a table.
+
+Accessing a binary table stored on a random access storage medium is
+straightforward.  Since the data records in the main table are fixed in
+size they may be randomly accessed given the record number, by computing
+the offset.  Once the record has been read in, any variable length array
+data may be directly accessed using the element count and offset given
+by the array descriptor stored in the data record.
+
+Reading a binary table stored on a sequential access storage medium
+requires
+that a table of array descriptors be built up as the main table records are
+read in.  Once all the table records have been read, the array descriptors
+are sorted by the offset of the array data in the heap.  As the heap data is
+read, arrays are extracted sequentially from the heap and stored in the
+affected records using the back pointers to the record and field from the
+table of array descriptors.  Since array aliasing is permitted, it may be
+necessary to store a given array in more than one field or record.
+
+Variable length arrays are more complicated than regular static arrays
+and imply an extra data access per array to fetch all the data for a record.
+For this reason, it is recommended that regular static arrays be used
+instead
+of variable length arrays unless efficiency or other considerations require
+the use of a variable array.
+
+\vskip 1em
+This facility is still undergoing trials and is not currently part of the
+main binary table definition.
+
+\chapter{Implementation on Physical Media}
+   \label{s:phy}
+  
+   (This Appendix is not part of the NOST {\em FITS\/} Standard, but 
+   is included as a guide to recommended practices.)
+    
+\section{Block Size}
+   The block size (physical record length) for transport of data should, 
+   where possible, equal the logical record length or an integer 
+   blocking factor times this record length.  Standard values of the 
+   blocking factor may be specified for each medium; if not otherwise 
+   specified, the expected value is unity.
+                                       
+  \subsection{Nine-Track, Half-Inch Magnetic Tape}
+   For nine-track half-inch magnetic tapes\index{tape, 9-track half-inch} 
+   conforming to the\index{ANSI, X3.40--1983}
+   ANSI X3.40--1983 specifications [13], there should be 
+   from one to\index{BLOCKED}
+   ten logical records per physical block. The {\tt BLOCKED} 
+   keyword (section \ref{s:block}) may be used to warn that there may 
+   be more than one logical record per physical block. The last 
+   physical block of a {\em FITS\/} file should be truncated to the 
+   minimum number of {\em FITS\/} logical 
+   records required to\index{ANSI, X3.27--1978}
+   hold the remaining data, in accordance with ANSI X3.27--1978
+   specifications [14].  With the issuance of this standard, 
+   the {\tt BLOCKED} keyword is deprecated\index{deprecate} by this
+document.
+  
+  \subsection{Other Media}
+   For media where the physical block size cannot be equal to or
+   an integral multiple of the {\em FITS\/} logical record length 
+   of 23040-bits (2880 8-bit bytes), records should be written 
+   over multiple blocks as a byte stream. Conventions regarding 
+   the relation between physical block size and logical record 
+   length of {\em FITS\/} files have 
+   not been otherwise established for other media.
+  
+\section{Physical Properties of Media}
+   The arrangement of digital bits and other physical properties of
+   any medium should be in conformance with the relevant national
+   and/or international standard for that medium. 
+
+  
+\section{Labeling}
+  
+  \subsection{Tape}
+   Tapes may be either ANSI standard labeled or unlabeled.
+   Unlabeled tapes are preferred.\index{ANSI, tapes}
+  
+  \subsection{Other Media}
+   Conventions regarding labels for physical media containing 
+   {\em FITS\/} files have not been established for other media.
+  
+\section{{\em\bf FITS\/} File Boundaries}
+  
+  \subsection{Magnetic Reel Tape}
+   Individual {\em FITS\/} files are terminated by a tape-mark.
+  
+  \subsection{Other Media}
+   For media where the physical record size cannot be equal to or
+   an integral multiple of the standard {\em FITS\/} logical record length, 
+   a logical record of fewer than 23040 bits (2880 8-bit bytes) immediately
+   following the end of the\index{primary header} primary header, 
+   data, or an extension\index{extension}
+   should be treated as an end-of-file. Otherwise, individual 
+   {\em FITS\/} files should be terminated by a delimiter appropriate 
+   to the medium, analogous to the tape end-of-file mark.  
+   If more than one {\em FITS\/} file appears on a 
+   physical structure, the appropriate end-of-file indicator 
+   should immediately precede the start of the primary
+   headers of all files after the first.  
+  
+\section{Multiple Physical Volumes}
+   Storage of a single {\em FITS\/} file on more than one unlabeled tape 
+   or on multiple units of any other medium is not universally supported
+   in {\em FITS}.  One possible way to handle multivolume 
+   unlabeled tape was suggested in [1]. 
+
+\chapter{Differences from IAU-endorsed Publications}
+\label{s:sdif}
+   (This Appendix is not part of the NOST {\em FITS\/} Standard but 
+   is included for informational purposes only.)       
+
+Note: In\index{IAU} this discussion, the term {\em the FITS papers} 
+      refers to [1], [2], 
+     [4], and [5], collectively, and the term {\em Floating Point Agreement
+     (FPA)} refers\index{floating point, FITS agreement} to [8].
+
+\begin{enumerate}
+
+\item Section \ref{s:def} -- Definitions, Acronyms, and Symbols
+
+ \begin{description}
+
+ \item[Array value] -- This\index{array, value} precise definition 
+     is not used in the original {\em FITS\/} papers.
+ \item[ASCII text] -- This\index{ASCII, text} permissible subset 
+     of the ASCII character set, used in many contexts, is not 
+     precisely defined in the {\em FITS\/} papers.
+ \item[Basic FITS] -- This definition\index{Basic FITS} 
+   includes the possibility of floating point data arrays, 
+   while the terminology in the {\em FITS\/} papers refers 
+   to {\em FITS\/} as described in [1], where 
+   only integer arrays were possible. 
+ \item[Conforming Extension] -- This terminology is not used in 
+     the\index{extension, conforming} 
+     {\em FITS\/} papers.\index{conforming extension}
+ \item[Deprecate] -- The concept of deprecation does\index{deprecate}
+      not appear in the {\em FITS\/} papers.
+ \item[FITS structure] -- This\index{FITS, structure} terminology 
+       is not used in the {\em FITS\/}
+       papers in the precise way that it is in this standard.
+ \item[Header and Data Unit] -- This terminology is not used in the 
+     {\em FITS\/} papers.
+ \item[Indexed keyword] -- This terminology is not\index{keyword, indexed}
+      used in the original {\em FITS\/} papers.\index{indexed, keyword}
+ \item[Physical value] -- This\index{physical value} precise definition 
+     is not used in the original {\em FITS\/} papers.
+ \item[Reference point] -- This term replaces the {\em reference pixel} of 
+     the\index{reference point}
+     {\em FITS\/} papers.  The new terminology is consistent 
+     with the fact that 
+     the array need not represent a digital image and that the reference 
+     point (or {\em pixel}) need not lie within the array.
+ \item[Reserved keyword] -- The {\em FITS\/} 
+     papers\index{keyword, reserved} 
+     describe optional keywords but do not say 
+     explicitly that they are reserved.
+ \item[Standard Extension] -- This\index{standard extension} 
+     precise\index{extension, standard} definition is new.  The term
+     {\em standard extension} is used in some contexts in the 
+     {\em FITS\/} papers to refer to what this standard defines as a
+     {\em standard extension} and in others to refer to what this 
+     standard defines\index{conforming extension}
+     as\index{extension, conforming} a {\em conforming extension}.
+
+ \end{description}
+
+\item Section \ref{s:pdata} Primary Data Array\\
+     Fill\index{fill} format -- This\index{primary data array} 
+     specification is new.  The {\em FITS\/} papers 
+     and the FPA do not precisely specify 
+     the format\index{fill} of data fill for the primary data array.
+
+\item Section \ref{s:idy} Identity (of conforming extensions)\\
+     The {\em FITS\/} papers specify that creators of
+     new\index{conforming extension}
+     extension types\index{extension, conforming}
+     should check with the {\em FITS\/} standards committee.  
+     This standard identifies the committee specifically, 
+     introduces the role of the {\em FITS\/} Support 
+     Office\index{FITS, Support Office} as 
+     its\index{extension, registration} agent, and mandates registration.
+
+\item Section \ref{s:keyw} Keyword (as header component)\\
+     The specification of permissible keyword characters is new.
+     The {\em FITS\/} papers do not precisely define the permissible 
+     characters for keywords.
+
+\item Section \ref{s:pman} Principal (mandatory keywords)
+
+ \begin{enumerate}
+
+ \item {\tt NAXIS} keyword -- The\index{keyword, required} 
+     requirement that the {\tt NAXIS} keyword\index{NAXIS}
+     may not be negative is not explicitly specified in 
+     the {\em FITS\/} papers.  
+
+ \item {\tt NAXISn} keyword -- The requirement that 
+     the {\tt NAXISn} keyword may not be negative\index{NAXISn}
+     is not explicitly specified in the {\em FITS\/} papers.  
+
+ \end{enumerate} 
+
+
+\item Section \ref{s:conf} Conforming Extensions
+
+ \begin{enumerate}
+
+ \item {\tt NBITS} -- The requirement\index{conforming extension}
+     that\index{extension, conforming} 
+     {\tt NBITS} may not be negative\index{NBITS}
+     is not explicitly specified in the {\em FITS\/} papers.  
+
+ \item {\tt XTENSION} keyword -- That this keyword\index{XTENSION} 
+     may not appear in the primary header is only implied by 
+     the {\em FITS\/} papers; the prohibition is explicit in this standard.
+     The {\em FITS\/} papers name a {\em FITS\/} standards committee 
+     as the keeper of the list of accepted extension\index{extension} 
+     type names. This standard specifically identifies the committee 
+     and introduces the role of the {\em FITS\/} Support 
+     Office\index{FITS, Support Office}
+     as its agent.
+
+ \end{enumerate}
+
+\item Section \ref{s:resk} Other Reserved Keywords\\
+     That\index{keyword, reserved} the optional keywords defined 
+     in the {\em FITS\/} papers are 
+     to be reserved with the meanings and usage defined in those papers, 
+     as in the standard, is not explicitly stated in them.
+
+\item Section \ref{s:dhist} Keywords Describing the History...
+
+ \begin{enumerate}
+
+ \item {\tt DATE} Keyword -- The recommendation\index{DATE} 
+       for use of Universal\index{Universal Time} Time is not 
+       in the {\em FITS\/} papers.
+
+ \item {\tt BLOCKED} keyword -- The {\em FITS\/} papers
+     require\index{BLOCKED} the {\tt BLOCKED} keyword to appear 
+     in the first record of the primary header\index{primary header} 
+     even though it cannot when the value of {\tt NAXIS}
+     exceeds\index{NAXIS} the values described in the text.  They do
+     not address this contradiction.  Deprecation of the {\tt BLOCKED}
+     keyword is new with this standard. 
+
+ \end{enumerate}
+
+\item Section \ref{s:kobs} Keywords Describing Observations
+
+ \begin{enumerate}
+
+ \item {\tt DATE-OBS} Keyword -- The 
+     recommendation\index{DATE-OBS} for use of
+     Universal\index{Universal Time} Time
+     is not in the {\em FITS\/} papers.
+
+ \item {\tt EQUINOX} and {\tt EPOCH} keywords -- This
+     standard\index{EQUINOX} replaces the\index{EPOCH}
+     {\tt EPOCH} keyword with the more appropriately 
+     named {\tt EQUINOX} keyword and 
+     deprecates\index{deprecate} the {\tt EPOCH} name.     
+
+ \end{enumerate}
+
+\item Section \ref{s:comk} Commentary keywords\\
+     Keyword field is blank -- Reference [1] contains 
+     the text ``BLANK'' to represent a blank keyword field.  The standard
+     clarifies the intention.\index{BLANK}
+
+\item Section \ref{s:array} Array keywords
+
+ \begin{enumerate}
+
+ \item {\tt BUNIT} Keyword -- The {\em FITS\/} papers 
+     recommend the use of SI\index{BUNIT} units and 
+     identify\index{units} other units standard in astronomy.  This 
+     standard makes the recommendation more\index{IAU, Style Manual}
+     specific by referring to the IAU Style Manual [7].
+     The {\em FITS} papers also recommend
+     the use of degrees as the appropriate unit for 
+     angles.\index{angle} This standard 
+     incorporates that recommendation, specifying decimal degrees.
+
+ \item {\tt CTYPEn} Keywords -- This standard extends the
+     recommendations on units\index{units} to\index{coordinate, axis}
+     coordinate\index{CTYPEn} axes.
+
+ \item {\tt CRVALn}, {\tt CDELTn}, and {\tt CROTAn} 
+     Keywords\index{CRVALn} -- This\index{CDELTn} 
+     standard\index{CROTAn} extends the recommendations to coordinate
+     axes, explicitly requiring decimal degrees for 
+     celestial\index{coordinate, celestial} coordinates.
+
+ \item {\tt CRPIXn} Keywords -- This standard explicitly notes the 
+     ambiguity\index{CRPIXn}
+     in the location of the index number relative to an image pixel.
+
+ \item {\tt CDELTn} Keywords -- The definition in the standard 
+     differs from that in the {\em FITS\/} papers in that 
+     it provides for the case where\index{CDELTn}
+     the spacing between index points varies over the grid.  
+     For the case of constant spacing, it is identical to 
+     the specification in the {\em FITS\/} papers.
+
+ \item {\tt DATAMAX} and {\tt DATAMIN} Keywords -- The standard
+     clarifies that the value refers to the 
+     physical value\index{physical value} 
+     represented by the\index{DATAMIN}
+     array\index{DATAMAX}, after any\index{scaling, data} scaling, 
+     not the array value\index{array, value} before scaling.  
+     The standard also notes that special
+     values\index{IEEE, special values} are not to be considered 
+     when determining the values of {\tt DATAMAX} and {\tt DATAMIN}, 
+     an issue not specifically addressed 
+     by the {\em FITS\/} papers or the FPA. 
+
+ \end{enumerate}
+ 
+\item Section \ref{s:GFR} General Format Requirements\\
+     The {\em FITS} papers specify that the value field is to be 
+     written following the rules of 
+     ANSI FORTRAN\index{FORTRAN-77, list-directed read} 
+     list-directed\index{list-directed, read}
+     input, with some restrictions.  The standard 
+     incorporates such restrictions by explicitly noting that 
+     formats may be otherwise specified in the Standard. 
+ 
+\item Section \ref{s:ffch} Character String (fixed format)\\
+     The\index{character string} standard explicitly 
+     describes how single quotes are to be 
+     coded into keyword values, a rule only implied by the 
+     FORTRAN-77 list-directed\index{list-directed, read}
+     read\index{format, fixed} 
+     requirements of the {\em FITS\/} papers.
+
+\item Section \ref{s:ffi} Integer (fixed format)\\
+     The standard explicitly notes that the fixed format 
+     for complex integers\index{format, fixed} 
+     does not\index{complex, integer} conform to the rules 
+     for\index{FORTRAN-77, list-directed read} ANSI FORTRAN 
+     list-directed read.\index{list-directed, read}
+
+\item Section \ref{s:ffrfp} Real Floating Point Number (fixed 
+     format)\\
+     The standard explicitly notes that the full precision of 64-bit
+     values cannot be expressed as a single value using the 
+     fixed\index{floating point, 64 bit} format. 
+
+\item Section \ref{s:ffrfp} Complex Floating Point Number (fixed 
+     format)\\
+     The standard explicitly notes that the fixed format for 
+     complex floating point numbers
+     does not conform to the rules for 
+     ANSI\index{FORTRAN-77, list-directed read} FORTRAN
+     list-directed read.\index{list-directed, read}
+     It notes also that the full precision of 64-bit
+     values cannot be expressed as a single value using the
+     fixed\index{complex, floating point} format. 
+
+\item Section \ref{s:Units} Units\\
+     The {\em FITS\/} papers recommend the use of SI units\index{units} 
+     and identify certain
+     other units standard in astronomy.  This standard codifies the
+     recommendation and makes it more specific by referring to the IAU
+     Style\index{IAU, Style Manual} Manual [7], 
+     while explicitly identifying degrees. 
+
+\item Section \ref{s:Rgrp} Random Groups\index{random groups}
+     Structure\\
+     The standard deprecates\index{deprecate} 
+     the Random Groups structure.
+
+\item Section \ref{s:rgrrk} Reserved Keywords (random groups)\\ 
+     That\index{keyword, reserved} the optional keywords defined 
+     in the {\em FITS\/} papers are 
+     to be reserved with the meanings and usage defined in those papers, 
+     as in the standard, is not explicitly stated in them.
+
+\item Section \ref{s:pscl} {\tt PSCALn} Keywords --
+     The default value is explicitly specified in the standard, whereas
+     in the {\em FITS\/} papers it is assumed by analogy\index{PSCALn} 
+     with the\index{BSCALE} {\tt BSCALE} keyword.
+
+\item Section \ref{s:pzer} {\tt PZEROn} Keywords --
+     The default value is explicitly specified in the standard, whereas
+     in the {\em FITS\/} papers it is assumed by analogy\index{PZEROn} 
+     with the\index{BZERO}
+     {\tt BZERO} keyword.
+
+\item Section \ref{s:ATabl} ASCII Tables Extension\\
+     The name {\em ASCII Tables} is given to the\index{ASCII tables}
+     Tables extension discussed\index{TABLE}
+     in the {\em FITS\/} papers to distinguish it from binary tables.
+
+\item Section \ref{s:atmk} Mandatory Keywords (ASCII tables)
+
+ \begin{enumerate}
+
+ \item {\tt NAXIS1} keyword -- The\index{keyword, required} requirement
+that 
+     the {\tt NAXIS1} keyword may not be negative in an ASCII table header
+     is not explicitly specified in\index{NAXIS1}
+     the {\em FITS\/} papers.  
+
+ \item {\tt NAXIS2} keyword -- The requirement that 
+     the {\tt NAXIS2} keyword 
+     may not be negative in an ASCII table header
+     is not explicitly specified in\index{NAXIS2}
+     the {\em FITS\/} papers.  
+
+ \item {\tt TFIELDS} keyword -- The requirement that 
+     the {\tt TFIELDS} keyword 
+     may not be negative is not explicitly specified 
+     in\index{TFIELDS} the {\em FITS\/} papers.  
+
+\end{enumerate}
+
+\item Section \ref{s:atork} Other Reserved Keywords (ASCII tables)\\
+     That\index{keyword, reserved} the optional keywords 
+     defined in the {\em FITS\/} papers are 
+     to be reserved with the meanings and usage defined in those papers, 
+     as in the standard, is not explicitly stated in them.
+
+ \begin {enumerate} 
+
+ \item {\tt TUNITn} Keyword -- The {\em FITS\/} papers\index{TUNITn} 
+     do not explicitly recommend the use of any particular 
+     units\index{units}
+     for this keyword, although the reference to the {\tt BUNIT} 
+     keyword may be considered an implicit extension of\index{BUNIT}
+     the recommendation for that keyword. This standard makes 
+     the recommendation more specific for the 
+     {\tt TUNITn} keyword by referring to the\index{IAU, Style Manual} 
+     IAU Style Manual [7], while recommending the use of 
+      degrees as the unit for angles.\index{angle}
+
+ \item {\tt TSCALn} Keyword  -- The prohibition against use in 
+     A-format fields is stronger than
+     the statement in the {\em FITS\/} papers that the
+     keyword\index{TSCALn}
+     ``is not relevant''.
+
+ \item {\tt TZEROn} Keywords -- The prohibition against use in 
+     A-format fields is stronger than the statement 
+     in the {\em FITS\/} papers that the
+     keyword\index{TZEROn} ``is not relevant''.
+
+ \end{enumerate}
+
+\item Section \ref{s:Restrict} Restrictions on Changes\\
+     The concept of deprecation is not provided for in the 
+     {\em FITS\/} papers.
+
+\item Appendix \ref{s:phy} Implementation on Physical Media\\
+     Material in the {\em FITS\/} papers specifying the 
+     expression of {\em FITS\/} 
+     on specific physical media is not part of this Standard.
+
+\end{enumerate}
+
+\chapter{Summary of Keywords}
+   \label{s:summ} 
+   (This Appendix is not part of the NOST {\em FITS\/} Standard, 
+   but is included
+   for convenient reference).
+  
+\begin{table}[htpb]
+\begin{center}
+ 
+\begin{tabular}{lllll} \\
+\multicolumn{1}{c}{Principal}  & \multicolumn{1}{c}{Conforming}     &
+\multicolumn{1}{c}{ASCII Table} & \multicolumn{1}{c}{Random Groups}
+&
+\multicolumn{1}{c}{Proposed Binary }  \\ 
+\multicolumn{1}{c}{HDU}        & \multicolumn{1}{c}{Extension}      &
+\multicolumn{1}{c}{Extension}   & \multicolumn{1}{c}{Records}     &
+\multicolumn{1}{c}{Table Extension}     \\ \hline
+{\tt SIMPLE} & {\tt XTENSION} & {\tt XTENSION}$^{1}$ & {\tt
+SIMPLE}     & {\tt
+XTENSION}$^{2}$\\
+{\tt BITPIX} & {\tt BITPIX}   & {\tt BITPIX = 8}     & {\tt BITPIX}     &
+{\tt BITPIX = 8}\\
+{\tt NAXIS}  & {\tt NAXIS}    & {\tt NAXIS = 2}      & {\tt NAXIS}      &
+{\tt NAXIS = 2}\\
+{\tt NAXISn}$^{3}$& {\tt NAXISn}$^{3}$& {\tt NAXIS1} & {\tt NAXIS1 = 0} &
+{\tt NAXIS1}\\
+{\tt EXTEND}$^{4}$& {\tt PCOUNT} & {\tt NAXIS2}    & {\tt NAXISn}$^{3}$ 
+   & {\tt NAXIS2}\\
+{\tt END}    & {\tt GCOUNT}   & {\tt PCOUNT = 0}     & {\tt GROUPS = T}  
+  & {\tt PCOUNT}\\
+             & {\tt END}      & {\tt GCOUNT = 1}     & {\tt PCOUNT}     & {\tt
+GCOUNT = 1}\\
+             &                & {\tt TFIELDS}        & {\tt GCOUNT}     & {\tt
+TFIELDS}\\
+             &                & {\tt TBCOLn}$^{5}$   & {\tt END}        & {\tt
+TFORMn}$^{5}$\\
+             &                & {\tt TFORMn}$^{5}$   &                  & {\tt END}\\
+             &                & {\tt END}            &                  &          \\ \hline
+\end{tabular}
+\end{center}
+
+$^1$  \verb*+XTENSION= 'TABLE   '+ for the ASCII Table 
+\index{TABLE, extension} extension. \\
+$^2$ \verb*+XTENSION= 'BINTABLE'+ for the proposed 
+ binary table extension\index{binary tables}\index{BINTABLE, 
+extension}.\\
+$^3$ Runs from 1 through the value of {\tt NAXIS}.\\
+$^4$ Required only if extensions are present.\\
+$^5$ Runs from 1 through the value of {\tt TFIELDS}.
+
+\caption[Mandatory {\em FITS\/} keywords]                                        
+         {Mandatory {\em FITS\/} keywords for the 
+          structures described in this document.}                              
+\end{table}              
+
+\begin{table}[htpb]        
+\begin{center}
+\begin{tabular}{llllll}  \\
+           \multicolumn{2}{c}{Principal HDU}                       & 
+\multicolumn{1}{c}{Conforming}   & \multicolumn{1}{c}{ASCII Table} & 
+\multicolumn{1}{c}{Random Groups}& \multicolumn{1}{c}{Binary Table}
+
+\\ 
+\multicolumn{1}{c}{General}      &\multicolumn{1}{c}{Array}        & 
+\multicolumn{1}{c}{Extension}    & \multicolumn{1}{c}{Extension}   & 
+\multicolumn{1}{c}{Records}    & \multicolumn{1}{c}{Extension}     \\
+\hline
+{\tt DATE}     & {\tt BSCALE}   & {\tt EXTNAME}   & {\tt TSCALn}    &
+{\tt PTYPEn}    & {\tt
+TSCALn}   \\
+{\tt ORIGIN}   & {\tt BZERO}    & {\tt EXTVER}    & {\tt TZEROn}    &
+{\tt PSCALn}    & {\tt
+TZEROn}   \\
+{\tt BLOCKED}$^{1}$ & {\tt BUNIT}    & {\tt EXTLEVEL}  & {\tt TNULLn}   
+& {\tt PZEROn}    &
+{\tt TNULLn}    \\
+{\tt AUTHOR}   & {\tt BLANK}    &                 & {\tt TTYPEn}    &        
+        &{\tt TTYPEn}  
+\\
+{\tt REFERENC} & {\tt CTYPEn}   &                 & {\tt TUNITn}    &      
+          &{\tt TUNITn}
+\\ 
+{\tt COMMENT}  & {\tt CRPIXn}   &                 &                 &              
+  &{\tt TDISPn}    \\   
+    
+{\tt HISTORY}  & {\tt CROTAn}   &                 &                 &               
+ &{\tt TDIMn}     \\    
+\verb*+        +& {\tt CRVALn}  &                 &                 &                
+&{\tt THEAP}     \\       
+
+{\tt DATE-OBS} & {\tt CDELTn}   &                 &                 &              
+  &                \\        
+{\tt TELESCOP} & {\tt DATAMAX}  &                 &                 &            
+    &                \\       
+
+{\tt INSTRUME} & {\tt DATAMIN}  &                 &                 &             
+   &                \\        
+
+    
+{\tt OBSERVER} &                &                 &                 &                 & 
+              \\        
+{\tt OBJECT}   &                &                 &                 &                 &    
+           \\        
+{\tt EQUINOX}  &                &                 &                 &                 &   
+            \\        
+{\tt EPOCH}$^{1}$  &                &                 &                 &                 &    
+           \\  \hline
+\end{tabular}
+\end{center}
+
+$^1$ Deprecated by this document.
+
+\caption[Reserved {\em FITS\/} keywords]
+         {Reserved {\em FITS\/} keywords for the 
+          structures described in this document.}
+\end{table}
+
+\begin{table}[htpb]
+\begin{center}
+\begin{tabular}{lllll} \\ 
+\multicolumn{1}{c}{Production} & \multicolumn{1}{c}{Bibliographic} & 
+\multicolumn{1}{c}{Commentary} & \multicolumn{1}{c}{Observation}  
+& 
+\multicolumn{1}{c}{Array} \\ \hline
+{\tt DATE}     & {\tt AUTHOR}       & {\tt COMMENT}   & {\tt DATE-OBS}
+
+   & {\tt BSCALE}  
+
+       \\
+{\tt ORIGIN}   & {\tt REFERENC}     & {\tt HISTORY}   & {\tt
+TELESCOP}     & {\tt BZERO}   
+
+       \\
+{\tt BLOCKED}$^{1}$&                    &\verb*+        + & {\tt INSTRUME}     &
+{\tt BUNIT}           
+\\
+               &                    &                 & {\tt OBSERVER}     & {\tt
+BLANK}            \\
+               &                    &                 & {\tt OBJECT}       & {\tt
+CTYPEn}           \\
+               &                    &                 & {\tt EQUINOX}      & {\tt
+CRPIXn}           \\
+               &                    &                 & {\tt EPOCH}$^{1}$ & 
+{\tt CROTAn}           \\
+               &                    &                 &                    & {\tt CRVALn}    
+      \\
+               &                    &                 &                    & {\tt CDELTn}   
+       \\
+               &                    &                 &                    & {\tt DATAMAX} 
+        \\
+               &                    &                 &                    & {\tt DATAMIN}  
+       \\ \hline
+\end{tabular}
+\end{center}
+$^1$ Deprecated by this document.
+\caption[General Reserved {\em FITS\/} keywords]
+        {General Reserved {\em FITS\/} keywords described in this
+document. }
+\end{table}
+
+\chapter{ASCII Text}
+   \label{s:Atxt}
+
+(This appendix is not part of the NOST {\em FITS\/} standard; the 
+material in it is taken from the ANSI standard for ASCII [11] and is 
+included here for informational purposes.)
+
+In the following table, the first column is 
+the decimal\index{ASCII, character}
+and the second column the hexadecimal value for the character 
+in the third column.  The characters hexadecimal 20 to 7E (decimal 32 
+to 126) constitute the subset referred to in this document as 
+ASCII text.\index{ASCII, text} 
+                                                                               
+\begin{table}[hb]                                          
+\begin{center}
+\begin{tabular}{|lll||lll|lll|lll|} \hline                                     
+\multicolumn{3}{|c||}{ASCII Control}    & 
+\multicolumn{9}{|c|}{ASCII Text} \\  \hline
+\multicolumn{1}{|c}{dec} & \multicolumn{1}{c}{hex} &
+\multicolumn{1}{c||}{char} &
+\multicolumn{1}{|c}{dec} & \multicolumn{1}{c}{hex} &
+\multicolumn{1}{c}{char} &
+\multicolumn{1}{|c}{dec} & \multicolumn{1}{c}{hex} &
+\multicolumn{1}{c}{char} &
+\multicolumn{1}{|c}{dec} & \multicolumn{1}{c}{hex} &
+\multicolumn{1}{c|}{char} \\
+\hline
+ 0 & 00 & NUL & 32 & 20 & SP       & 64 & 40 & \verb+@+ & 96 & 60 &
+\verb+`+ \\ 
+ 1 & 01 & SOH & 33 & 21 & \verb+!+ & 65 & 41 & A        & 97 & 61 & a 
+      \\ 
+ 2 & 02 & STX & 34 & 22 & \verb+"+ & 66 & 42 & B        & 98 & 62 & b 
+      \\ 
+ 3 & 03 & ETX & 35 & 23 & \verb+#+ & 67 & 43 & C        & 99 & 63 &
+c        \\ 
+ 4 & 04 & EOT & 36 & 24 & \verb+$+ & 68 & 44 & D        &100 & 64 &
+d        \\ 
+ 5 & 05 & ENQ & 37 & 25 & \verb+%+ & 69 & 45 & E        &101 & 65 &
+e        \\ 
+ 6 & 06 & ACK & 38 & 26 & \verb+&+ & 70 & 46 & F        &102 & 66 &
+f        \\ 
+ 7 & 07 & BEL & 39 & 27 & \verb+'+ & 71 & 47 & G        &103 & 67 &
+g        \\ 
+ 8 & 08 & BS  & 40 & 28 & \verb+(+ & 72 & 48 & H        &104 & 68 & h 
+      \\ 
+ 9 & 09 & HT  & 41 & 29 & \verb+)+ & 73 & 49 & I        &105 & 69 & i 
+      \\ 
+10 & 0A & LF  & 42 & 2A & \verb+*+ & 74 & 4A & J        &106 & 6A &
+j        \\ 
+11 & 0B & VT  & 43 & 2B & \verb-+- & 75 & 4B & K        &107 & 6B & k 
+      \\ 
+12 & 0C & FF  & 44 & 2C & \verb+, + & 76 & 4C & L        &108 & 6C &
+l        \\ 
+13 & 0D & CR  & 45 & 2D & \verb+-+ & 77 & 4D & M        &109 & 6D &
+m        \\ 
+14 & 0E & SO  & 46 & 2E & \verb+.+ & 78 & 4E & N        &110 & 6E &
+n        \\ 
+15 & 0F & SI  & 47 & 2F & \verb+/+ & 79 & 4F & O        &111 & 6F & o 
+      \\ 
+16 & 10 & DLE & 48 & 30 & 0        & 80 & 50 & P        &112 & 70 & p  
+     \\ 
+17 & 11 & DC1 & 49 & 31 & 1        & 81 & 51 & Q        &113 & 71 & q  
+     \\ 
+18 & 12 & DC2 & 50 & 32 & 2        & 82 & 52 & R        &114 & 72 & r   
+    \\ 
+19 & 13 & DC3 & 51 & 33 & 3        & 83 & 53 & S        &115 & 73 & s   
+    \\ 
+20 & 14 & DC4 & 52 & 34 & 4        & 84 & 54 & T        &116 & 74 & t   
+    \\ 
+21 & 15 & NAK & 53 & 35 & 5        & 85 & 55 & U        &117 & 75 & u  
+     \\ 
+22 & 16 & SYN & 54 & 36 & 6        & 86 & 56 & V        &118 & 76 & v   
+    \\ 
+23 & 17 & ETB & 55 & 37 & 7        & 87 & 57 & W        &119 & 77 & w 
+      \\ 
+24 & 18 & CAN & 56 & 38 & 8        & 88 & 58 & X        &120 & 78 & x   
+    \\ 
+25 & 19 & EM  & 57 & 39 & 9        & 89 & 59 & Y        &121 & 79 & y   
+    \\ 
+26 & 1A & SUB & 58 & 3A & \verb+:+ & 90 & 5A & Z        &122 & 7A &
+z        \\ 
+27 & 1B & ESC & 59 & 3B & \verb+;+ & 91 & 5B & \verb+[+ &123 & 7B
+& \verb+{+ \\ 
+28 & 1C & FS  & 60 & 3C & \verb+<+ & 92 & 5C & \verb+\+ &124 & 7C
+& \verb+|+ \\ 
+29 & 1D & GS  & 61 & 3D & \verb+=+ & 93 & 5D & \verb+]+ &125 & 7D
+& \verb+}+ \\ 
+30 & 1E & RS  & 62 & 3E & \verb+>+ & 94 & 5E & \verb+^+ &126 &
+7E & \verb+~+ \\ 
+31 & 1F & US  & 63 & 3F & \verb+?+ & 95 & 5F & \verb+_+ &127 & 7F
+& DEL$^{1}$ \\
+\hline                            
+\end{tabular}                     
+\end{center} 
+$^1$ Not ASCII Text                     
+\caption[ASCII character set]{ASCII character set}  
+\label{t:ascii}                   
+\end{table}                       
+
+
+\chapter{IEEE Special Formats}
+   \label{s:spf}
+ (The\index{IEEE, special format} material in this Appendix is not
+ part of this standard; it is taken from the IEEE-754 floating
+ point\index{floating point} standard [12], for informational
+ purposes.  It is not intended to be a comprehensive description of
+ the IEEE special formats; readers should refer to the IEEE standard.)
+ 
+Table \ref{t:ieee} displays the hexadecimal contents, most significant
+byte first, of the double and single precision IEEE special
+values.\index{floating point, format}
+\begin{table}[htpb]
+\begin{center}
+\begin{tabular}{lcc} \\
+\multicolumn{1}{c}{IEEE special value} & Double Precision & Single Precision \\\hline
+    $-0$                & {\tt 8000000000000000} & {\tt 80000000} \\
+    $+\infty$           & {\tt 7FF0000000000000} & {\tt 7F800000} \\
+    $-\infty$           & {\tt FFF0000000000000} & {\tt FF800000} \\
+    NaN$^{1}$           & {\tt 7FF0000000000001} & {\tt 7F800001} \\
+                        &             to         &         to     \\
+                        & {\tt 7FFFFFFFFFFFFFFF} & {\tt 7FFFFFFF} \\
+                        &             and        &         and    \\
+                        & {\tt FFF0000000000001} & {\tt FF800001} \\
+                        &             to         &         to     \\
+                        & {\tt FFFFFFFFFFFFFFFF} & {\tt FFFFFFFF} \\
+    positive overflow   & {\tt 7FEFFFFFFFFFFFFF} & {\tt 7F7FFFFF} \\
+    negative overflow   & {\tt FFEFFFFFFFFFFFFF} &  {\tt FF7FFFFF} \\
+    positive underflow  & {\tt 0010000000000000} & {\tt 00800000} \\
+    negative underflow  & {\tt 8010000000000000} & {\tt 80800000} \\
+    denormalized        & {\tt 0000000000000001} & {\tt 00000001} \\
+                        &             to         &         to     \\
+                        & {\tt 000FFFFFFFFFFFFF} & {\tt 007FFFFF} \\
+                        &             and        &         and    \\
+                        & {\tt 8000000000000001} & {\tt 80000001} \\
+                        &             to         &         to     \\
+                        & {\tt 800FFFFFFFFFFFFF} & {\tt 807FFFFF} \\
+                        &                                         \\ \hline
+\end{tabular}
+\end{center}
+$^1$ Certain values may be designated as {\em quiet} NaN (no
+diagnostic when used) or {\em signaling} (produces diagnostic when
+used) by particular implementations. \\ \\
+\caption[IEEE special floating point formats]{IEEE special floating point
+formats}
+\label{t:ieee}
+\end{table}
+
+
+
+\chapter{Reserved Extension Type Names}
+   
+   (This Appendix is not part of the NOST {\em FITS\/} Standard, 
+   but\index{extension} 
+   is included for\index{ASCII tables}
+   informational\index{BINTABLE, extension} purposes.  It describes
+   the extension type names registered as of the date this standard
+   was issued.  A current list is available from the FITS Support 
+   Office at ftp://nssdc.gsfc.nasa.gov/fits/xtension.lis.)
+
+\label{s:resn}    
+
+\begin{table}[htpb]
+\begin{center}
+\begin{tabular}{lllll} \\ 
+\multicolumn{1}{c}{Type Name} & \multicolumn{1}{c}{Status} & 
+\multicolumn{1}{c}{Reference} & \multicolumn{1}{c}{Sponsor}& 
+\multicolumn{1}{c}{Comments} \\ \hline
+\verb*+'A3DTABLE'+ & L & [15] & NRAO & Prototype binary
+	                                table\index{NRAO} design \\
+                   &   &      &      & supported in AIPS\index{AIPS}; 
+                                       superseded \\
+                   &   &      &      & by BINTABLE\index{BINTABLE}, 
+                                       which supports\\
+                   &   &      &      & all A3DTABLE\index{A3DTABLE} 
+                                       features. \\
+                   &   &      &      &               \\  
+\verb*+'BINTABLE'+ & S & [9] & IAU  & Binary Tables   \\
+                   &   &      &      & Available at FITS Archives in files \\ 
+                   &   &      &      & /documents/standards/bintable* \\
+                   &   &      &      & for 1995-Feb-06\index{BINTABLE} \\  
+                   &   &      &      & Note: only main document, \\
+		   &   &      &      & excluding appendixes. \\
+                   &   &      &      &                          \\  
+\verb*+'COMPRESS'+ & R & none & GSFC & Suggested name\index{COMPRESS}
+                                       by A. Warnock. \\
+                   &   &      & A/WWW & Preliminary proposal. \\  
+                   &   &      &      &                          \\  
+\verb*+'DUMP    '+ & R & none & none & Suggested name for\index{DUMP}
+                                       binary dumps. \\
+                   &   &      &      & No full proposal submitted. \\  
+                   &   &      &      &                          \\  
+\verb*+'FILEMARK'+ & R & none & NRAO & Intended\index{FILEMARK} 
+                                       for structure to \\ 
+                   &   &      &      & represent equivalent of \\ 
+                   &   &      &      & tape mark on other media. \\
+                   &   &      &      & No full proposal submitted. \\  
+                   &   &      &      &                          \\  
+\verb*+'IMAGE   '+ & S & [16] & IAU  & IMAGE extension, contains \\
+                   &   &      &      & an array\index{IMAGE} of one or \\
+                   &   &      &      & more dimensions. \\
+                   &   &      &      &                          \\  
+\verb*+'IUEIMAGE'+ & L & [17] & IUE  & Prototype matrix extension 
+                                       used   \\
+                   &   &      &      & for archiving\index{IUEIMAGE} 
+                                       IUE products, \\
+                   &   &      &      & superseded by IMAGE.       \\  
+                   &   &      &      &                          \\  
+\verb*+'TABLE   '+ & S & [5]  & IAU  & ASCII\index{TABLE} Tables. \\
+                   &   &      &      &                       \\ 
+\verb*+'VGROUP  '+ & R & none & GSFC & Reserved for possible use in \\
+                   &   &      &      & supporting analog of      \\
+                   &   &      &      & HDF group structures under FITS. \\
+                   &   &      &      & Current proposal does not use \\  
+                   &   &      &      & separate extension type.\\  
+                   &     &        &                       \\ \hline
+
+\end{tabular}
+\end{center}
+\caption[Reserved Extension Type Names]{Reserved Extension Type
+Names}
+\end{table}
+
+\medskip
+
+\begin{table}[htpb]
+\begin{center}
+\begin{tabular}{ll} \\ 
+\multicolumn{1}{c}{Code} & \multicolumn{1}{c}{Significance} \\ \hline
+  D  & Draft extension proposal for discussion by regional FITS 
+committees. \\ 
+  L & Local FITS extension. \\
+  P & Proposed FITS extension approved by regional FITS committees \\ 
+    & but not by IAU FITS Working Group. \\
+  R & Reserved type name for which a full draft proposal has not been 
+submitted. \\
+  S & Standard extension approved by IAU FITS Working Group and \\
+    & endorsed by the IAU. \\
+                                             \\ \hline
+
+\end{tabular}
+\end{center}
+\caption[Status Codes]{Status Codes}
+\end{table}
+
+\chapter{NOST Publications}
+
+\begin{table}[htpb]
+\begin{center}
+\begin{tabular}{llll} \\ 
+\multicolumn{1}{c}{Document} & \multicolumn{1}{c}{Title} & 
+\multicolumn{1}{c}{Date} & \multicolumn{1}{c}{Status}  \\ \hline
+NOST 100-0.1 & FITS Standard                & December, 1990 & Draft
+Standard  \\ 
+NOST 100-0.2 & FITS Implementation Standard & June, 1991    & Revised
+Draft Standard  \\ 
+NOST 100-0.3 & FITS Implementation Standard & December, 1991 &
+Revised Draft Standard  \\
+NOST 100-1.0 & FITS Definition Standard  & March, 1993 & Proposed
+Standard  \\ 
+NOST 100-1.0 & FITS Definition Standard  & June, 1993 & NOST
+Standard  \\
+NOST 100-1.1 & FITS Definition Standard  & June, 1995 & Proposed
+Standard  \\ 
+NOST 100-1.1 & FITS Definition Standard  & September, 1995 & NOST
+Standard  \\ 
+                               &                 &                 \\ \hline
+\end{tabular}
+\end{center}
+\caption[NOST Publications]{NOST Publications}
+\end{table}
+
+% check if a \newpage or \clearpage is needed here  - PJT
+
+\cleardoublepage
+
+\ifindex
+  \addcontentsline{toc}{chapter}{Index}
+  \printindex
+\fi
+
+\typeout{#### For UNIX: makeindex < fits_standard.idx >
+fits_standard.ind}
+\typeout{#### For  VMS: makeindex   fits_standard.idx}
+
+\end{document}
+%                                                                               
+

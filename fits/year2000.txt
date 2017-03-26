@@ -1,0 +1,223 @@
+The following text was approved on 1997-11-10 by a formal vote of the IAU
+FITS Working Group, the body which controls the FITS standards under the
+authority of the International Astronomical Union. The rules specified
+below are now a part of the FITS standards.  -Don Wells (Chair, IAU-FWG)
+
+			 -=-=-=-=-=-=-=-=-=-
+
+                  Precise re-definition of DATE-OBS Keyword
+                         encompassing the millennium
+ 
+                         Peter Bunclark 1996 Nov 19
+                      Amended: Arnold Rots 1997-10-24T21:03:30
+ 
+                             1) Introduction
+
+Although this document formally defines the format of the value field of
+the DATE-OBS keyword, the same format applies to the value field of all
+keywords beginning with the string "DATE" that have a value containing
+date, and optionally time, information.  Known examples of such keywords,
+used in the exchange of date information, are DATE, DATE-OBS, DATE-END,
+and DATE-MAP.  We shall refer to these keywords collectively as DATExxxx.
+
+The original DATExxxx keywords, including in particular DATE-OBS,  have
+several shortcomings which make it desirable to alter the definition:
+1.1) The year is expressed in only two digits; currently, digitized
+      astronomical data span more than a century; and furthermore, the
+      implied most-significant two digits of the year will change from
+      19 to 20 shortly.
+1.2) The timescale of DATExxxx is not defined.
+1.3) The relation of DATE-OBS to the start, middle or end of an observation
+     is not defined.
+1.4) The order of day, month, year is least-significant first, so lists
+     of dates cannot be sorted simply on the ASCII collating sequence.
+ 
+                               2) Scope
+
+Three main issues are addressed:
+2.1) The format of date strings to be used in any DATExxxx keyword.
+2.2) The future of the DATE-OBS keyword itself.
+2.3) The specification of the time scales (time systems) used.
+
+                    3) The Date-String format Proposal
+ 
+3.1) A DATExxxx field in the old format of 'DD/MM/YY' will explicitly refer
+   to a year 1900-1999.  The very few instances of digitized nineteenth-century
+   plates represented as FITS files (only files created before this proposal
+   went into effect) must be handled as special cases.
+ 
+3.2) The new format is a restricted subset of
+   ISO-8601, being one of two options:
+   a) 'CCYY-MM-DD'
+   b) 'CCYY-MM-DDThh:mm:ss[.sss...]'
+
+   <CCYY> represents a calendar year, <MM> the ordinal number of a calendar
+   month within the calendar year, and <DD> the ordinal number of a day
+   within the calendar month.  <hh> represents the hour in the day, <mm>
+   the minutes, <ss[.s...]> the seconds.  The value of the integer part of
+   the seconds field is normally in the range [0..59] but may take the value
+   60, if the time scale is UTC, to indicate a leap second.  The literal 'T'
+   is the ISO 8601 time designator.
+
+   In the short form (a), there must not be any additional terminator/separator
+   (such as T).  In the long form, there must be a 'T' time designator
+   between the date and the time.
+   The decimal point character is an ASCII full-stop (hexadecimal value 0x2E).
+   The number of decimal places in the `seconds' field may be arbitrarily 
+   long, up to the FITS header-card limitations.
+ 
+3.3) Only fully-specified date or date/time strings are permitted. No fields
+   may be defaulted, no leading zeroes omitted.  The decimal part of
+   the seconds field is optional.
+ 
+                    4) Use of the DATE-OBS keyword
+ 
+4.1) The name of the keyword shall remain DATE-OBS.
+ 
+4.2) Henceforth, DATE-OBS shall be assumed to refer to the start of an
+   observation.  Other interpretations must be clearly explained in the
+   comment field.
+
+4.3) The default interpretation of all DATExxxx keywords shall use the
+   Gregorian Calendar for the date portion.
+
+4.4) The value of the DATExxxx keywords, with the exception of DATE (see
+   section 5), shall be expressed in the principal time scale or time system
+   of the HDU to which they belong.  The default interpretation shall use
+   UTC (for dates since 1972) or UT (for dates before 1972).  If there is
+   any chance of ambiguity as to which is the principal time scale, the
+   choice shall be clarified in comments.
+ 
+4.5) It is recommended that the time scale or time system be specified
+   explicitly.  However, implementors can be assured that the error resulting
+   from ignoring the time scale specification and making the default
+   assumption will not exceed 1000 s for the period 1001-01-01 through
+   3000-12-31.
+
+4.6) By default, times will be deemed to be as measured at the detector (or
+   in practical cases, at the observatory) for TAI and times that run
+   synchronously with TAI (i.e., UTC and TT).  In the case of coordinate
+   times (such as TCG and TCB) and TDB which are tied to an unambiguous
+   coordinate origin, the default meaning of time values will be: time as if
+   the observation had taken place at the origin of the coordinate time
+   system.  These defaults follow common practice; a future convention on
+   time scale issues in FITS files may allow other combinations but shall
+   preserve this default behavior.
+
+                      5) Use of the DATE keyword
+
+5.1) The date-time string value of the DATE keyword indicates the creation
+   time of the HDU.
+
+5.2) The value of the DATE keyword shall always be expressed in UTC whenever
+   the date-string format defined in this proposal is used, in all HDUs
+   created on earth.
+ 
+                          6) Examples
+
+Three legal representations of the date of October 14, 1996, are possible:
+ 
+DATE-OBS= '14/10/96'           / Original format, means 1996 Oct 14.
+
+DATE-OBS= '1996-10-14'         / Date of start of observation, by default UTC.
+
+DATE-OBS= '1996-10-14T10:14:36.123' / Date and time of start of obs. in UTC.
+ 
+                          7) Transition
+ 
+FITS readers must continue to interpret the old format, as a twentieth
+century date (with the year "00" to be interpreted as "1900"), indefinitely.
+Readers should be altered as soon as possible to cope with the new format.
+In order to give adequate time for the major package writers to revise their
+software, FITS writers should commence writing the new format between
+1999-01-01T00:00:00 and 2000-01-01T00:00:00.
+
+FITS writing code which must be distributed and operated before 1999-01-01
+should be coded to test the current year to decide whether to use the old
+date format or the new format. Cases of DATE-OBS before 1900-01-01 should
+always be written with the new format.
+ 
+                    A) Appendix: Suggested time scale specification
+
+       [Note: this appendix is not part of the formal DATExxxx agreement]
+
+A.1) Use of the keyword TIMESYS is suggested as an implementation of the time
+   scale specification.  It sets the principal time system for time-related
+   keywords and data in the HDU (i.e., it does not preclude the addition of
+   keywords or data columns that provide information for transformations to
+   other time scales, such as sidereal times or barycenter corrections).
+   Each HDU shall contain not more than one TIMESYS keyword.
+   Initially, officially allowed values are:
+      UTC  Coordinated Universal Time; defined since 1972.
+      UT   Universal Time, equal to Greenwich Mean Time (GMT) since 1925;
+            the UTC equivalent before 1972;
+            see: Explanatory Supplement, p. 76.
+      TAI  International Atomic Time; "UTC without the leap seconds";
+            31 s ahead of UTC on 1997-07-01.
+      IAT  International Atomic Time; deprecated synonym of TAI.
+      ET   Ephemeris Time, the predecessor of TT; valid until 1984.
+      TT   Terrestrial Time, the IAU standard time scale since 1984;
+            continuous with ET and synchronous with (but 32.184 s ahead of)
+            TAI.
+      TDT  Terrestrial Dynamical Time; =TT.
+      TDB  Barycentric Dynamical Time.
+      TCG  Geocentric Coordinate Time; runs ahead of TT since 1977-01-01
+            at a rate of approximately 22 ms/year.
+      TCB  Barycentric Coordinate Time; runs ahead of TDB since 1977-01-01
+            at a rate of approximately 0.5 s/year.
+   For reference, see:
+      Explanatory Supplement to the Astronomical Almanac, P. K. Seidelmann,
+         ed., University Science Books, 1992, ISBN 0-935702-68-7.
+      http://tycho.usno.navy.mil/systime.html
+   Use of GPS time (19 s behind TAI) is deprecated.
+
+A.2) By default, times will be deemed to be as measured at the detector (or
+   in practical cases, at the observatory) for times that run synchronously
+   with TAI (i.e., TAI, UTC, and TT).  In the case of coordinate times (such
+   as TCG and TCB) and TDB which are tied to an unambiguous coordinate origin,
+   the default meaning of time values will be: time as if the observation
+   had taken place at the origin of the coordinate time system.  These
+   defaults follow common practice; a future convention on time scale issues
+   in FITS files may allow other combinations but shall preserve this default
+   behavior.  The rationale is that raw observational data are most likely
+   to be tagged by a clock that is synchronized with TAI, while a
+   transformation to coordinate times or TDB is usually accompanied by a
+   spatial transformation, as well.  This implies that path length differences
+   have been corrected for.  Note that the difference TDB-UTC, in that case,
+   is approximately sinusoidal, with period one year and amplitude up to
+   500 s, depending on source position.  Also, note that when the location
+   is not unambiguous (such as in the case of an interferometer) precise
+   specification of the location is strongly encouraged in, for instance,
+   geocentric Cartesian coordinates.
+
+A.3) Note that "TT" is the IAU preferred standard.  It may be considered
+   equivalent to "TDT" and "ET", though "ET" should not be used for data
+   taken after 1984.  For reference, see: Explanatory Supplement, pp. 40-48.
+
+A.4) If the TIMESYS keyword is absent or has an unrecognized value,
+   the value "UTC" will be assumed for dates since 1972, and "UT" for
+   pre-1972 data.
+
+A.5) Examples
+   The three legal representations of the date of October 14, 1996, from
+   Section 6 might be written as:
+ 
+DATE-OBS= '14/10/96'           / Original format, means 1996 Oct 14.
+
+TIMESYS = 'UTC     '           / Explicit time scale specification: UTC.
+DATE-OBS= '1996-10-14'         / Date of start of observation in UTC.
+
+DATE-OBS= '1996-10-14'         / Date of start of observation, also in UTC.
+
+TIMESYS = 'TT      '           / Explicit time scale specification: TT.
+DATE-OBS= '1996-10-14T10:14:36.123' / Date and time of start of obs. in TT.
+
+A.6) The convention suggested in this Appendix is part of the mission-specific
+   FITS conventions adopted for, and used in, the RXTE archive, building on
+   existing High Energy Astrophysics FITS conventions.  See:
+      http://legacy.gsfc.nasa.gov/docs/xte/abc/time_tutorial.html
+      http://heasarc.gsfc.nasa.gov/docs/xte/abc/time.html
+   The VLBA project has adopted a convention where the keyword TIMSYS, rather
+   than TIMESYS, is used, currently allowing the values UTC and IAT.
+   See p.9 and p.16 of:
+      http://www.cv.nrao.edu/fits/documents/drafts/vlba_format.ps

@@ -1,0 +1,80 @@
+
+          Representation of Coordinates in FITS
+
+            Latest revision 9 September 1996
+
+This anonymous ftp area (fits.cv.nrao.edu /fits/documents/wcs) has
+been set aside for documents concerning the representation of the
+coordinates of the pixels in FITS images.  My two early AIPS Memos (27
+and 46) have been recovered and recast into modern LaTeX (from TeX -1
+or so).  In so doing, I redrew the figures for both memos in
+PostScript, using AIPS to draw those for Memo 46 and "hand" drawing
+those for Memo 27.  The files are called aips27.ps (of modest size)
+and aips46.ps (about 600 kbyte in uncompressed form).  Therefore, it
+is stored only in the Unix compressed form aips46.ps.Z.  Try "zcat
+<file> | lpr -Pxxx" to avoid on-disk decompression; else "lpr -s -Pxxx
+<file>" to avoid complaints about too-large files.
+
+Another early document is found in the files wcs88.tex and wcs88.ps.
+This document is a draft by Hanisch and Wells concerning the meeting
+held in Charlottesville in 1988 on "world coordinates".
+
+These earlier papers are intended to be superceded entirely by a new
+document found (partly) in a file called wcs.tex.date.Z (the figures
+are separate files not included in wcs.tex).  The real working
+document for a FITS paper authored by myself and Mark Calabretta is
+called wcs.none.ps.Z (no figures, prints quickly), and wcs.all.ps and
+wcs.all.ps.Z (all figures).  The figures are drawn with PostScript
+programs which have all been verified with our printers and ghostview.
+However, we have found several models of "postscript" printer which
+simply fail on the documents and others which work, but are
+exceedingly slow.  Hence, the quicker-to-print version.
+
+This is an evolving document, representing our opinion of the best
+ways to represent coordinates.  To track earlier versions, I have left
+the .tex copies of versions from June 1993, August 1993, September
+1994, November 1994 and October 1995.  The June 1993 version was
+widely advertised and presented at the AAS meeting in Berkeley.  The
+August version was advertised and contained the results of some
+discussions at Berkeley, primarily the reintroduction of the CDELTn
+keywords.  The September 1994 version was discussed at the ADASS
+meeting in Baltimore.  A document describing the changes from November
+1994 to September 1996 is named wcs.9496.changes in the fits documents
+area.
+
+Don Wells has asked me to include files representing my poster papers
+at the June 1993 AAS meeting and September 1994 ADASS meetings.  I
+have added these as Talk93.tex.Z, Talk93.ps.Z, Talk94.tex.Z,
+Talk94.tex.Z, Poster93.ps, and Poster94.ps.  The 93 poster may have to
+be broken into separate pages for some printers.  The page breaks are
+obvious (a full line of % signs).
+
+Almost all of the files have been compressed using the standard Unix
+compress command to save space and to speed network transmission.
+
+If you find that you cannot read the papers via ftp, or cannot get
+them to print, you may obtain paper copies of all 3 are by contacting
+
+       Ernest Allen
+       National Radio Astronomy Observatory
+       520 Edgemont Road
+       Charlottesville, VA 22903-2475
+
+       e-mail: eallen@nrao.edu
+       phone: 804-296-0209
+       fax:   804-296-0328
+
+Please let us know your comments (well-considered and temperate only), so
+that we may develop a consensus which will allow the final wcs.ps to
+become a new FITS standard.
+
+                                     Thanks,
+
+                                     Eric W. Greisen,
+                                     Scientist.
+                                     National Radio Astronomy Observatory
+                                     egreisen@nrao.edu
+                                     804-296-0348
+
+
+       

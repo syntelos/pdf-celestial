@@ -1,0 +1,261 @@
+<title>Representation of World Coordinate Systems (WCS) in FITS</title>
+<h1>Representation of World Coordinate Systems in FITS</h1>
+
+<H2> Current status of the negotiations</H2>
+
+<P> <A HREF="http://www.aoc.nrao.edu/~egreisen">Eric Greisen</a> (NRAO)
+and <A HREF="http://www.atnf.csiro.au/people/mcalabre/">Mark
+Calabretta</A> (ATNF) have been working on a proposed mechanism to
+transfer coordinate information in detail in FITS headers and tables.
+The work on the current papers was begun in 1992, following the ADASS
+meeting in Boston.  It has a considerable history some of which is
+described in the following section.  The state of these documents was
+discussed in the latest ADASS meeting, held in November 1998 at the
+University of Illinois and some tentative agreements were reached.  As
+a result, Mark and I have reworked the documents, turning them into
+three separate papers.  We have already received considerable
+feedback, particularly on the subject of units, which has led to
+significant improvements in the papers.</P>
+
+
+<P> There will now be four papers: I on general matters, II on ideal
+celestial coordinates, III on ideal spectral coordinates, and IV on
+distortion corrections used to convert real instruments into these
+ideal coordinates.  Draft documents for Papers I, II, and III are
+presently available.  The 2001 ADASS directed us to make certain
+changes to the papers which we have done.  These are color coded in
+green.  The NOAO (IRAF) group reviewed those documents and further
+changes/corrections made (after 10/18) partly as a result of their
+comments are colored in blue.  Recent changes are in red and those
+made after December 12, 2001 are in purple..  All changes since the
+last release of Paper II (11/2000) are in red.  Note that the
+appendices have been moved into the main text.  Frank Valdes has added
+a practical projection  suited to optical instruments to Paper III.
+Please examine the following and, if you find any problems, please let
+us know as soon as possible:
+<OL>
+  <LI> <A
+  HREF="http://www.aoc.nrao.edu/~egreisen/wcs.ps.gz">Representations
+       of world coordinates in FITS</A> by Greisen and Calabretta
+       (gzipped 108 kbyte), or <A 
+       HREF="http://www.aoc.nrao.edu/~egreisen/wcst.ps">  unzipped
+       (283 kbyte)</A> 1-March-2002.
+  <LI> <A
+  HREF="http://www.aoc.nrao.edu/~egreisen/ccs.ps.gz">Representations
+  of celestial coordinates in FITS</A> by Calabretta and Greisen
+  (gzipped 370 kbyte), or <A 
+  HREF="http://www.aoc.nrao.edu/~egreisen/ccs.ps">  unzipped (1007
+  kbyte)</A> 12-December-2001.
+  <LI> <A
+  HREF="http://www.aoc.nrao.edu/~egreisen/scs.ps.gz">Representations
+  of spectral coordinates in FITS</A> by Greisen and Valdes (gzipped
+  178 kbyte), or <A 
+  HREF="http://www.aoc.nrao.edu/~egreisen/scs.ps"> unzipped (464
+  kbyte)</A> 06-February-2002.
+</OL>
+The most current versions may not be referenced here due to caching by
+your browser.  Refer to <A
+HREF="http://www.aoc.nrao.edu/~egreisen">Eric Greisen</a> for the
+latest versions.
+We believe that these are nearing readiness for submission to,
+consideration by, and (one hopes) prompt voting by the regional FITS
+committees.  However, there are one or two serious  matters still
+under advisement affecting all 3 papers before they can be submitted
+to these committees.  Paper IV is being worked on as well, but it is
+complex and will take time.
+</P>
+
+<P> Paper I describes a very general method for specifying
+coordinates.  A pixel-to-coordinate matrix PCj_i will replace  CROTAj,
+units will be described with a new keyword CUNITj, and secondary sets
+of coordinate descriptions may be specified.  A complete system of
+unit specification is described and is expected to supplement the IAU
+standard system of units.  Methods for describing the coordinates of
+matrices in binary tables are also described.</P>
+
+<P> Paper II applies the general rules of Paper I to the specific
+problem of specifying celestial coordinates in a two-dimensional
+projection of the sky.  The coordinate system is specified with the
+new keyword RADESYS and a large number of "projections" are defined.
+Oblique projections are described and illustrated.  Several examples
+of header interpretation and construction are given including one that
+specifies coordinates on a planetary body rather than the celestial
+sphere.  The application to binary tables is described.</P>
+
+<P> Paper III applies the general rules and practices developed in the
+first two papers to spectral coordinates, namely frequency, wavelength,
+velocity, and the radio and optical conventional "velocities".  These
+are defined and methods of computing one type of coordinate from a
+spectral axis gridded in another are given.    A projection
+representative of optical spectrometers is also defined. Coordinate
+reference frames may be specified.</P>
+
+<P> Paper IV is in preparation and is not yet ready for public 
+comment.  It will define Distortion Correction Functions (DCFs) which
+may be used to correct for instrumental "defects" including celestial
+coordinate warps ("plate defects"), variation of actual frequency with
+celestial coordinate, refaction, and the like.</P>
+
+<EM> These documents will change in response to feedback  should we
+receive any - many thanks to Steve Allen for numerous helpful remarks.
+These papers were voted upon, at the ADASS meeting in Hawaii in
+October 1999.  At that point they were - in principle - submitted to
+the United States, European, and Japanese FITS Committees to be voted
+upon.  They were not voted upon and then Tody, Valdes, and Davis of
+NOAO made the suggestion to generalize and separate instrumental
+correction into a Paper IV.  That has been done and the papers were
+voted upon at the ADASS in Victoria in 2001.  We have now presented
+the results we were told to present and the papers should be ready
+fairly soon to go again to the committees for a vote.  Should that
+ever happen, they will be submitted to Astronomy & Astrophysics (the
+Supplements have been subsumed) for publication and will go before the
+IAU FITS panel.  Please read and consider these documents carefully
+and give us your considered comments.  The FITS standard controls how
+we think about our data and you would not want to be stuck with a
+standard that you do not like.</EM>
+</P>
+
+<H2> Older papers giving the history of the negotiations</H2>
+
+<P>
+<EM>The following documents may be of interest in tracing the
+evolution of the current WCS proposals but do not form part of
+it.</EM></P>
+
+<P>
+The states of Papers I, II and III prior to the Victoria (2001) ADASS
+meeting are
+<OL type=I>
+  <LI> <A
+  HREF="http://www.aoc.nrao.edu/~egreisen/wcs.ps.gz">Representations
+       of world coordinates in FITS</A> by Greisen and Calabretta (100
+       kbyte, 4-July-2001)
+  <LI>  <A
+  HREF="http://www.aoc.nrao.edu/~egreisen/ccs.ps.gz">Representations
+       of celestial coordinates in FITS</A>, by Calabretta and
+       Greisen (210 kbytes, 7-Nov-2000)
+  <LI> <A
+  HREF="http://www.aoc.nrao.edu/~egreisen/scs.ps.gz">Representations
+       of spectral coordinates in FITS</A> by Greisen (74 kbyte,
+       4-July-2001)
+</OL>
+</P>
+
+<P> This anonymous ftp area (ftp://ftp.cv.nrao.edu/fits/documents/wcs)
+has been set aside for the early documents concerning the
+representation of the coordinates of the pixels in FITS images. My two
+early AIPS Memos (27 and 46) have been recovered and recast into
+modern LaTeX (from TeX -1 or so).  In so doing, I redrew the figures
+for both memos in PostScript, using AIPS to draw those for Memo 46 and
+"hand" drawing those for Memo 27.  The files are called aips27.ps (of
+modest size) and aips46.ps (about 600 kbyte in uncompressed form).
+Therefore, it is stored only in the Unix compressed form aips46.ps.Z.
+Try "zcat <file> | lpr -Pxxx" to avoid on-disk decompression; else
+"lpr -s -Pxxx <file>" to avoid complaints about too-large files.</P>
+
+<ul>
+
+<li> <a href="http://www.cv.nrao.edu/fits/documents/wcs/wcs.all.ps">
+wcs.all.ps</a> (520 KB) -- The draft proposal for "World Coordinate
+System" syntax in FITS headers. The figures and the mathematics in
+this paper are impressive.  Revision of 9 September, 1996.  THIS
+DOCUMENT IS NOW OBSOLETE.
+
+<li> <a href="http://www.cv.nrao.edu/fits/documents/wcs/wcs.9496.changes"> 
+wcs.9496.changes</a> (3.5 KB) -- A summary of the changes to the
+document from November 1994 to September 1996.
+
+<li> <a href="http://www.cv.nrao.edu/fits/documents/wcs/Talk94.ps">
+Talk94.ps</a> (121 KB) -- Textual view graphs describing the draft
+proposal for "World Coordinate System" syntax in FITS headers.
+
+<li> <a href="http://www.cv.nrao.edu/fits/documents/wcs/Poster94.ps">
+Poster94.ps</a> (50 KB) -- Graphical view graphs describing the draft
+proposal for "World Coordinate System" syntax in FITS headers.
+
+<li> USGS-90-284: USGS document "Cartographic Projection Procedures
+for the UNIX Environment -- A User's Manual" --
+ <a href="http://www.cv.nrao.edu/fits/documents/wcs/USGS/front.ps.Z">
+page 0</a> --
+ <a href="http://www.cv.nrao.edu/fits/documents/wcs/USGS/doc01-16.ps.Z">
+pages 1-16</a> --
+ <a href="http://www.cv.nrao.edu/fits/documents/wcs/USGS/doc17-32.ps.Z">
+pages 17-32</a> --
+ <a href="http://www.cv.nrao.edu/fits/documents/wcs/USGS/doc33-48.ps.Z">
+pages 33-48</a> --
+ <a href="http://www.cv.nrao.edu/fits/documents/wcs/USGS/doc49-63.ps.Z">
+pages 49-63, contents</a>
+
+<li> <a href="http://www.cv.nrao.edu/fits/documents/wcs/aips27.ps">
+AIPS Memo #27</a> (168 KB, PostScript) -- the 1983 AIPS
+WCS document
+
+</ul>
+
+<P>
+Another early document is found in the files wcs88.tex and wcs88.ps.
+This document is a draft by Hanisch and Wells concerning the meeting
+held in Charlottesville in 1988 on "world coordinates".</P>
+
+<P>
+These earlier papers are intended to be superseded entirely by a new
+document found (partly) in a file called wcs.tex.date.Z (the figures
+are separate files not included in wcs.tex). <EM>[This document in now
+superseded by the 3 documents described in the previous section.]</EM>
+The real working document for a FITS paper authored by myself and Mark
+Calabretta was called wcs.none.ps.Z (no figures, prints quickly), and
+wcs.all.ps and wcs.all.ps.Z (all figures).  The figures are drawn with
+PostScript programs which have all been verified with our printers and
+ghostview. However, we have found several models of "postscript"
+printer which simply fail on the documents and others which work, but
+are exceedingly slow.  Hence, the quicker-to-print version.</P>
+
+<P>
+This was an evolving document, representing our opinion of the best
+ways to represent coordinates.  To track earlier versions, I have left
+the .tex copies of versions from June 1993, August 1993, September
+1994, November 1994 and October 1995.  The June 1993 version was
+widely advertised and presented at the AAS meeting in Berkeley.  The
+August version was advertised and contained the results of some
+discussions at Berkeley, primarily the reintroduction of the CDELTn
+keywords.  The September 1994 version was discussed at the ADASS
+meeting in Baltimore.  A document describing the changes from November
+1994 to September 1996 is named wcs.9496.changes in the fits documents
+area.</P>
+
+<P>
+Don Wells has asked me to include files representing my poster papers
+at the June 1993 AAS meeting and September 1994 ADASS meetings.  I
+have added these as Talk93.tex.Z, Talk93.ps.Z, Talk94.tex.Z,
+Talk94.tex.Z, Poster93.ps, and Poster94.ps.  The 93 poster may have to
+be broken into separate pages for some printers.  The page breaks are
+obvious (a full line of % signs).</P>
+
+<P>
+Almost all of the files have been compressed using the standard Unix
+compress command to save space and to speed network transmission.</P>
+
+<P>If you find that you cannot read the papers via ftp, or cannot get
+them to print, you may obtain paper copies of all 3 are by contacting
+</P>
+
+<P>Ernest Allen, National Radio Astronomy Observatory</P>
+<P>520 Edgemont Road, Charlottesville, VA 22903-2475</P>
+
+<P>e-mail: eallen@nrao.edu</P>
+<P>phone: 804-296-0209</P>
+<P>fax:   804-296-0328</P>
+
+<P>
+Please let us know your comments (well-considered and temperate only),
+so that we may develop a consensus which will allow the final wcs.ps
+to become a new FITS standard.</P>
+
+<P>Thanks,</P>
+
+<P>Eric W. Greisen, Scientist</P>
+<P>National Radio Astronomy Observatory</P>
+<P>egreisen@nrao.edu, 804-296-0348</P>
+
+<p>
+<inc srv "|/home/fits/dwells/bin/getdate.awk /fits_1/ftp/fits/documents/wcs/wcs.html">

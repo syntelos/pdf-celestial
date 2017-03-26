@@ -1,0 +1,383 @@
+<html>
+<head>
+<base href="http://www.atnf.csiro.au/people/mcalabre/">
+<title>World Coordinate Systems (WCS) in FITS</title>
+<meta name="description" content="Representations of world coordinates in FITS">
+<meta name="keywords" content="World Coordinate Systems, WCS, FITS, astronomy, astrometry">
+<meta name="author" content="Dr. M.R. Calabretta - Email: mcalabre@atnf.csiro.au">
+<meta name="updated" content="2017-01-15 15:30 +11:00">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<script language="JavaScript1.2" src="js/pop_menu.js"></script>
+<script language="JavaScript1.2" src="js/fw_menu.js"></script>
+
+<link rel="icon" href="favicon.ico" type="image/vnd.microsoft.icon">
+<link rel="stylesheet" href="css/styles.css" type="text/css">
+</head>
+
+<body bgcolor="#000000" text="#CCFFFF" leftmargin="0" topmargin="0"
+      marginwidth="0" marginheight="0" link="66CCFF" vlink="CCFF99"
+      alink="66CCFF">
+
+<table width="610" border="0" cellspacing="0" cellpadding="0"
+       name="Lvl 2 banner">
+  <tr>
+    <td width="99">
+      <img src="img/lft_1.gif" width="99" height="37" alt="diagram a">
+    </td>
+    <td align="left" width="511">
+      <a href="index.html"><img src="img/home_b.gif" width="58" height="37"
+	 alt="[Home]" border="0"></a>
+    </td>
+  </tr>
+  <tr>
+    <td rowspan="2">
+      <img src="img/lft_2.gif" width="99" height="28" alt="diagram b">
+    </td>
+    <td bgcolor="#000099" height="1" align="right">
+      <img src="img/000099.gif" width="5" height="1"><img src="img/grad.gif"
+	   width="79" height="1"
+    ></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+<table width="885" border="0" cellspacing="0" cellpadding="0" name="Content">
+  <tr>
+    <td width="30"><img src="img/000_30x10.gif" width="30" height="10">
+    </td>
+    <td width="275">&nbsp;</td>
+    <td width="30"><img src="img/000_30x10.gif" width="30" height="10"></td>
+    <td width="275">&nbsp;</td>
+    <td width="30"><img src="img/000_30x10.gif" width="30" height="10"></td>
+    <td width="275">&nbsp;</td>
+  </tr>
+  <tr valign="top">
+    <td>&nbsp;</td>
+    <td colspan="3" valign="top" height="40">
+      <font color="#3399FF">
+      <h2>FITS World Coordinate Systems</h2>
+      </font>
+    </td>
+  </tr>
+  <tr valign="top">
+    <td>&nbsp;</td>
+    <td>
+      <p><h3><b>Literature</b></h3></p>
+
+      <p>The <b>FITS "World Coordinate System" (WCS)</b> standard defines
+	keywords and usage that provide for the description of astronomical
+	coordinate systems in a <a href="http://fits.gsfc.nasa.gov"><b>
+	FITS</b></a> image header.
+      </p>
+
+      <p>Electronic versions of the four (WCS) papers and related
+	<a href="WCS/TAN">background material</a> are available:
+      </p>
+      <table width="275" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+	  <td><img src="img/000_20x10.gif" width="20" height="15"></td>
+	</tr>
+	<tr valign="middle">
+	  <td valign="top">
+	    <img src="img/star_green.gif" width="23" height="19">
+	  </td>
+	  <td>
+	    <p><a href="WCS/wcs.pdf"><b>I: "Representations of world
+	      coordinates in FITS"</b></a>,
+	      <a href="http://www.cv.nrao.edu/%7Eegreisen/">
+	      Greisen,&nbsp;E.W.</a> &amp;
+	      Calabretta,&nbsp;M.R. (2002),
+	      <a href="http://www.edpsciences.org/journal/index.cfm?edpsname=aa">
+	      Astronomy &amp; Astrophysics</a>,
+	      <a href="http://www.edpsciences.org/articles/aa/abs/2002/45/contents/contents.html">
+	      <u>395</u></a>,
+	      <a href="http://www.edpsciences.org/articles/aa/abs/2002/45/aah3859/aah3859.html">
+	      1061-1075.</a> &nbsp;
+	    </p>
+
+	    <p>Also a supplement to Paper I entitled
+	      <a href="http://www.ucolick.org/%7Esla/fits/"><b>Concatenation
+	      of FITS World Coordinate Systems</b></a> by
+	      <a href="http://www.ucolick.org/%7Esla/">Steve Allen</a> and
+	      <a href="http://tdc-www.harvard.edu/mink.html">Doug Mink</a>.
+	    </p>
+	  </td>
+	</tr>
+	<tr>
+	  <td><img src="img/000_20x10.gif" width="20" height="15"></td>
+	</tr>
+	<tr valign="middle">
+	  <td valign="top">
+	    <img src="img/star_green.gif" width="23" height="19">
+	  </td>
+	  <td>
+	    <p><a href="WCS/ccs.pdf"><b>II: "Representations of celestial
+	      coordinates in FITS"</b></a>, Calabretta,&nbsp;M.R., &amp;
+	      <a href="http://www.cv.nrao.edu/%7Eegreisen/">
+	      Greisen,&nbsp;E.W.</a>, (2002),
+	      <a href="http://www.edpsciences.org/journal/index.cfm?edpsname=aa">
+	      Astronomy &amp; Astrophysics</a>,
+	      <a href="http://www.edpsciences.org/articles/aa/abs/2002/45/contents/contents.html">
+	      <u>395</u></a>,
+	      <a href="http://www.edpsciences.org/articles/aa/abs/2002/45/aah3860/aah3860.html">
+	      1077-1122.</a> &nbsp;
+	    </p>
+	  </td>
+	</tr>
+	<tr>
+	  <td><img src="img/000_20x10.gif" width="20" height="15"></td>
+	</tr>
+	<tr valign="middle">
+	  <td valign="top">
+	    <img src="img/star_green.gif" width="23" height="19">
+	  </td>
+	  <td>
+	    <p><a href="WCS/scs.pdf"><b>III: "Representations of spectral
+	      coordinates in FITS"</b></a>,
+	      <a href="http://www.cv.nrao.edu/%7Eegreisen/">
+	      Greisen,&nbsp;E.W.</a>, Calabretta,&nbsp;M.R.
+	      <a href="http://www.noao.edu/noao/scistaff/valdes.html">
+	      Valdes,&nbsp;F.G.</a>, &amp;
+	      <a href="http://www.ucolick.org/%7Esla">Allen,&nbsp;S.L.</a>,
+	      (2006),
+	      <a href="http://www.edpsciences.org/journal/index.cfm?edpsname=aa">
+	      Astronomy &amp; Astrophysics</a>,
+	      <a href="http://www.edpsciences.org/articles/aa/abs/2006/05/contents/contents.html">
+	      <u>446</u></a>,
+	      <a href="http://www.edpsciences.org/articles/aa/abs/2006/05/aa3818-05/aa3818-05.html">
+	      747-771</a>. &nbsp;
+	    </p>
+	  </td>
+	</tr>
+	<tr>
+	  <td><img src="img/000_20x10.gif" width="20" height="15"></td>
+	</tr>
+	<tr valign="middle">
+	  <td valign="top">
+	    <img src="img/star_green.gif" width="23" height="19">
+	  </td>
+	  <td>
+	    <p><a href="WCS/dcs_20040422.pdf"><b>IV: "Representations of
+	      distortions in FITS world coordinate systems"</b></a>,
+	      Calabretta et al., draft dated 2004/04/22.
+	    </p>
+	  </td>
+	</tr>
+	<tr>
+	  <td><img src="img/000_20x10.gif" width="20" height="15"></td>
+	</tr>
+	<tr valign="middle">
+	  <td valign="top">
+	    <img src="img/star_green.gif" width="23" height="19">
+	  </td>
+	  <td>
+	    <p><a href="WCS/notes_20040211.pdf"><b>Miscellaneous
+	      notes</b></a> on the derivation of some formulae and special
+	      conditions in <b>Paper&nbsp;II</b>, dated 2004/02/11. &nbsp;
+	    </p>
+	  </td>
+	</tr>
+	<tr>
+	  <td><img src="img/000_20x10.gif" width="20" height="15"></td>
+	</tr>
+	<tr valign="middle">
+	  <td valign="top">
+	    <img src="img/star_green.gif" width="23" height="19">
+	  </td>
+	  <td>
+	    <p><a href="WCS/errata_20130921.pdf"><b>Errata</b></a> dated
+	      2013/09/21 for <b>Papers&nbsp;I, II &amp; III</b>.
+	    </p>
+	    <hr>
+	  </td>
+	</tr>
+	<tr>
+	  <td><img src="img/000_20x10.gif" width="20" height="15"></td>
+	</tr>
+	<tr valign="middle">
+	  <td valign="top">
+	    <img src="img/star_green.gif" width="23" height="19">
+	  </td>
+	  <td>
+	    <p><a href="WCS/Intro"><b>Introduction to celestial coordinate
+	        systems</b></a>; slides (in HTML) from a talk explaining FITS
+	        world coordinate systems.
+	    </p>
+	  </td>
+	</tr>
+      </table>
+    </td>
+    <td>&nbsp;</td>
+    <td>
+      <table width="275" border="1" cellspacing="0" cellpadding="10">
+	<tr valign="middle">
+	  <td>
+	    <img src="WCS/Bonne.gif" width="268" height="235"><br>
+	    <p>
+	      <font size="-2">
+	      This diagram illustrating Bonne's
+	      <a href="http://www.progonos.com/furuti/MapProj/Normal/TOC/cartTOC.html">
+	      projection</a> with conformal latitude +35&deg; was produced by
+	      <a href="WCS/wcslib"><b>WCSLIB</b></a>, a C implementation of
+	      the coordinate transformations defined in the FITS WCS papers.
+	      The non-oblique native graticule is in dark green.
+	      </font>
+	    </p>
+
+	    <p>
+	      <font size="-2">
+	      The oblique 15&deg; celestial graticule centred on celestial
+	      coordinates (0&deg;, +45&deg;) with north celestial pole at
+	      native coordinates (45&deg;, 0&deg;) is colour-coded  blue, red
+	      and white (in increasing order) with the equator and prime
+	      meridian in yellow.
+	      </font>
+	    </p>
+	  </td>
+	</tr>
+      </table>
+
+      <br>
+
+      <table width="275" border="0" cellspacing="0" cellpadding="0">
+	<tr valign="middle">
+	  <td valign="top">
+	    <img src="img/star_green.gif" width="23" height="19">
+	  </td>
+	  <td>
+	    <p><a href="WCS/mhg_20070725.pdf"><b>"Mapping on the HEALPix
+	      grid"</b></a>, Calabretta &amp; Roukema (2007), as accepted by
+	      <a href="http://www.blackwell-synergy.com/loi/mnr">Monthly
+	      Notices of the Royal Astronomical Society (MNRAS)</a> on
+	      2007/07/25, describes the HEALPix projection and introduces the
+	      <b>HPX</b> projection type in FITS.
+	    </p>
+
+	    <p>The <a href="http://www.blackwell-synergy.com">official
+	      refereed version</a> of the paper was published as MNRAS
+	      <b>381</b> 865, and can be accessed from
+	      <a href="http://adsabs.harvard.edu/abs/2007MNRAS.381..865C">ADS
+	      </a>.
+	    </p>
+	  </td>
+	</tr>
+	<tr>
+	  <td><img src="img/000_20x10.gif" width="20" height="15"></td>
+	<tr valign="middle">
+	  <td valign="top">
+	    <img src="img/star_green.gif" width="23" height="19">
+	  </td>
+	  <td>
+	    <p><a href="WCS/xph.pdf"><b>"Representing the <em>'Butterfly'</em>
+	      Projection in FITS &mdash; Projection Code
+	      <code>XPH</code></b>"</a>, Calabretta &amp; 
+	      <a href="http://lcogt.net/user/slowe">Lowe</a> (2013), as
+	      <a href="http://dx.doi.org/10.1017/pasa.2013.30">published with
+	      open access</a> in
+	      <a href="http://journals.cambridge.org/action/displayJournal?jid=PAS">Publications
+	      of the Astronomical Society of Australia (PASA)</a> (copyright
+	      <a href="http://journals.cambridge.org">Cambridge University
+	      Press</a>).
+	  </td>
+	</tr>
+      </p>
+      </table>
+    </td>
+    <td>&nbsp;</td>
+    <td>
+      <p><h3><b>Software &amp;c.</b></h3></p>
+
+      <p><a href="WCS/wcslib"><b>WCSLIB</b></a> is implemented in C, with
+	support for FORTRAN via a set of wrapper functions.  A
+	<a href="http://www.doxygen.org">doxygen</a>-generated programming
+	manual (<a href="WCS/wcslib">HTML</a> and
+	<a href="WCS/wcslib.pdf">PDF</a>) is provided.
+      </p>
+
+      <p><font color="#66CC00"><b>NEW! (2017/01/15)</b></font>
+	<a href="ftp://ftp.atnf.csiro.au/pub/software/wcslib/wcslib.tar.bz2">
+	<b>WCSLIB 5.16</b></a> contains a number of minor 
+	<a href="WCS/CHANGES">improvements and bug fixes</a>.  Now mostly
+        feature-complete, <b>WCSLIB 5.15</b> implements the framework of
+        <a href="WCS/dcs_20040422.pdf"> <b>WCS Paper IV</b></a>, together with
+        the general <b>Polynomial</b> distortion defined therein, and a new
+        Template Polynomial Distortion
+	(<b>TPD</b>).
+      </p>
+
+      <p><b>TPD</b> is a superset of the conventional
+	<a href="http://fits.gsfc.nasa.gov/registry/tpvwcs.html"><b>TPV
+	"projection"</b></a>, and the
+	<a href="http://fits.gsfc.nasa.gov/registry/sip.html"><b>SIP image
+	distortion</b></a>, which are both fully supported as instances of it,
+	as are <a href="http://archive.stsci.edu/dss/booklet_n.pdf">DSS</a>,
+	<a href="http://fits.gsfc.nasa.gov/registry/tnx/tnxdoc.html">TNX</a>,
+	and
+	<a href="http://fits.gsfc.nasa.gov/registry/zpxwcs/zpx.html">ZPX</a>.
+      </p>
+
+      <hr>
+
+      <p>
+	<font size="-1">
+	A general curvilinear axis drawing routine,
+	<a href="WCS/PGSBOX"><b>PGSBOX</b></a>, for
+	<a href="http://astro.caltech.edu/%7Etjp/pgplot/">PGPLOT</a> that can
+	optionally interface to WCSLIB, is also included with WCSLIB.
+	</font>
+      </p>
+
+      <hr>
+
+      <p>Utility program <em><b>HPXcvt</b></em> is included with WCSLIB.
+	It converts 1D HEALPix pixelization data stored in a variety of forms
+	in FITS, including ring or nested organization in a binary table
+	extension, into a 2D primary image array with
+	<a href="WCS/mhg_20070725.pdf"><b>HPX</b></a> or
+	<a href="WCS/XPH.pdf"><b>XPH</b></a> coordinate representation.
+      </p>
+	
+      <p>
+	An <a href="data/WCS/wmap_ilc_3yr_v2-HPX.fits.bz2">example</a>
+	(13MiB bzip'd) is provided of its application to the
+	<a href="http://lambda.gsfc.nasa.gov/product/map/dr2/ilc_map_get.cfm">
+	WMAP 3-year Internal Linear Combination map</a>.
+      </p>
+
+      <hr>
+
+      <p><a href="WCS/example_data.html"><b>Example FITS files</b></a>
+	produced for each of the projections in
+	<a href="WCS/ccs.pdf">Paper&nbsp;II</a> and for a selection of
+	spectral representations from
+	<a href="WCS/scs.pdf">Paper&nbsp;III</a>, are available for testing
+	purposes.
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+<table width="610" border="0" cellspacing="0" cellpadding="0" name="footer">
+  <tr>
+    <td></td>
+    <td bgcolor="#000099" align="right"><img src="img/000099.gif" width="5"
+      height="1"><img src="img/grad.gif" width="79" height="1"
+    ></td>
+  </tr>
+  <tr>
+    <td width="30"><img src="img/000_30x10.gif" width="30" height="10"></td>
+    <td width="580"><font size="-1"><br>
+      Dr. Mark R. Calabretta (<a href="mailto:mcalabre@atnf.csiro.au">
+      mcalabre@atnf.csiro.au</a>)<br>
+      Last modified: 2017/01/15</font>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

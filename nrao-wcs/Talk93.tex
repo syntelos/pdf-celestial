@@ -1,0 +1,245 @@
+\documentstyle [twoside]{article}
+\title{Celestial and Other Coordinates in FITS}
+\author{1-June-93}
+\date{\ }
+\parskip 4mm
+\special{landscape()}
+\linewidth 10in
+\textwidth 10in                     % text width excluding margin
+\textheight 7.3 in
+\marginparsep 0in
+\oddsidemargin -.45in                 % EWG from -.25
+\evensidemargin -.45in
+\topmargin -.5in
+\headsep 0.25in
+\headheight 0.25in
+\parindent 0in
+%
+%
+\begin{document}
+
+\newcommand{\normalstyle}{\baselineskip 4mm \parskip 2mm \normalsize}
+\newcommand{\tablestyle}{\baselineskip 2mm \parskip 1mm \small }
+\newcommand{\eg}{{\it e.g.,}}
+\newcommand{\ie}{{\it i.e.,}}
+\pagestyle{myheadings}
+\thispagestyle{empty}
+
+%
+%
+
+\vskip -.5cm
+\pretolerance 10000 
+\listparindent 0cm
+\labelsep 0cm
+%
+%
+
+\vskip -30pt
+%\maketitle
+\vskip -30pt
+\normalstyle
+\pagestyle{empty}
+\huge
+
+\hphantom{aaa}
+\vskip 25pt
+
+\centerline{\Huge Representations of Celestial Coordinates in FITS}
+\vskip 50pt
+\centerline{\Huge Eric W. Greisen}
+\vskip 20pt
+\centerline{\huge National Radio Astronomy Observatory}
+\vskip 30pt
+\centerline{\Huge Mark Calabretta}
+\vskip 20pt
+\centerline{\huge Australia Telescope National Facility}
+\vfill\eject
+
+\hphantom{aaa}
+\vskip -25pt
+
+\centerline{\Huge Initial FITS Coordinate Specification}
+\vskip 20pt
+\begin{center}
+\begin{tabular}{l}
+\multicolumn{1}{l}{\Huge Keywords} \\
+\noalign{\vskip 6pt}
+\hphantom{aa} {\tt CTYPE}{\it n}  Coordinate type (8 characters)\\
+\hphantom{aa} {\tt CRPIX}{\it n}  Reference pixel location \\
+\hphantom{aa} {\tt CRVAL}{\it n}  Coordinate value at reference pixel \\
+\hphantom{aa} {\tt CDELT}{\it n}  Coordinate increment at reference pixel \\
+\hphantom{aa} {\tt CROTA}{\it n}  Coordinate ``rotation'' \\
+\noalign{\vskip 13pt}
+\multicolumn{1}{l}{\Huge Problems with this} \\
+\noalign{\vskip 6pt}
+\hphantom{aa} $\bullet$  Types inadequate for celestial coordinates,
+                             velocities\\ 
+\hphantom{aa} $\bullet$  Physical meaning of reference pixel undefined \\
+\hphantom{aa} $\bullet$  Rotation undefined, inadequate for general
+                             use \\
+\hphantom{aa} $\bullet$  No provision for skew in images \\
+\noalign{\vskip 13pt}
+\multicolumn{1}{l}{\Huge AIPS enhancements} \\
+\noalign{\vskip 6pt}
+\hphantom{aa} $\bullet$  Types defined for some celestial coordinates,
+                            velocities \\
+\hphantom{aa} $\bullet$  Reference pixel defined as tangent point\\
+\hphantom{aa} $\bullet$  Rotation limited to celestial coordinates \\
+\hphantom{aa} $\bullet$  Still no skew or offset rotations  \\
+\hphantom{aa} $\bullet$  Limited view of projective geometries
+\end{tabular}
+\end{center}
+\vfill\eject
+
+\hphantom{aaa}
+\vskip -25pt
+
+\centerline{\Huge Proposed FITS Coordinate Specification}
+\vskip 20pt
+\centerline{\Huge Keywords for All Coordinate Types}
+\vskip 20pt
+\begin{center}
+\begin{tabular}{l}
+\multicolumn{1}{l}{ {\tt CD{\it n}\_{\it m}} $ = $ {\tt CD}{\it
+      nnn}{\it mmm} {\Huge Matrix}} \\
+\hphantom{aa} $\bullet$  Replaces {\tt CDELT}{\it n} and {\tt
+                            CROTA}{\it n} keywords \\
+\hphantom{aa} $\bullet$  Allows skew, offset and general rotations \\
+\hphantom{aa} $\bullet$  Allows dissimilar coordinates to be rotated
+                            together \\
+\hphantom{aa} $\bullet$  Relative coordinates given by linear
+                            transform :
+\end{tabular}
+\end{center}
+\begin{displaymath}
+\left ( \begin{array}{c} x \\ y \\ z \\ \vdots \end{array} \right ) =
+   \left ( \begin{array}{cccc}
+   \hbox{{\tt CD1\_1}} & \hbox{{\tt CD1\_2}} & \hbox{{\tt CD1\_3}} &
+         \ldots \\ 
+   \hbox{{\tt CD2\_1}} & \hbox{{\tt CD2\_2}} & \hbox{{\tt CD2\_3}} &
+         \ldots \\ 
+   \hbox{{\tt CD3\_1}} & \hbox{{\tt CD3\_2}} & \hbox{{\tt CD3\_3}} &
+         \ldots \\ 
+   \vdots          & \vdots          & \vdots          & \ddots
+   \end{array} \right )
+   \left ( \begin{array}{c}
+   i - i_0 \\ j - j_0 \\ k - k_0 \\ \vdots \end{array} \right )
+\end{displaymath}
+\vfill\eject
+
+\hphantom{aaa}
+\vskip -25pt
+
+\centerline{\Huge Proposed FITS Coordinate Specification}
+\vskip 20pt
+\centerline{\Huge Keywords for Celestial Coordinates}
+\vskip 20pt
+\begin{center}
+\begin{tabular}{l}
+\multicolumn{1}{l}{{\tt CTYPE{\it n}} {\Huge format defined}} \\
+\hphantom{aa} $\bullet$  First 4 characters give type of ``standard
+                           coordinate system'' as \\
+\hphantom{aa $\bullet$ aa} equatorial --- {\tt RA--} and {\tt DEC-} \\
+\hphantom{aa $\bullet$ aa} galactic --- {\tt GLON} and {\tt GLAT} \\
+\hphantom{aa $\bullet$ aa} ecliptic --- {\tt ELON} and {\tt ELAT} \\
+\hphantom{aa} $\bullet$  Second 4 characters give type of projection
+                            as {\tt -{\it ccc}} \\
+\hphantom{aa $\bullet$ aa} where {\it ccc} defined by convention, such
+                           as \\
+\hphantom{aa $\bullet$ aa} {\tt SIN}, {\tt TAN}, {\tt ARC}, {\tt AIT} \\
+\noalign{\vskip 12pt}
+\multicolumn{1}{l}{{\tt CRPIX{\it n}} {\Huge meaning defined by
+                           projection }} \\
+\hphantom{aa} $\bullet$  Each projection has ``native coordinate
+                           system '' \\
+\hphantom{aa} $\bullet$  Reference pixel is native north pole
+                           $(0,90^{\circ})$ for \\
+\hphantom{aa $\bullet$ aa} azimuthal and conical projections \\
+\hphantom{aa} $\bullet$  Reference pixel is native origin $(0,0)$ for \\
+\hphantom{aa $\bullet$ aa} cylindrical and conventional projections \\
+\end{tabular}
+\end{center}
+\vfill\eject
+
+\hphantom{aaa}
+\vskip -25pt
+
+\centerline{\Huge Proposed FITS Coordinate Specification}
+\vskip 20pt
+\centerline{\Huge Celestial Coordinates Continued}
+\vskip 20pt
+\begin{center}
+\begin{tabular}{l}
+\multicolumn{1}{l}{ {\tt CRVAL{\it n}} {\Huge clarified}} \\
+\hphantom{aa} $\bullet$  Value in standard coordinates at the
+                            reference pixel \\ 
+\hphantom{aa} $\bullet$  {\tt LONGPOLE} keyword added for generality \\
+\hphantom{aa $\bullet$ aa} Native longitude of north pole of standard
+                              system \\
+\hphantom{aa $\bullet$ aa} Default value is $180^{\circ}$ \\
+\noalign{\vskip 10pt}
+\multicolumn{1}{l}{{\tt PROJP{\it j}} {\Huge keywords added to define
+                           some projections }} \\
+\noalign{\vskip 10pt}
+\multicolumn{1}{l}{\Huge Astrometry-related keywords added} \\
+\hphantom{aa} $\bullet$ {\tt EQUINOX} replaces {\tt EPOCH} for the
+                 epoch of the mean \\
+\hphantom{aa $\bullet$ aa}  equator and equinox in years \\
+\hphantom{aa} $\bullet$ {\tt MJD-OBS} modified Julian date of
+                 observation in days \\
+\hphantom{aa} $\bullet$ {\tt RADECSYS} frame of reference of
+                 equatorial coordinates \\
+\hphantom{aa $\bullet$ aa} as {\tt FK4}, {\tt FK4-NO-E}, {\tt FK5},
+                 {\tt GAPPT} \\
+\end{tabular}
+\end{center}
+\vfill\eject
+
+\hphantom{aaa}
+\vskip -25pt
+
+\centerline{\Huge Proposed FITS Coordinate Specification}
+\vskip 20pt
+\centerline{\Huge Conventions and Matters of ``Good Form''}
+\vskip 20pt
+\begin{center}
+\begin{tabular}{rl}
+1. & The center of each pixel is its location. \\
+\noalign{\vskip 5pt}
+2. & Default viewing convention: \\
+   &\hphantom{a} $\bullet$ First pixel at lower left corner, \\
+   &\hphantom{a} $\bullet$ First axis displayed along horizontal, \\
+   &\hphantom{a} $\bullet$ Second axis displayed along vertical. \\
+\noalign{\vskip 5pt}
+3. & Diagonal elements of {\tt CD{\it i}\_{\it j}} should predominate.\\ 
+   &\hphantom{a} $\bullet$ Do not hide transpositions in the {\tt CD}
+                             matrix. \\
+\noalign{\vskip 5pt}
+4. & Forbid rotation into axes which have only integral values.\\
+\noalign{\vskip 5pt}
+5. & {\tt NCP} projection (of WSRT) changed to offset {\tt SIN}
+        projection.\\ 
+\noalign{\vskip 5pt}
+6. & When possible, {\tt CDELT}{\it n} should be written along with
+        {\tt CD{\it i}\_{\it j}}. \\
+\noalign{\vskip 5pt}
+7. & For longitude axis $i$ and latitude axis $j$, the conversion is\\
+\end{tabular}
+\end{center}
+\vskip -5pt
+\begin{displaymath}
+\left ( \begin{array}{cc}
+   \hbox{{\tt CD{\it i}\_{\it i}}} & \hbox{{\tt CD{\it i}\_{\it j}}} \\
+   \hbox{{\tt CD{\it j}\_{\it i}}} & \hbox{{\tt CD{\it j}\_{\it j}}}
+   \end{array} \right ) =
+\left ( \begin{array}{cc}
+   \hbox{{\tt CDELT{\it i}}} \cos(\hbox{{\tt CROTA{\it j}}}) &
+   - \hbox{{\tt CDELT{\it j}}} \sin(\hbox{{\tt CROTA{\it j}}}) \\
+   \hbox{{\tt CDELT{\it i}}} \sin(\hbox{{\tt CROTA{\it j}}}) &
+   \hbox{{\tt CDELT{\it j}}} \cos(\hbox{{\tt CROTA{\it j}}})
+   \end{array} \right ) \, .
+\end{displaymath}
+\vfill\eject
+
+\end{document}

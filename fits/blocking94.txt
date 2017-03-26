@@ -1,0 +1,49 @@
+
+               Blocking of Fixed-block Sequential Media.
+                                 and
+                           Bitstream Devices.
+
+                         P.Grosbol and D.Wells
+                              1994-May-10
+
+
+                             Introduction
+
+A number of high density storage media (e.g. optical disks and helical
+scan tapes) is of significant interest of exchange of large volumes of
+astronomical data in FITS format. Many controllers and devices for these
+media can only access data in blocks of fixed length, typically 2**n bytes.
+Thus, a special blocking agreement for FITS files is required for this
+type of media.
+
+                      Blocking for fixed-block media.
+
+For fixed-block sequential media, FITS files consisting of an integer
+number of 2880 byte logical records should be regarded as a bitstream
+written out with the fixed blocking size of the media with the last
+block being padded out with zeros to the length of the fixed blocks.
+After detection of an end-of-file on reading, any incomplete logical
+FITS record should be disregarded.  This proposal applies to optical
+disks (accessed as a sequential set of records), QIC format 1/4inch
+cartridge tapes and Local Area Networks.
+
+The fixed-block blocking proposal conforms to the general rules
+for blocking of FITS files (Grosbol et al. 1988, Astron. Astrophys.
+Suppl. 73, p359) using a blocking factor of 2**n/2880 for a media
+with a fixed block size of 2**n bytes.
+
+                       Blocking for bitstream devices.
+
+For bitstream devices, FITS files should be written with a blocking
+factor of one i.e. with fixed blocks of 2880 bytes corresponding to
+the logical record size. This proposal applies to FITS files written
+to logical file systems.
+
+                        Blocking for variable-block media.
+
+For variable block length sequencial media, FITS files may be written
+with an interger blocking factor between 1 and 10 including as specified
+in the blocking agreement for 1/2 inch 9 track tapes. This proposal applies
+to FITS files written to DDS/DAT 4mm cartridge tapes and
+8mm cartridge tape (Exabyte).
+

@@ -1,0 +1,87 @@
+From wgas@Hypatia.gsfc.nasa.gov Tue Jul 13 10:10:33 1993
+Message-Id: <930713100743.2261a8b4@NSSDCA.GSFC.NASA.GOV>
+Comment: AAS Working Group for Astronomical Software
+Reply-To: <wgas@Hypatia.gsfc.nasa.gov>
+From: "BARRY M. SCHLESINGER" <BSCHLESINGER@NSSDCA.GSFC.NASA.GOV>
+Sender: wgas@Hypatia.gsfc.nasa.gov
+To: Multiple recipients of list <wgas@Hypatia.gsfc.nasa.gov>
+Subject: NOST FITS Definition approved as NOST Standard
+Date: Tue, 13 Jul 93 09:56:37 -0400
+
+The NSSDC's NASA/Science Office of Standards and Technology (NOST) has
+completed development of a formal definition of the Flexible Image
+Transport System (FITS) for the transfer of information, in support of
+the astronomical community.  The standard was developed to provide a
+document that would remove contradictions and resolve ambiguities
+present in the four papers and Floating Point Agreement endorsed by
+the International Astronomical Union (IAU) as the basis for FITS, one
+that NASA projects and other researchers could use to design data sets
+in conformance to FITS. 
+
+Working under NOST procedures, a FITS Technical Panel composed of
+astronomers and chaired by American Astronomical Society Working Group
+on Astronomical Software Chair R. J. Hanisch (STScI) developed a draft
+standard.  In order to ensure that this standard accurately
+represented FITS as accepted by the astronomical community, there were
+three review cycles.  In each cycle, the opportunity to review the
+standard was widely publicized throughout the astronomical community,
+with particular care taken to notify the international and regional
+FITS Committees.  When the two-month review period was completed, the
+Panel reviewed the comments, revised the draft standard, and provided
+detailed replies to all reviewers explaining its action on each point.
+
+When the review process was complete, the Technical Panel proposed the
+standard to the NOST FITS Accreditation Panel for acceptance as a NOST
+standard.  The Accreditation Panel, composed of the NOST executive
+board and an outside member from the astrophysics community, reviewed
+the process followed by the Technical Panel and their handling of
+reviewer comments.  Approval of the NOST "Definition of the Flexible
+Image Transport System (FITS)" was unanimous and an outstanding effort
+by the Technical Panel was noted.  This standard will now be submitted
+to the IAU FITS Working Group for endorsement as the international
+standard for FITS.  Approval is believed likely.
+
+The NOST Standard, like the drafts before it, is available by 
+anonymous ftp from nssdca.gsfc.nasa.gov, or by DECnet copy from 
+NSSDCA, in the directory FITS, in LaTeX, PostScript, and flat ASCII 
+forms.  Get the AAREADME.DOC file for details.
+
+(Note: as of this writing, the LaTeX and flat ASCII versions of the 
+approved standard are available.  The PostScript version is still in 
+production.  The proposed and adopted standards can be distinguished 
+by the date; the final standard is dated June 18, 1993.  The only 
+change in content is that adopted standard contains the new name for 
+the NOST.)
+
+Printed copies can be obtained from the NOST Librarian, who can be
+reached as follows: 
+
+(Postal) NASA/Science Office of Standards and Technology
+	 Code 633.2
+	 Goddard Space Flight Center
+	 Greenbelt MD 20771
+	 USA
+ 
+(Internet) nost@nssdca.gsfc.nasa.gov
+(DECnet) NCF::NOST
+
+Telephone: +1-301-286-3575 8 a. m. - 5 p. m., U. S. Eastern Time
+
+If the Librarian is unavailable, a phone mail system takes the call
+after four rings. 
+
+If you have additional questions, the FITS office can be reached by
+electronic mail at the address below. 
+
+				for Donald Sawyer, NOST Secretary 
+
+				Barry M. Schlesinger
+				Coordinator, FITS Support Office
+				Secretary, Technical Panel.
+
+		
++1-301-513-1634				fits@nssdca.gsfc.nasa.gov
+					NCF::FITS
+
+
+
