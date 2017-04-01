@@ -7,6 +7,7 @@
 * aips46, AIPS Memo #46, Additional non-linear coordinates in AIPS, Greisen, 1994
 
 * OGIP93, Specification of physical units within OGIP FITS files, George, Angelini, 1995, GSFC 
+** required differentiation of units and systems of reference
 
 * Poster93, 
 ** B+W figures like Poster94
@@ -29,6 +30,7 @@
 ** Conventions and matters of "good form"
 
 * wcs88, World Coordinate Systems Representations Within the FITS Format, Hanish, Wells, 1988
+** essential with "representations" series
 
 * wcs96, Representations of celestial coordinates in FITS, Greisen, Calabretta, 1996, 43pp 
-
+** essential with "representations" series
