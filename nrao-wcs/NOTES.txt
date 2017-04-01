@@ -1,0 +1,34 @@
+                                    -*-outline-*-
+
+* aips27, AIPS Memo #27, Non-linear coordinates in AIPS, Greisen, 1994
+** 1983 document, revised with notes
+** 1993 proposals noted
+
+* aips46, AIPS Memo #46, Additional non-linear coordinates in AIPS, Greisen, 1994
+
+* OGIP93, Specification of physical units within OGIP FITS files, George, Angelini, 1995, GSFC 
+
+* Poster93, 
+** B+W figures like Poster94
+** perhaps more figures and details
+
+* Poster94.txt, Greisen, Calabretta
+** images of 
+*** WCS transformation sequence WRT FITS
+*** Geometric figures in projection transformation
+*** Various projection types
+*** Does geometry matter Jacobian data display
+
+* Talk93, Representations of celestial coordinates in FITS, Greisen, Calabretta
+** Review FITS parameter system for CWS
+** Propose FITS parameter system for CWS
+
+* Talk94, Representations of celestial coordinates in FITS, Greisen, Calabretta
+** Review FITS parameter system for CWS
+** Propose FITS parameter system for CWS
+** Conventions and matters of "good form"
+
+* wcs88, World Coordinate Systems Representations Within the FITS Format, Hanish, Wells, 1988
+
+* wcs96, Representations of celestial coordinates in FITS, Greisen, Calabretta, 1996, 43pp 
+
