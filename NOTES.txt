@@ -1,0 +1,16 @@
+                              -*-outline-*-
+
+* FITS, Wells, 1981, fits/fits-wells-greisen-harten-1981.pdf
+
+** FITS "coordinate" identification merged with units in the FITS system of parameterization
+
+*** The FITS P Subsystem "C" (CRVAL{n}, CRPIX{n}, CDELT{n}, CTYPE{n}, CROTA{n}) "rotates" in {n} while the FITS P Subsystem "B" ( BUNIT ) does not.
+
+* WCS within FITS, Hanish, 1988, nrao-wcs/wcs88.pdf
+
+** The nondeterministic conception of the FITS system of parameterization 
+
+*** The FITS Parameterization Subsystem "C"
+
+*** The physical and logical systems of units available to CTYPE{n}
+
