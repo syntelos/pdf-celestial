@@ -14,3 +14,4 @@
 
 *** The physical and logical systems of units available to CTYPE{n}
 
+** "This paper presents the complete set of standards to be used within the FITS format for the specification of the most common sky geometries."
