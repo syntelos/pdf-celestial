@@ -12,3 +12,7 @@ Intended starting points
 
   ./nrao-wcs/wcs88.pdf
 
+See also
+
+   https://github.com/syntelos/cc-fits-grok
+   https://github.com/syntelos/cc-fits-look
