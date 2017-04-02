@@ -2,9 +2,13 @@
 
 * FITS, Wells, 1981, fits/fits-wells-greisen-harten-1981.pdf
 
-** FITS "coordinate" identification merged with units in the FITS system of parameterization
+*** FITS P Subsystem "B" ( BUNIT ) 
 
-*** The FITS P Subsystem "C" (CRVAL{n}, CRPIX{n}, CDELT{n}, CTYPE{n}, CROTA{n}) "rotates" in {n} while the FITS P Subsystem "B" ( BUNIT ) does not.
+**** Units of measure
+
+*** The FITS P Subsystem "C" (CRVAL{n}, CRPIX{n}, CDELT{n}, CTYPE{n}, CROTA{n}) 
+
+**** Parameters of location
 
 * WCS within FITS, Hanish, 1988, nrao-wcs/wcs88.pdf
 
