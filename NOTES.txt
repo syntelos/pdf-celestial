@@ -15,3 +15,12 @@
 *** The physical and logical systems of units available to CTYPE{n}
 
 ** "This paper presents the complete set of standards to be used within the FITS format for the specification of the most common sky geometries."
+
+** References frames have multiple parametric forms
+
+*** https://en.wikipedia.org/wiki/Catalogues_of_Fundamental_Stars
+*** https://en.wikipedia.org/wiki/Astrometry
+*** https://en.wikipedia.org/wiki/Frame_of_reference
+
+** "world" === "physical" (reference system === coordinate system)
+
