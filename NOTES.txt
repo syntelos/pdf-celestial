@@ -12,6 +12,18 @@
 
 * WCS within FITS, Hanish, 1988, nrao-wcs/wcs88.pdf
 
+  ...the vast amount of astronomical data requires an association
+  between the pixel coordinate system and the world or physical
+  coordinate system.  For example, an array of spectral flux
+  measurements needs to be associated with wavelengths through some
+  sort of dispersion solution, or an array of time-resolved flux
+  measurements needs to be associated with actual times in UTC.  In
+  the simplest cases, these associations can be expressed in linear
+  terms: world coordinate = pixel coordinate · scale + offset where
+  scale is the pixel size (in world coordinate units) and offset is a
+  zero-point correction.  In more common cases, however, the relation
+  between pixel coordinates and world coordinates is non-linear.
+
 ** The nondeterministic conception of the FITS system of parameterization 
 
 *** The FITS Parameterization Subsystem "C"
@@ -27,4 +39,18 @@
 *** https://en.wikipedia.org/wiki/Frame_of_reference
 
 ** "world" === "physical" (reference system === coordinate system)
+
+* Representations of world coordinates in FITS, Greisen, Calabretta, 2002 representations-fits/representations-I.pdf
+
+  Wells et al. (1981) anticipated the need to specify the physical, or
+  world, coordinates to be attached to each pixel of an N-dimensional
+  image.  By world coordinates, we mean coordinates that serve to
+  locate a measurement in some multidimensional parameter space.  They
+  include, for example, a measurable quantity such as the frequency or
+  wavelength associated with each point in a spectrum or, more
+  abstractly, the longitude and latitude in a conventional spherical
+  coordinate system which define a direction in space.  World
+  coordinates may also include enumerations such as “Stokes
+  parameters”, which do not form an image axis in the normal sense
+  since interpolation along such axes is not meaningful.
 
