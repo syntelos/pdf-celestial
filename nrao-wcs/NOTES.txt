@@ -7,7 +7,7 @@
 * aips46, AIPS Memo #46, Additional non-linear coordinates in AIPS, Greisen, 1994
 
 * OGIP93, Specification of physical units within OGIP FITS files, George, Angelini, 1995, GSFC 
-** required differentiation of units and systems of reference
+** Specification of FITS header value strings for Physical Units 
 
 * Poster93, 
 ** B+W figures like Poster94
